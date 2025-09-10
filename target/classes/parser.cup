@@ -1,0 +1,74 @@
+/* 
+ * CUP grammar file for Javdin language
+ * This will be used to generate the parser
+ */
+
+package com.javdin.parser;
+
+import com.javdin.lexer.*;
+import com.javdin.ast.*;
+import java.util.List;
+import java.util.ArrayList;
+
+/* Terminals (tokens) */
+terminal String IDENTIFIER;
+terminal Integer INTEGER;
+terminal Double REAL;
+terminal String STRING;
+terminal Boolean BOOL;
+
+terminal VAR, IF, ELSE, WHILE, FOR, FUNCTION, RETURN;
+terminal PRINT, INPUT, TRUE, FALSE, LAMBDA;
+terminal BREAK, CONTINUE;
+
+terminal PLUS, MINUS, MULTIPLY, DIVIDE, MODULO;
+terminal ASSIGN, EQUAL, NOT_EQUAL;
+terminal LESS_THAN, LESS_EQUAL, GREATER_THAN, GREATER_EQUAL;
+terminal AND, OR, NOT;
+
+terminal LEFT_PAREN, RIGHT_PAREN;
+terminal LEFT_BRACE, RIGHT_BRACE;
+terminal LEFT_BRACKET, RIGHT_BRACKET;
+terminal SEMICOLON, COMMA, DOT, COLON, ARROW;
+terminal NEWLINE;
+
+/* Non-terminals */
+non terminal ProgramNode program;
+non terminal List<StatementNode> statement_list;
+non terminal StatementNode statement;
+non terminal ExpressionNode expression;
+non terminal LiteralNode literal;
+
+/* Grammar rules */
+program ::= statement_list:stmts
+    {: RESULT = new ProgramNode(stmts, 1, 1); :}
+    | /* empty */
+    {: RESULT = new ProgramNode(new ArrayList<StatementNode>(), 1, 1); :};
+
+statement_list ::= statement_list:list statement:stmt
+    {: list.add(stmt); RESULT = list; :}
+    | statement:stmt
+    {: List<StatementNode> list = new ArrayList<>(); 
+       list.add(stmt); 
+       RESULT = list; :};
+
+statement ::= VAR IDENTIFIER:name ASSIGN expression:expr SEMICOLON
+    {: RESULT = new DeclarationNode(name, expr, nameleft, nameright); :}
+    | VAR IDENTIFIER:name SEMICOLON
+    {: RESULT = new DeclarationNode(name, null, nameleft, nameright); :}
+    | PRINT expression:expr SEMICOLON
+    {: RESULT = new PrintNode(exprleft, exprright); :};
+
+expression ::= literal:lit
+    {: RESULT = lit; :};
+
+literal ::= INTEGER:val
+    {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.INTEGER, valleft, valright); :}
+    | REAL:val
+    {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.REAL, valleft, valright); :}
+    | STRING:val
+    {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.STRING, valleft, valright); :}
+    | TRUE
+    {: RESULT = new LiteralNode(true, LiteralNode.LiteralType.BOOLEAN, TRUEleft, TRUEright); :}
+    | FALSE
+    {: RESULT = new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, FALSEleft, FALSEright); :};

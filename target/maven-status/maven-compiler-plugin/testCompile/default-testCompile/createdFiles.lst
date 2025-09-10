@@ -1,0 +1,3 @@
+com/javdin/parser/ParserTest.class
+com/javdin/integration/EndToEndTest.class
+com/javdin/lexer/LexerTest.class
