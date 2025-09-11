@@ -1,0 +1,61 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Lexer Demo (Default Sample)",
+            "request": "launch",
+            "mainClass": "com.javdin.lexer.LexerDebug",
+            "projectName": "javdin",
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "java",
+            "name": "Interactive Lexer Demo",
+            "request": "launch",
+            "mainClass": "com.javdin.lexer.InteractiveLexerDemo",
+            "projectName": "javdin",
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "java",
+            "name": "Lexer Demo (File Input)",
+            "request": "launch",
+            "mainClass": "com.javdin.lexer.LexerDebug",
+            "projectName": "javdin",
+            "args": ["src/main/resources/samples/hello.jd"],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "java",
+            "name": "Run Lexer Tests",
+            "request": "launch",
+            "mainClass": "org.junit.platform.console.ConsoleLauncher",
+            "projectName": "javdin",
+            "args": [
+                "--select-package", "com.javdin.lexer",
+                "--details", "tree"
+            ],
+            "console": "internalConsole",
+            "vmArgs": [
+                "-Djunit.platform.output.capture.stdout=true",
+                "-Djunit.platform.output.capture.stderr=true"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Main Application",
+            "request": "launch", 
+            "mainClass": "com.javdin.main.Main",
+            "projectName": "javdin",
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}

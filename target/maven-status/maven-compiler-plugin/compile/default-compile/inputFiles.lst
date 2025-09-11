@@ -38,4 +38,5 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ReturnNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/main/Main.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/FunctionLiteralNode.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/InteractiveLexerDemo.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/AssignmentNode.java
