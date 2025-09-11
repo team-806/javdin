@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Lexer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Javdin</a> &gt; <a href="index.source.html" class="el_package">com.javdin.lexer</a> &gt; <span class="el_source">Lexer.java</span></div><h1>Lexer.java</h1><pre class="source lang-java linenums">package com.javdin.lexer;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Lexical analyzer for the Javdin language.
+ * Converts source code into a stream of tokens.
+ */
+public class Lexer {
+    private final String source;
+    private int position;
+    private int line;
+    private int column;
+    
+<span class="fc" id="L16">    private static final Map&lt;String, TokenType&gt; KEYWORDS = new HashMap&lt;&gt;();</span>
+    
+    static {
+<span class="fc" id="L19">        KEYWORDS.put(&quot;var&quot;, TokenType.VAR);</span>
+<span class="fc" id="L20">        KEYWORDS.put(&quot;if&quot;, TokenType.IF);</span>
+<span class="fc" id="L21">        KEYWORDS.put(&quot;then&quot;, TokenType.THEN);</span>
+<span class="fc" id="L22">        KEYWORDS.put(&quot;else&quot;, TokenType.ELSE);</span>
+<span class="fc" id="L23">        KEYWORDS.put(&quot;end&quot;, TokenType.END);</span>
+<span class="fc" id="L24">        KEYWORDS.put(&quot;while&quot;, TokenType.WHILE);</span>
+<span class="fc" id="L25">        KEYWORDS.put(&quot;for&quot;, TokenType.FOR);</span>
+<span class="fc" id="L26">        KEYWORDS.put(&quot;in&quot;, TokenType.IN);</span>
+<span class="fc" id="L27">        KEYWORDS.put(&quot;loop&quot;, TokenType.LOOP);</span>
+<span class="fc" id="L28">        KEYWORDS.put(&quot;exit&quot;, TokenType.EXIT);</span>
+<span class="fc" id="L29">        KEYWORDS.put(&quot;function&quot;, TokenType.FUNCTION);</span>
+<span class="fc" id="L30">        KEYWORDS.put(&quot;func&quot;, TokenType.FUNC);</span>
+<span class="fc" id="L31">        KEYWORDS.put(&quot;return&quot;, TokenType.RETURN);</span>
+<span class="fc" id="L32">        KEYWORDS.put(&quot;print&quot;, TokenType.PRINT);</span>
+<span class="fc" id="L33">        KEYWORDS.put(&quot;input&quot;, TokenType.INPUT);</span>
+<span class="fc" id="L34">        KEYWORDS.put(&quot;true&quot;, TokenType.TRUE);</span>
+<span class="fc" id="L35">        KEYWORDS.put(&quot;false&quot;, TokenType.FALSE);</span>
+<span class="fc" id="L36">        KEYWORDS.put(&quot;lambda&quot;, TokenType.LAMBDA);</span>
+<span class="fc" id="L37">        KEYWORDS.put(&quot;break&quot;, TokenType.BREAK);</span>
+<span class="fc" id="L38">        KEYWORDS.put(&quot;continue&quot;, TokenType.CONTINUE);</span>
+<span class="fc" id="L39">        KEYWORDS.put(&quot;and&quot;, TokenType.AND);</span>
+<span class="fc" id="L40">        KEYWORDS.put(&quot;or&quot;, TokenType.OR);</span>
+<span class="fc" id="L41">        KEYWORDS.put(&quot;xor&quot;, TokenType.XOR);</span>
+<span class="fc" id="L42">        KEYWORDS.put(&quot;not&quot;, TokenType.NOT);</span>
+<span class="fc" id="L43">        KEYWORDS.put(&quot;is&quot;, TokenType.IS);</span>
+<span class="fc" id="L44">        KEYWORDS.put(&quot;none&quot;, TokenType.NONE);</span>
+        // Type indicators
+<span class="fc" id="L46">        KEYWORDS.put(&quot;int&quot;, TokenType.INT_TYPE);</span>
+<span class="fc" id="L47">        KEYWORDS.put(&quot;real&quot;, TokenType.REAL_TYPE);</span>
+<span class="fc" id="L48">        KEYWORDS.put(&quot;bool&quot;, TokenType.BOOL_TYPE);</span>
+<span class="fc" id="L49">        KEYWORDS.put(&quot;string&quot;, TokenType.STRING_TYPE);</span>
+<span class="fc" id="L50">    }</span>
+    
+<span class="fc" id="L52">    public Lexer(String source) {</span>
+<span class="fc" id="L53">        this.source = source;</span>
+<span class="fc" id="L54">        this.position = 0;</span>
+<span class="fc" id="L55">        this.line = 1;</span>
+<span class="fc" id="L56">        this.column = 1;</span>
+<span class="fc" id="L57">    }</span>
+    
+    /**
+     * Returns the next token from the source code.
+     */
+    public Token nextToken() {
+<span class="fc" id="L63">        skipWhitespace();</span>
+        
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (position &gt;= source.length()) {</span>
+<span class="fc" id="L66">            return new Token(TokenType.EOF, line, column);</span>
+        }
+        
+<span class="fc" id="L69">        char current = source.charAt(position);</span>
+        
+        // Handle newlines
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (current == '\n') {</span>
+<span class="fc" id="L73">            Token token = new Token(TokenType.NEWLINE, line, column);</span>
+<span class="fc" id="L74">            advance();</span>
+<span class="fc" id="L75">            return token;</span>
+        }
+        
+        // Handle comments
+<span class="fc bfc" id="L79" title="All 4 branches covered.">        if (current == '/' &amp;&amp; peek() == '/') {</span>
+<span class="fc" id="L80">            skipLineComment();</span>
+<span class="fc" id="L81">            return nextToken();</span>
+        }
+        
+<span class="fc bfc" id="L84" title="All 4 branches covered.">        if (current == '/' &amp;&amp; peek() == '*') {</span>
+<span class="fc" id="L85">            skipMultiLineComment();</span>
+<span class="fc" id="L86">            return nextToken();</span>
+        }
+        
+        // Handle multi-character operators
+<span class="pc bpc" id="L90" title="1 of 4 branches missed.">        if (current == ':' &amp;&amp; peek() == '=') {</span>
+<span class="fc" id="L91">            Token token = new Token(TokenType.ASSIGN_OP, line, column);</span>
+<span class="fc" id="L92">            advance();</span>
+<span class="fc" id="L93">            advance();</span>
+<span class="fc" id="L94">            return token;</span>
+        }
+        
+<span class="fc bfc" id="L97" title="All 4 branches covered.">        if (current == '=' &amp;&amp; peek() == '&gt;') {</span>
+<span class="fc" id="L98">            Token token = new Token(TokenType.SHORT_IF, line, column);</span>
+<span class="fc" id="L99">            advance();</span>
+<span class="fc" id="L100">            advance();</span>
+<span class="fc" id="L101">            return token;</span>
+        }
+        
+<span class="fc bfc" id="L104" title="All 4 branches covered.">        if (current == '=' &amp;&amp; peek() == '=') {</span>
+<span class="fc" id="L105">            Token token = new Token(TokenType.EQUAL, line, column);</span>
+<span class="fc" id="L106">            advance();</span>
+<span class="fc" id="L107">            advance();</span>
+<span class="fc" id="L108">            return token;</span>
+        }
+
+<span class="pc bpc" id="L111" title="1 of 4 branches missed.">        if (current == '!' &amp;&amp; peek() == '=') {</span>
+<span class="fc" id="L112">            Token token = new Token(TokenType.NOT_EQUAL, line, column);</span>
+<span class="fc" id="L113">            advance();</span>
+<span class="fc" id="L114">            advance();</span>
+<span class="fc" id="L115">            return token;</span>
+        }
+        
+<span class="fc bfc" id="L118" title="All 4 branches covered.">        if (current == '/' &amp;&amp; peek() == '=') {</span>
+<span class="fc" id="L119">            Token token = new Token(TokenType.NOT_EQUAL_ALT, line, column);</span>
+<span class="fc" id="L120">            advance();</span>
+<span class="fc" id="L121">            advance();</span>
+<span class="fc" id="L122">            return token;</span>
+        }
+
+<span class="fc bfc" id="L125" title="All 4 branches covered.">        if (current == '&lt;' &amp;&amp; peek() == '=') {</span>
+<span class="fc" id="L126">            Token token = new Token(TokenType.LESS_EQUAL, line, column);</span>
+<span class="fc" id="L127">            advance();</span>
+<span class="fc" id="L128">            advance();</span>
+<span class="fc" id="L129">            return token;</span>
+        }
+
+<span class="fc bfc" id="L132" title="All 4 branches covered.">        if (current == '&gt;' &amp;&amp; peek() == '=') {</span>
+<span class="fc" id="L133">            Token token = new Token(TokenType.GREATER_EQUAL, line, column);</span>
+<span class="fc" id="L134">            advance();</span>
+<span class="fc" id="L135">            advance();</span>
+<span class="fc" id="L136">            return token;</span>
+        }
+
+<span class="fc bfc" id="L139" title="All 4 branches covered.">        if (current == '-' &amp;&amp; peek() == '&gt;') {</span>
+<span class="fc" id="L140">            Token token = new Token(TokenType.ARROW, line, column);</span>
+<span class="fc" id="L141">            advance();</span>
+<span class="fc" id="L142">            advance();</span>
+<span class="fc" id="L143">            return token;</span>
+        }
+        
+<span class="fc bfc" id="L146" title="All 4 branches covered.">        if (current == '.' &amp;&amp; peek() == '.') {</span>
+<span class="fc" id="L147">            Token token = new Token(TokenType.RANGE, line, column);</span>
+<span class="fc" id="L148">            advance();</span>
+<span class="fc" id="L149">            advance();</span>
+<span class="fc" id="L150">            return token;</span>
+        }        // Handle special type indicators
+<span class="fc bfc" id="L152" title="All 4 branches covered.">        if (current == '[' &amp;&amp; peek() == ']') {</span>
+<span class="fc" id="L153">            Token token = new Token(TokenType.ARRAY_TYPE, line, column);</span>
+<span class="fc" id="L154">            advance();</span>
+<span class="fc" id="L155">            advance();</span>
+<span class="fc" id="L156">            return token;</span>
+        }
+        
+<span class="fc bfc" id="L159" title="All 4 branches covered.">        if (current == '{' &amp;&amp; peek() == '}') {</span>
+<span class="fc" id="L160">            Token token = new Token(TokenType.TUPLE_TYPE, line, column);</span>
+<span class="fc" id="L161">            advance();</span>
+<span class="fc" id="L162">            advance();</span>
+<span class="fc" id="L163">            return token;</span>
+        }
+        
+        // Handle single-character tokens
+<span class="fc" id="L167">        TokenType singleChar = getSingleCharToken(current);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (singleChar != null) {</span>
+<span class="fc" id="L169">            Token token = new Token(singleChar, line, column);</span>
+<span class="fc" id="L170">            advance();</span>
+<span class="fc" id="L171">            return token;</span>
+        }
+        
+        // Handle numbers
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (Character.isDigit(current)) {</span>
+<span class="fc" id="L176">            return scanNumber();</span>
+        }
+        
+        // Handle strings (both single and double quotes)
+<span class="fc bfc" id="L180" title="All 4 branches covered.">        if (current == '&quot;' || current == '\'') {</span>
+<span class="fc" id="L181">            return scanString(current);</span>
+        }        // Handle identifiers and keywords
+<span class="pc bpc" id="L183" title="1 of 4 branches missed.">        if (Character.isLetter(current) || current == '_') {</span>
+<span class="fc" id="L184">            return scanIdentifier();</span>
+        }
+        
+        // Unknown character
+<span class="fc" id="L188">        throw new LexicalException(&quot;Unexpected character: &quot; + current, line, column);</span>
+    }
+    
+    private void skipWhitespace() {
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        while (position &lt; source.length()) {</span>
+<span class="fc" id="L193">            char c = source.charAt(position);</span>
+<span class="pc bpc" id="L194" title="2 of 6 branches missed.">            if (c == ' ' || c == '\t' || c == '\r') {</span>
+<span class="fc" id="L195">                advance();</span>
+            } else {
+                break;
+            }
+<span class="fc" id="L199">        }</span>
+<span class="fc" id="L200">    }</span>
+    
+    private void skipLineComment() {
+<span class="pc bpc" id="L203" title="1 of 4 branches missed.">        while (position &lt; source.length() &amp;&amp; source.charAt(position) != '\n') {</span>
+<span class="fc" id="L204">            advance();</span>
+        }
+<span class="fc" id="L206">    }</span>
+    
+    private void skipMultiLineComment() {
+<span class="fc" id="L209">        advance(); // Skip '/'</span>
+<span class="fc" id="L210">        advance(); // Skip '*'</span>
+        
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        while (position &lt; source.length() - 1) {</span>
+<span class="fc bfc" id="L213" title="All 4 branches covered.">            if (source.charAt(position) == '*' &amp;&amp; source.charAt(position + 1) == '/') {</span>
+<span class="fc" id="L214">                advance(); // Skip '*'</span>
+<span class="fc" id="L215">                advance(); // Skip '/'</span>
+<span class="fc" id="L216">                return;</span>
+            }
+<span class="fc" id="L218">            advance();</span>
+        }
+        
+        // Unterminated comment
+<span class="fc" id="L222">        throw new LexicalException(&quot;Unterminated multi-line comment&quot;, line, column);</span>
+    }
+    
+    private Token scanNumber() {
+<span class="fc" id="L226">        int startLine = line;</span>
+<span class="fc" id="L227">        int startColumn = column;</span>
+<span class="fc" id="L228">        StringBuilder sb = new StringBuilder();</span>
+        
+<span class="fc bfc" id="L230" title="All 4 branches covered.">        while (position &lt; source.length() &amp;&amp; Character.isDigit(source.charAt(position))) {</span>
+<span class="fc" id="L231">            sb.append(source.charAt(position));</span>
+<span class="fc" id="L232">            advance();</span>
+        }
+        
+        // Check for decimal point
+<span class="fc bfc" id="L236" title="All 4 branches covered.">        if (position &lt; source.length() &amp;&amp; source.charAt(position) == '.' &amp;&amp; </span>
+<span class="pc bpc" id="L237" title="1 of 4 branches missed.">            position + 1 &lt; source.length() &amp;&amp; Character.isDigit(source.charAt(position + 1))) {</span>
+<span class="fc" id="L238">            sb.append(source.charAt(position));</span>
+<span class="fc" id="L239">            advance();</span>
+            
+<span class="fc bfc" id="L241" title="All 4 branches covered.">            while (position &lt; source.length() &amp;&amp; Character.isDigit(source.charAt(position))) {</span>
+<span class="fc" id="L242">                sb.append(source.charAt(position));</span>
+<span class="fc" id="L243">                advance();</span>
+            }
+            
+<span class="fc" id="L246">            return new Token(TokenType.REAL, sb.toString(), startLine, startColumn);</span>
+        }
+        
+<span class="fc" id="L249">        return new Token(TokenType.INTEGER, sb.toString(), startLine, startColumn);</span>
+    }
+    
+    private Token scanString(char quote) {
+<span class="fc" id="L253">        int startLine = line;</span>
+<span class="fc" id="L254">        int startColumn = column;</span>
+<span class="fc" id="L255">        StringBuilder sb = new StringBuilder();</span>
+        
+<span class="fc" id="L257">        advance(); // Skip opening quote</span>
+        
+<span class="fc bfc" id="L259" title="All 4 branches covered.">        while (position &lt; source.length() &amp;&amp; source.charAt(position) != quote) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            if (source.charAt(position) == '\\') {</span>
+<span class="fc" id="L261">                advance();</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">                if (position &lt; source.length()) {</span>
+<span class="fc" id="L263">                    char escaped = source.charAt(position);</span>
+<span class="pc bpc" id="L264" title="4 of 7 branches missed.">                    switch (escaped) {</span>
+<span class="fc" id="L265">                        case 'n' -&gt; sb.append('\n');</span>
+<span class="fc" id="L266">                        case 't' -&gt; sb.append('\t');</span>
+<span class="nc" id="L267">                        case 'r' -&gt; sb.append('\r');</span>
+<span class="nc" id="L268">                        case '\\' -&gt; sb.append('\\');</span>
+<span class="nc" id="L269">                        case '&quot;' -&gt; sb.append('&quot;');</span>
+<span class="fc" id="L270">                        case '\'' -&gt; sb.append('\'');</span>
+<span class="nc" id="L271">                        default -&gt; sb.append(escaped);</span>
+                    }
+<span class="fc" id="L273">                    advance();</span>
+<span class="fc" id="L274">                }</span>
+            } else {
+<span class="fc" id="L276">                sb.append(source.charAt(position));</span>
+<span class="fc" id="L277">                advance();</span>
+            }
+        }
+        
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        if (position &gt;= source.length()) {</span>
+<span class="fc" id="L282">            throw new LexicalException(&quot;Unterminated string literal&quot;, startLine, startColumn);</span>
+        }
+        
+<span class="fc" id="L285">        advance(); // Skip closing quote</span>
+<span class="fc" id="L286">        return new Token(TokenType.STRING, sb.toString(), startLine, startColumn);</span>
+    }
+    
+    private Token scanIdentifier() {
+<span class="fc" id="L290">        int startLine = line;</span>
+<span class="fc" id="L291">        int startColumn = column;</span>
+<span class="fc" id="L292">        StringBuilder sb = new StringBuilder();</span>
+        
+<span class="fc bfc" id="L294" title="All 2 branches covered.">        while (position &lt; source.length() &amp;&amp; </span>
+<span class="pc bpc" id="L295" title="1 of 4 branches missed.">               (Character.isLetterOrDigit(source.charAt(position)) || source.charAt(position) == '_')) {</span>
+<span class="fc" id="L296">            sb.append(source.charAt(position));</span>
+<span class="fc" id="L297">            advance();</span>
+        }
+        
+<span class="fc" id="L300">        String identifier = sb.toString();</span>
+<span class="fc" id="L301">        TokenType type = KEYWORDS.getOrDefault(identifier, TokenType.IDENTIFIER);</span>
+        
+<span class="fc" id="L303">        return new Token(type, identifier, startLine, startColumn);</span>
+    }
+    
+    private TokenType getSingleCharToken(char c) {
+<span class="pc bpc" id="L307" title="2 of 19 branches missed.">        return switch (c) {</span>
+<span class="fc" id="L308">            case '+' -&gt; TokenType.PLUS;</span>
+<span class="fc" id="L309">            case '-' -&gt; TokenType.MINUS;</span>
+<span class="fc" id="L310">            case '*' -&gt; TokenType.MULTIPLY;</span>
+<span class="fc" id="L311">            case '/' -&gt; TokenType.DIVIDE;</span>
+<span class="nc" id="L312">            case '%' -&gt; TokenType.MODULO;</span>
+<span class="fc" id="L313">            case '=' -&gt; TokenType.ASSIGN;</span>
+<span class="fc" id="L314">            case '&lt;' -&gt; TokenType.LESS_THAN;</span>
+<span class="fc" id="L315">            case '&gt;' -&gt; TokenType.GREATER_THAN;</span>
+<span class="fc" id="L316">            case '(' -&gt; TokenType.LEFT_PAREN;</span>
+<span class="fc" id="L317">            case ')' -&gt; TokenType.RIGHT_PAREN;</span>
+<span class="fc" id="L318">            case '{' -&gt; TokenType.LEFT_BRACE;</span>
+<span class="fc" id="L319">            case '}' -&gt; TokenType.RIGHT_BRACE;</span>
+<span class="fc" id="L320">            case '[' -&gt; TokenType.LEFT_BRACKET;</span>
+<span class="fc" id="L321">            case ']' -&gt; TokenType.RIGHT_BRACKET;</span>
+<span class="fc" id="L322">            case ';' -&gt; TokenType.SEMICOLON;</span>
+<span class="fc" id="L323">            case ',' -&gt; TokenType.COMMA;</span>
+<span class="fc" id="L324">            case '.' -&gt; TokenType.DOT;</span>
+<span class="nc" id="L325">            case ':' -&gt; TokenType.COLON;</span>
+<span class="fc" id="L326">            default -&gt; null;</span>
+        };
+    }
+    
+    private char peek() {
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (position + 1 &gt;= source.length()) {</span>
+<span class="fc" id="L332">            return '\0';</span>
+        }
+<span class="fc" id="L334">        return source.charAt(position + 1);</span>
+    }
+    
+    private void advance() {
+<span class="pc bpc" id="L338" title="1 of 4 branches missed.">        if (position &lt; source.length() &amp;&amp; source.charAt(position) == '\n') {</span>
+<span class="fc" id="L339">            line++;</span>
+<span class="fc" id="L340">            column = 1;</span>
+        } else {
+<span class="fc" id="L342">            column++;</span>
+        }
+<span class="fc" id="L344">        position++;</span>
+<span class="fc" id="L345">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

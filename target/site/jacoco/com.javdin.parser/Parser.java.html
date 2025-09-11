@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Parser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Javdin</a> &gt; <a href="index.source.html" class="el_package">com.javdin.parser</a> &gt; <span class="el_source">Parser.java</span></div><h1>Parser.java</h1><pre class="source lang-java linenums">package com.javdin.parser;
+
+import com.javdin.lexer.Lexer;
+import com.javdin.lexer.Token;
+import com.javdin.lexer.TokenType;
+import com.javdin.ast.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Parser for the Javdin language.
+ * Implements a recursive descent parser.
+ * In the future, this will be replaced by CUP-generated parser.
+ */
+public class Parser {
+    private final Lexer lexer;
+    private Token currentToken;
+    
+<span class="fc" id="L20">    public Parser(Lexer lexer) {</span>
+<span class="fc" id="L21">        this.lexer = lexer;</span>
+<span class="fc" id="L22">        this.currentToken = lexer.nextToken();</span>
+<span class="fc" id="L23">    }</span>
+    
+    /**
+     * Parse the input and return the AST root node.
+     */
+    public ProgramNode parse() {
+<span class="fc" id="L29">        List&lt;StatementNode&gt; statements = new ArrayList&lt;&gt;();</span>
+        
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        while (currentToken.type() != TokenType.EOF) {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">            if (currentToken.type() == TokenType.NEWLINE) {</span>
+<span class="fc" id="L33">                advance();</span>
+<span class="fc" id="L34">                continue;</span>
+            }
+            
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">            if (currentToken.type() == TokenType.SEMICOLON) {</span>
+<span class="nc" id="L38">                advance(); // Skip semicolons</span>
+<span class="nc" id="L39">                continue;</span>
+            }
+            
+<span class="fc" id="L42">            StatementNode stmt = parseStatement();</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">            if (stmt != null) {</span>
+<span class="fc" id="L44">                statements.add(stmt);</span>
+                
+                // Consume optional semicolon after statement
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">                if (currentToken.type() == TokenType.SEMICOLON) {</span>
+<span class="fc" id="L48">                    advance();</span>
+                }
+            }
+<span class="fc" id="L51">        }</span>
+        
+<span class="fc" id="L53">        return new ProgramNode(statements, 1, 1);</span>
+    }
+    
+    private StatementNode parseStatement() {
+<span class="pc bpc" id="L57" title="1 of 3 branches missed.">        return switch (currentToken.type()) {</span>
+<span class="fc" id="L58">            case VAR -&gt; parseDeclaration();</span>
+<span class="fc" id="L59">            case PRINT -&gt; parsePrint();</span>
+            // Add more statement types here
+<span class="nc" id="L61">            default -&gt; parseExpressionStatement();</span>
+        };
+    }
+    
+    private DeclarationNode parseDeclaration() {
+<span class="fc" id="L66">        int line = currentToken.line();</span>
+<span class="fc" id="L67">        int column = currentToken.column();</span>
+        
+<span class="fc" id="L69">        expect(TokenType.VAR);</span>
+        
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (currentToken.type() != TokenType.IDENTIFIER) {</span>
+<span class="fc" id="L72">            throw new ParseException(&quot;Expected identifier after 'var'&quot;, currentToken.line(), currentToken.column());</span>
+        }
+        
+<span class="fc" id="L75">        String varName = currentToken.value();</span>
+<span class="fc" id="L76">        advance();</span>
+        
+<span class="fc" id="L78">        ExpressionNode initialValue = null;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (currentToken.type() == TokenType.ASSIGN) {</span>
+<span class="fc" id="L80">            advance();</span>
+<span class="fc" id="L81">            initialValue = parseExpression();</span>
+        }
+        
+<span class="fc" id="L84">        return new DeclarationNode(varName, initialValue, line, column);</span>
+    }
+    
+    private PrintNode parsePrint() {
+<span class="fc" id="L88">        int line = currentToken.line();</span>
+<span class="fc" id="L89">        int column = currentToken.column();</span>
+        
+<span class="fc" id="L91">        expect(TokenType.PRINT);</span>
+        
+        // Print statements can optionally have an expression
+<span class="fc" id="L94">        ExpressionNode expression = null;</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (currentToken.type() != TokenType.SEMICOLON &amp;&amp; </span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            currentToken.type() != TokenType.NEWLINE &amp;&amp; </span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            currentToken.type() != TokenType.EOF) {</span>
+<span class="nc" id="L98">            expression = parseExpression();</span>
+        }
+        
+<span class="fc" id="L101">        return new PrintNode(line, column, expression);</span>
+    }
+    
+    private ExpressionStatementNode parseExpressionStatement() {
+<span class="nc" id="L105">        int line = currentToken.line();</span>
+<span class="nc" id="L106">        int column = currentToken.column();</span>
+        
+        // Parse the expression
+<span class="nc" id="L109">        ExpressionNode expression = parseExpression();</span>
+        
+<span class="nc" id="L111">        return new ExpressionStatementNode(line, column, expression);</span>
+    }
+    
+    private ExpressionNode parseExpression() {
+<span class="fc" id="L115">        return parseLiteral();</span>
+    }
+    
+    private LiteralNode parseLiteral() {
+<span class="fc" id="L119">        Token token = currentToken;</span>
+        
+<span class="pc bpc" id="L121" title="2 of 6 branches missed.">        switch (token.type()) {</span>
+            case INTEGER -&gt; {
+<span class="fc" id="L123">                advance();</span>
+<span class="fc" id="L124">                return new LiteralNode(Integer.parseInt(token.value()), </span>
+                                     LiteralNode.LiteralType.INTEGER, 
+<span class="fc" id="L126">                                     token.line(), token.column());</span>
+            }
+            case REAL -&gt; {
+<span class="fc" id="L129">                advance();</span>
+<span class="fc" id="L130">                return new LiteralNode(Double.parseDouble(token.value()), </span>
+                                     LiteralNode.LiteralType.REAL, 
+<span class="fc" id="L132">                                     token.line(), token.column());</span>
+            }
+            case TRUE -&gt; {
+<span class="fc" id="L135">                advance();</span>
+<span class="fc" id="L136">                return new LiteralNode(true, LiteralNode.LiteralType.BOOLEAN, </span>
+<span class="fc" id="L137">                                     token.line(), token.column());</span>
+            }
+            case FALSE -&gt; {
+<span class="nc" id="L140">                advance();</span>
+<span class="nc" id="L141">                return new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, </span>
+<span class="nc" id="L142">                                     token.line(), token.column());</span>
+            }
+            case STRING -&gt; {
+<span class="fc" id="L145">                advance();</span>
+<span class="fc" id="L146">                return new LiteralNode(token.value(), LiteralNode.LiteralType.STRING, </span>
+<span class="fc" id="L147">                                     token.line(), token.column());</span>
+            }
+<span class="nc" id="L149">            default -&gt; throw new ParseException(&quot;Expected literal&quot;, token.line(), token.column());</span>
+        }
+    }
+    
+    private void expect(TokenType expected) {
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (currentToken.type() != expected) {</span>
+<span class="nc" id="L155">            throw new ParseException(&quot;Expected &quot; + expected + &quot; but got &quot; + currentToken.type(), </span>
+<span class="nc" id="L156">                                   currentToken.line(), currentToken.column());</span>
+        }
+<span class="fc" id="L158">        advance();</span>
+<span class="fc" id="L159">    }</span>
+    
+    private void advance() {
+<span class="fc" id="L162">        currentToken = lexer.nextToken();</span>
+<span class="fc" id="L163">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

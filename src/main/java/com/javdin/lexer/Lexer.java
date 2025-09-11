@@ -18,10 +18,16 @@ public class Lexer {
     static {
         KEYWORDS.put("var", TokenType.VAR);
         KEYWORDS.put("if", TokenType.IF);
+        KEYWORDS.put("then", TokenType.THEN);
         KEYWORDS.put("else", TokenType.ELSE);
+        KEYWORDS.put("end", TokenType.END);
         KEYWORDS.put("while", TokenType.WHILE);
         KEYWORDS.put("for", TokenType.FOR);
+        KEYWORDS.put("in", TokenType.IN);
+        KEYWORDS.put("loop", TokenType.LOOP);
+        KEYWORDS.put("exit", TokenType.EXIT);
         KEYWORDS.put("function", TokenType.FUNCTION);
+        KEYWORDS.put("func", TokenType.FUNC);
         KEYWORDS.put("return", TokenType.RETURN);
         KEYWORDS.put("print", TokenType.PRINT);
         KEYWORDS.put("input", TokenType.INPUT);
@@ -32,7 +38,15 @@ public class Lexer {
         KEYWORDS.put("continue", TokenType.CONTINUE);
         KEYWORDS.put("and", TokenType.AND);
         KEYWORDS.put("or", TokenType.OR);
+        KEYWORDS.put("xor", TokenType.XOR);
         KEYWORDS.put("not", TokenType.NOT);
+        KEYWORDS.put("is", TokenType.IS);
+        KEYWORDS.put("none", TokenType.NONE);
+        // Type indicators
+        KEYWORDS.put("int", TokenType.INT_TYPE);
+        KEYWORDS.put("real", TokenType.REAL_TYPE);
+        KEYWORDS.put("bool", TokenType.BOOL_TYPE);
+        KEYWORDS.put("string", TokenType.STRING_TYPE);
     }
     
     public Lexer(String source) {
@@ -67,14 +81,33 @@ public class Lexer {
             return nextToken();
         }
         
+        if (current == '/' && peek() == '*') {
+            skipMultiLineComment();
+            return nextToken();
+        }
+        
         // Handle multi-character operators
+        if (current == ':' && peek() == '=') {
+            Token token = new Token(TokenType.ASSIGN_OP, line, column);
+            advance();
+            advance();
+            return token;
+        }
+        
+        if (current == '=' && peek() == '>') {
+            Token token = new Token(TokenType.SHORT_IF, line, column);
+            advance();
+            advance();
+            return token;
+        }
+        
         if (current == '=' && peek() == '=') {
             Token token = new Token(TokenType.EQUAL, line, column);
             advance();
             advance();
             return token;
         }
-        
+
         if (current == '!' && peek() == '=') {
             Token token = new Token(TokenType.NOT_EQUAL, line, column);
             advance();
@@ -82,22 +115,49 @@ public class Lexer {
             return token;
         }
         
+        if (current == '/' && peek() == '=') {
+            Token token = new Token(TokenType.NOT_EQUAL_ALT, line, column);
+            advance();
+            advance();
+            return token;
+        }
+
         if (current == '<' && peek() == '=') {
             Token token = new Token(TokenType.LESS_EQUAL, line, column);
             advance();
             advance();
             return token;
         }
-        
+
         if (current == '>' && peek() == '=') {
             Token token = new Token(TokenType.GREATER_EQUAL, line, column);
             advance();
             advance();
             return token;
         }
-        
+
         if (current == '-' && peek() == '>') {
             Token token = new Token(TokenType.ARROW, line, column);
+            advance();
+            advance();
+            return token;
+        }
+        
+        if (current == '.' && peek() == '.') {
+            Token token = new Token(TokenType.RANGE, line, column);
+            advance();
+            advance();
+            return token;
+        }        // Handle special type indicators
+        if (current == '[' && peek() == ']') {
+            Token token = new Token(TokenType.ARRAY_TYPE, line, column);
+            advance();
+            advance();
+            return token;
+        }
+        
+        if (current == '{' && peek() == '}') {
+            Token token = new Token(TokenType.TUPLE_TYPE, line, column);
             advance();
             advance();
             return token;
@@ -116,12 +176,10 @@ public class Lexer {
             return scanNumber();
         }
         
-        // Handle strings
-        if (current == '"') {
-            return scanString();
-        }
-        
-        // Handle identifiers and keywords
+        // Handle strings (both single and double quotes)
+        if (current == '"' || current == '\'') {
+            return scanString(current);
+        }        // Handle identifiers and keywords
         if (Character.isLetter(current) || current == '_') {
             return scanIdentifier();
         }
@@ -145,6 +203,23 @@ public class Lexer {
         while (position < source.length() && source.charAt(position) != '\n') {
             advance();
         }
+    }
+    
+    private void skipMultiLineComment() {
+        advance(); // Skip '/'
+        advance(); // Skip '*'
+        
+        while (position < source.length() - 1) {
+            if (source.charAt(position) == '*' && source.charAt(position + 1) == '/') {
+                advance(); // Skip '*'
+                advance(); // Skip '/'
+                return;
+            }
+            advance();
+        }
+        
+        // Unterminated comment
+        throw new LexicalException("Unterminated multi-line comment", line, column);
     }
     
     private Token scanNumber() {
@@ -174,14 +249,14 @@ public class Lexer {
         return new Token(TokenType.INTEGER, sb.toString(), startLine, startColumn);
     }
     
-    private Token scanString() {
+    private Token scanString(char quote) {
         int startLine = line;
         int startColumn = column;
         StringBuilder sb = new StringBuilder();
         
         advance(); // Skip opening quote
         
-        while (position < source.length() && source.charAt(position) != '"') {
+        while (position < source.length() && source.charAt(position) != quote) {
             if (source.charAt(position) == '\\') {
                 advance();
                 if (position < source.length()) {
@@ -192,6 +267,7 @@ public class Lexer {
                         case 'r' -> sb.append('\r');
                         case '\\' -> sb.append('\\');
                         case '"' -> sb.append('"');
+                        case '\'' -> sb.append('\'');
                         default -> sb.append(escaped);
                     }
                     advance();

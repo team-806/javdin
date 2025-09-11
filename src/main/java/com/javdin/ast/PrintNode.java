@@ -1,7 +1,7 @@
 package com.javdin.ast;
 
 public class PrintNode extends StatementNode {
-    private final ExpressionNode expression;
+    private final ExpressionNode expression; // Can be null for empty print statements
 
     public PrintNode(int line, int column, ExpressionNode expression) { 
         super(line, column);

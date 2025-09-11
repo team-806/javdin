@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeclarationNode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Javdin</a> &gt; <a href="index.source.html" class="el_package">com.javdin.ast</a> &gt; <span class="el_source">DeclarationNode.java</span></div><h1>DeclarationNode.java</h1><pre class="source lang-java linenums">package com.javdin.ast;
+
+/**
+ * AST node for variable declarations.
+ */
+public class DeclarationNode extends StatementNode {
+    private final String variableName;
+    private final ExpressionNode initialValue;
+    
+    public DeclarationNode(String variableName, ExpressionNode initialValue, int line, int column) {
+<span class="fc" id="L11">        super(line, column);</span>
+<span class="fc" id="L12">        this.variableName = variableName;</span>
+<span class="fc" id="L13">        this.initialValue = initialValue;</span>
+<span class="fc" id="L14">    }</span>
+    
+    public String getVariableName() {
+<span class="fc" id="L17">        return variableName;</span>
+    }
+    
+    public ExpressionNode getInitialValue() {
+<span class="fc" id="L21">        return initialValue;</span>
+    }
+    
+    @Override
+    public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) {
+<span class="fc" id="L26">        return visitor.visitDeclaration(this);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

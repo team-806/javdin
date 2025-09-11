@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LexerDebug.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Javdin</a> &gt; <a href="index.source.html" class="el_package">com.javdin.lexer</a> &gt; <span class="el_source">LexerDebug.java</span></div><h1>LexerDebug.java</h1><pre class="source lang-java linenums">package com.javdin.lexer;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+/**
+ * Lexer demonstration utility for showing tokenization of Javdin source code.
+ * This is useful for demonstrating the lexer's capabilities.
+ */
+<span class="nc" id="L12">public class LexerDebug {</span>
+    
+    public static void main(String[] args) {
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        if (args.length == 0) {</span>
+            // Default demonstration with sample code
+<span class="nc" id="L17">            System.out.println(&quot;=&quot;.repeat(60));</span>
+<span class="nc" id="L18">            System.out.println(&quot;JAVDIN LEXER DEMONSTRATION&quot;);</span>
+<span class="nc" id="L19">            System.out.println(&quot;=&quot;.repeat(60));</span>
+<span class="nc" id="L20">            System.out.println(&quot;Running with sample code &quot;);</span>
+<span class="nc" id="L21">            System.out.println();</span>
+            
+<span class="nc" id="L23">            String sampleCode = &quot;&quot;&quot;</span>
+                var factorial := func(n) is
+                    if n &lt;= 1 then
+                        return 1
+                    else
+                        return n * factorial(n - 1)
+                    end
+                end
+                
+                for i in 1..5 loop
+                    print factorial(i)
+                    if i = 3 =&gt; exit
+                end
+                &quot;&quot;&quot;;
+                
+<span class="nc" id="L38">            System.out.println(&quot;SAMPLE SOURCE CODE:&quot;);</span>
+<span class="nc" id="L39">            System.out.println(&quot;-&quot;.repeat(40));</span>
+<span class="nc" id="L40">            printSourceWithLineNumbers(sampleCode);</span>
+<span class="nc" id="L41">            System.out.println();</span>
+            
+<span class="nc" id="L43">            System.out.println(&quot;TOKENS:&quot;);</span>
+<span class="nc" id="L44">            System.out.println(&quot;-&quot;.repeat(40));</span>
+<span class="nc" id="L45">            tokenizeSource(sampleCode);</span>
+<span class="nc" id="L46">            return;</span>
+        }
+        
+        try {
+<span class="nc" id="L50">            tokenizeFile(args[0]);</span>
+<span class="nc" id="L51">        } catch (IOException e) {</span>
+<span class="nc" id="L52">            System.err.println(&quot;Error reading file: &quot; + e.getMessage());</span>
+<span class="nc" id="L53">            System.exit(1);</span>
+<span class="nc" id="L54">        } catch (LexicalException e) {</span>
+<span class="nc" id="L55">            System.err.println(&quot;Lexical error: &quot; + e.toString());</span>
+<span class="nc" id="L56">            System.exit(1);</span>
+<span class="nc" id="L57">        }</span>
+<span class="nc" id="L58">    }</span>
+    
+    /**
+     * Tokenizes a file and prints all tokens with detailed information
+     */
+    public static void tokenizeFile(String filename) throws IOException {
+<span class="nc" id="L64">        Path path = Paths.get(filename);</span>
+<span class="nc" id="L65">        String source = Files.readString(path);</span>
+        
+<span class="nc" id="L67">        System.out.println(&quot;=&quot;.repeat(60));</span>
+<span class="nc" id="L68">        System.out.println(&quot;JAVDIN LEXER DEMONSTRATION&quot;);</span>
+<span class="nc" id="L69">        System.out.println(&quot;=&quot;.repeat(60));</span>
+<span class="nc" id="L70">        System.out.println(&quot;File: &quot; + filename);</span>
+<span class="nc" id="L71">        System.out.println(&quot;Source length: &quot; + source.length() + &quot; characters&quot;);</span>
+<span class="nc" id="L72">        System.out.println();</span>
+        
+<span class="nc" id="L74">        System.out.println(&quot;SOURCE CODE:&quot;);</span>
+<span class="nc" id="L75">        System.out.println(&quot;-&quot;.repeat(40));</span>
+<span class="nc" id="L76">        printSourceWithLineNumbers(source);</span>
+<span class="nc" id="L77">        System.out.println();</span>
+        
+<span class="nc" id="L79">        System.out.println(&quot;TOKENS:&quot;);</span>
+<span class="nc" id="L80">        System.out.println(&quot;-&quot;.repeat(40));</span>
+<span class="nc" id="L81">        tokenizeSource(source);</span>
+<span class="nc" id="L82">    }</span>
+    
+    /**
+     * Tokenizes source code string and demonstrates all discovered tokens
+     */
+    public static void tokenizeSource(String source) {
+<span class="nc" id="L88">        Lexer lexer = new Lexer(source);</span>
+<span class="nc" id="L89">        int tokenCount = 0;</span>
+        
+<span class="nc" id="L91">        System.out.printf(&quot;%-4s %-20s %-15s %-30s %s%n&quot;, </span>
+                         &quot;#&quot;, &quot;TOKEN_TYPE&quot;, &quot;POSITION&quot;, &quot;VALUE&quot;, &quot;DESCRIPTION&quot;);
+<span class="nc" id="L93">        System.out.println(&quot;-&quot;.repeat(85));</span>
+        
+        Token token;
+        do {
+<span class="nc" id="L97">            token = lexer.nextToken();</span>
+<span class="nc" id="L98">            tokenCount++;</span>
+            
+<span class="nc" id="L100">            String position = String.format(&quot;%d:%d&quot;, token.line(), token.column());</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            String value = token.value().isEmpty() ? &quot;&lt;no value&gt;&quot; : &quot;\&quot;&quot; + escapeString(token.value()) + &quot;\&quot;&quot;;</span>
+<span class="nc" id="L102">            String description = getTokenDescription(token);</span>
+            
+<span class="nc" id="L104">            System.out.printf(&quot;%-4d %-20s %-15s %-30s %s%n&quot;, </span>
+<span class="nc" id="L105">                             tokenCount, token.type(), position, value, description);</span>
+            
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        } while (token.type() != TokenType.EOF);</span>
+        
+<span class="nc" id="L109">        System.out.println(&quot;-&quot;.repeat(85));</span>
+<span class="nc" id="L110">        System.out.println(&quot;Total tokens: &quot; + tokenCount);</span>
+<span class="nc" id="L111">    }</span>
+    
+    private static void printSourceWithLineNumbers(String source) {
+<span class="nc" id="L114">        String[] lines = source.split(&quot;\\n&quot;, -1);</span>
+        
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        for (int i = 0; i &lt; lines.length; i++) {</span>
+<span class="nc" id="L117">            System.out.printf(&quot;%3d: %s%n&quot;, i + 1, lines[i]);</span>
+        }
+<span class="nc" id="L119">    }</span>
+    
+    private static String escapeString(String str) {
+<span class="nc" id="L122">        return str.replace(&quot;\\&quot;, &quot;\\\\&quot;)</span>
+<span class="nc" id="L123">                  .replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;)</span>
+<span class="nc" id="L124">                  .replace(&quot;\n&quot;, &quot;\\n&quot;)</span>
+<span class="nc" id="L125">                  .replace(&quot;\t&quot;, &quot;\\t&quot;)</span>
+<span class="nc" id="L126">                  .replace(&quot;\r&quot;, &quot;\\r&quot;);</span>
+    }
+    
+    private static String getTokenDescription(Token token) {
+<span class="nc bnc" id="L130" title="All 46 branches missed.">        return switch (token.type()) {</span>
+<span class="nc" id="L131">            case VAR -&gt; &quot;Variable declaration&quot;;</span>
+<span class="nc" id="L132">            case IF -&gt; &quot;Conditional statement&quot;;</span>
+<span class="nc" id="L133">            case THEN -&gt; &quot;If-then clause&quot;;</span>
+<span class="nc" id="L134">            case ELSE -&gt; &quot;If-else clause&quot;;  </span>
+<span class="nc" id="L135">            case END -&gt; &quot;Block terminator&quot;;</span>
+<span class="nc" id="L136">            case WHILE -&gt; &quot;While loop&quot;;</span>
+<span class="nc" id="L137">            case FOR -&gt; &quot;For loop&quot;;</span>
+<span class="nc" id="L138">            case IN -&gt; &quot;For-in loop element&quot;;</span>
+<span class="nc" id="L139">            case LOOP -&gt; &quot;Loop body start&quot;;</span>
+<span class="nc" id="L140">            case EXIT -&gt; &quot;Loop exit statement&quot;;</span>
+<span class="nc" id="L141">            case FUNC -&gt; &quot;Function literal&quot;;</span>
+<span class="nc" id="L142">            case FUNCTION -&gt; &quot;Function declaration&quot;;</span>
+<span class="nc" id="L143">            case RETURN -&gt; &quot;Return statement&quot;;</span>
+<span class="nc" id="L144">            case PRINT -&gt; &quot;Print statement&quot;;</span>
+<span class="nc" id="L145">            case TRUE, FALSE -&gt; &quot;Boolean literal&quot;;</span>
+<span class="nc" id="L146">            case NONE -&gt; &quot;None literal&quot;;</span>
+<span class="nc" id="L147">            case INTEGER -&gt; &quot;Integer literal&quot;;</span>
+<span class="nc" id="L148">            case REAL -&gt; &quot;Real number literal&quot;; </span>
+<span class="nc" id="L149">            case STRING -&gt; &quot;String literal&quot;;</span>
+<span class="nc" id="L150">            case IDENTIFIER -&gt; &quot;Identifier/variable name&quot;;</span>
+<span class="nc" id="L151">            case ASSIGN -&gt; &quot;Assignment (=)&quot;;</span>
+<span class="nc" id="L152">            case ASSIGN_OP -&gt; &quot;Assignment (:=)&quot;; </span>
+<span class="nc" id="L153">            case EQUAL -&gt; &quot;Equality comparison (==)&quot;;</span>
+<span class="nc" id="L154">            case NOT_EQUAL -&gt; &quot;Inequality (!=)&quot;;</span>
+<span class="nc" id="L155">            case NOT_EQUAL_ALT -&gt; &quot;Inequality (/=)&quot;;</span>
+<span class="nc" id="L156">            case LESS_THAN, LESS_EQUAL, GREATER_THAN, GREATER_EQUAL -&gt; &quot;Comparison operator&quot;;</span>
+<span class="nc" id="L157">            case PLUS, MINUS, MULTIPLY, DIVIDE -&gt; &quot;Arithmetic operator&quot;;</span>
+<span class="nc" id="L158">            case AND, OR, XOR -&gt; &quot;Logical operator&quot;;</span>
+<span class="nc" id="L159">            case NOT -&gt; &quot;Logical negation&quot;;</span>
+<span class="nc" id="L160">            case IS -&gt; &quot;Type checking operator&quot;;</span>
+<span class="nc" id="L161">            case ARROW -&gt; &quot;Function arrow (-&gt;)&quot;;</span>
+<span class="nc" id="L162">            case SHORT_IF -&gt; &quot;Short if (=&gt;)&quot;;</span>
+<span class="nc" id="L163">            case RANGE -&gt; &quot;Range operator (..)&quot;;</span>
+<span class="nc" id="L164">            case INT_TYPE, REAL_TYPE, BOOL_TYPE, STRING_TYPE -&gt; &quot;Type indicator&quot;;</span>
+<span class="nc" id="L165">            case ARRAY_TYPE -&gt; &quot;Array type indicator ([])&quot;;</span>
+<span class="nc" id="L166">            case TUPLE_TYPE -&gt; &quot;Tuple type indicator ({})&quot;;</span>
+<span class="nc" id="L167">            case LEFT_PAREN, RIGHT_PAREN -&gt; &quot;Parenthesis&quot;;</span>
+<span class="nc" id="L168">            case LEFT_BRACE, RIGHT_BRACE -&gt; &quot;Brace&quot;;</span>
+<span class="nc" id="L169">            case LEFT_BRACKET, RIGHT_BRACKET -&gt; &quot;Bracket&quot;;</span>
+<span class="nc" id="L170">            case DOT -&gt; &quot;Dot/member access&quot;;</span>
+<span class="nc" id="L171">            case COMMA -&gt; &quot;Comma separator&quot;;</span>
+<span class="nc" id="L172">            case SEMICOLON -&gt; &quot;Statement separator&quot;;</span>
+<span class="nc" id="L173">            case COLON -&gt; &quot;Colon&quot;;</span>
+<span class="nc" id="L174">            case NEWLINE -&gt; &quot;Line break&quot;;</span>
+<span class="nc" id="L175">            case EOF -&gt; &quot;End of file&quot;;</span>
+<span class="nc" id="L176">            default -&gt; &quot;Unknown token&quot;;</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

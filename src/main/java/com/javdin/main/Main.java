@@ -18,9 +18,21 @@ import java.io.IOException;
 public class Main {
     
     public static void main(String[] args) {
+        int exitCode = runInterpreter(args);
+        System.exit(exitCode);
+    }
+    
+    /**
+     * Run the interpreter and return an exit code.
+     * This method is testable as it doesn't call System.exit().
+     * 
+     * @param args Command line arguments
+     * @return Exit code (0 for success, 1 for error)
+     */
+    public static int runInterpreter(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: java -jar javdin.jar <source-file>");
-            System.exit(1);
+            return 1;
         }
         
         String sourceFile = args[0];
@@ -39,7 +51,7 @@ public class Main {
             
             if (errorHandler.hasErrors()) {
                 errorHandler.printErrors();
-                System.exit(1);
+                return 1;
             }
             
             // Semantic analysis
@@ -48,20 +60,22 @@ public class Main {
             
             if (errorHandler.hasErrors()) {
                 errorHandler.printErrors();
-                System.exit(1);
+                return 1;
             }
             
             // Interpretation
             Interpreter interpreter = new Interpreter(errorHandler);
             interpreter.interpret(ast);
             
+            return 0;
+            
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
-            System.exit(1);
+            return 1;
         } catch (Exception e) {
             System.err.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
-            System.exit(1);
+            return 1;
         }
     }
 }

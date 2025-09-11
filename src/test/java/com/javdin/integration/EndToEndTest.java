@@ -30,7 +30,10 @@ class EndToEndTest {
         
         try {
             // Run the interpreter
-            Main.main(new String[]{testFile.toString()});
+            int exitCode = Main.runInterpreter(new String[]{testFile.toString()});
+            
+            // Verify exit code
+            assertThat(exitCode).isEqualTo(0);
             
             // Verify output
             String output = outputStream.toString();
@@ -52,9 +55,9 @@ class EndToEndTest {
         System.setErr(new PrintStream(errorStream));
         
         try {
-            // This should exit with error code 1
-            assertThatThrownBy(() -> Main.main(new String[]{testFile.toString()}))
-                .isInstanceOf(SecurityException.class); // System.exit throws this in tests
+            // This should return error code 1
+            int exitCode = Main.runInterpreter(new String[]{testFile.toString()});
+            assertThat(exitCode).isEqualTo(1);
         } finally {
             System.setErr(originalErr);
         }
@@ -68,8 +71,8 @@ class EndToEndTest {
         System.setErr(new PrintStream(errorStream));
         
         try {
-            assertThatThrownBy(() -> Main.main(new String[]{"nonexistent.d"}))
-                .isInstanceOf(SecurityException.class); // System.exit throws this in tests
+            int exitCode = Main.runInterpreter(new String[]{"nonexistent.d"});
+            assertThat(exitCode).isEqualTo(1);
             
             String error = errorStream.toString();
             assertThat(error).contains("Error reading file");
@@ -86,8 +89,8 @@ class EndToEndTest {
         System.setErr(new PrintStream(errorStream));
         
         try {
-            assertThatThrownBy(() -> Main.main(new String[]{}))
-                .isInstanceOf(SecurityException.class); // System.exit throws this in tests
+            int exitCode = Main.runInterpreter(new String[]{});
+            assertThat(exitCode).isEqualTo(1);
             
             String error = errorStream.toString();
             assertThat(error).contains("Usage:");

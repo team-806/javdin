@@ -34,9 +34,19 @@ public class Parser {
                 continue;
             }
             
+            if (currentToken.type() == TokenType.SEMICOLON) {
+                advance(); // Skip semicolons
+                continue;
+            }
+            
             StatementNode stmt = parseStatement();
             if (stmt != null) {
                 statements.add(stmt);
+                
+                // Consume optional semicolon after statement
+                if (currentToken.type() == TokenType.SEMICOLON) {
+                    advance();
+                }
             }
         }
         
@@ -80,8 +90,13 @@ public class Parser {
         
         expect(TokenType.PRINT);
         
-        // For now, parse a simple literal expression
-        ExpressionNode expression = parseExpression();
+        // Print statements can optionally have an expression
+        ExpressionNode expression = null;
+        if (currentToken.type() != TokenType.SEMICOLON && 
+            currentToken.type() != TokenType.NEWLINE && 
+            currentToken.type() != TokenType.EOF) {
+            expression = parseExpression();
+        }
         
         return new PrintNode(line, column, expression);
     }

@@ -4,6 +4,7 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ArrayAccessNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/WhileNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/DeclarationNode.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/LexerDebug.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/IfNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/TokenType.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ContinueNode.java
@@ -20,6 +21,7 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/interpreter/Interpreter.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/Lexer.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/Token.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/debug/ParserDebug.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/AstNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/AstNodes.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/BinaryOpNode.java

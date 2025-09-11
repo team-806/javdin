@@ -1,16 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.javdin.lexer.LexerTest
 -------------------------------------------------------------------------------
-Tests run: 13, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.280 s <<< FAILURE! -- in com.javdin.lexer.LexerTest
-com.javdin.lexer.LexerTest.testLineAndColumnTracking -- Time elapsed: 0.015 s <<< FAILURE!
-org.opentest4j.AssertionFailedError: 
-
-expected: NEWLINE
- but was: IDENTIFIER
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
-	at com.javdin.lexer.LexerTest.testLineAndColumnTracking(LexerTest.java:131)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-
+Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.091 s -- in com.javdin.lexer.LexerTest
