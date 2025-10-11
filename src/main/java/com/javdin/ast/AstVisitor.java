@@ -28,4 +28,6 @@ public interface AstVisitor<T> {
     T visitFunctionLiteral(FunctionLiteralNode node);
     T visitArrayLiteral(ArrayLiteralNode node);
     T visitTupleLiteral(TupleLiteralNode node);
+    T visitTypeCheck(TypeCheckNode node);
+    T visitTupleMemberAccess(TupleMemberAccessNode node);
 }

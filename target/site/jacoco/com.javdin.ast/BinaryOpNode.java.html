@@ -6,14 +6,14 @@ public class BinaryOpNode extends ExpressionNode {
     private final ExpressionNode right;
 
     public BinaryOpNode(int line, int column, ExpressionNode left, String operator, ExpressionNode right) { 
-<span class="nc" id="L9">        super(line, column);</span>
-<span class="nc" id="L10">        this.left = left;</span>
-<span class="nc" id="L11">        this.operator = operator;</span>
-<span class="nc" id="L12">        this.right = right;</span>
-<span class="nc" id="L13">    }</span>
+<span class="fc" id="L9">        super(line, column);</span>
+<span class="fc" id="L10">        this.left = left;</span>
+<span class="fc" id="L11">        this.operator = operator;</span>
+<span class="fc" id="L12">        this.right = right;</span>
+<span class="fc" id="L13">    }</span>
 
-<span class="nc" id="L15">    public ExpressionNode getLeft() { return left; }</span>
-<span class="nc" id="L16">    public String getOperator() { return operator; }</span>
+<span class="fc" id="L15">    public ExpressionNode getLeft() { return left; }</span>
+<span class="fc" id="L16">    public String getOperator() { return operator; }</span>
 <span class="nc" id="L17">    public ExpressionNode getRight() { return right; }</span>
 
     @Override

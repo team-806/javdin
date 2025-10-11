@@ -83,5 +83,7 @@ public class Interpreter implements AstVisitor&lt;Value&gt; {
 <span class="nc" id="L83">    @Override public Value visitFunctionLiteral(FunctionLiteralNode node) { return Value.VOID; }</span>
 <span class="nc" id="L84">    @Override public Value visitArrayLiteral(ArrayLiteralNode node) { return Value.VOID; }</span>
 <span class="nc" id="L85">    @Override public Value visitTupleLiteral(TupleLiteralNode node) { return Value.VOID; }</span>
+<span class="nc" id="L86">    @Override public Value visitTypeCheck(TypeCheckNode node) { return Value.VOID; }</span>
+<span class="nc" id="L87">    @Override public Value visitTupleMemberAccess(TupleMemberAccessNode node) { return Value.VOID; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

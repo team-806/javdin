@@ -77,4 +77,6 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
     @Override public Void visitFunctionLiteral(FunctionLiteralNode node) { return null; }
     @Override public Void visitArrayLiteral(ArrayLiteralNode node) { return null; }
     @Override public Void visitTupleLiteral(TupleLiteralNode node) { return null; }
+    @Override public Void visitTypeCheck(TypeCheckNode node) { return null; }
+    @Override public Void visitTupleMemberAccess(TupleMemberAccessNode node) { return null; }
 }

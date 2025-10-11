@@ -17,15 +17,15 @@ public class FunctionLiteralNode extends ExpressionNode {
 
     // Constructor for expression body: func(params) =&gt; expr
     public FunctionLiteralNode(int line, int column, List&lt;String&gt; parameters, ExpressionNode body, boolean isExpressionBody) { 
-<span class="nc" id="L20">        super(line, column);</span>
-<span class="nc" id="L21">        this.parameters = parameters;</span>
-<span class="nc" id="L22">        this.body = body;</span>
-<span class="nc" id="L23">        this.isExpressionBody = isExpressionBody;</span>
-<span class="nc" id="L24">    }</span>
+<span class="fc" id="L20">        super(line, column);</span>
+<span class="fc" id="L21">        this.parameters = parameters;</span>
+<span class="fc" id="L22">        this.body = body;</span>
+<span class="fc" id="L23">        this.isExpressionBody = isExpressionBody;</span>
+<span class="fc" id="L24">    }</span>
 
-<span class="nc" id="L26">    public List&lt;String&gt; getParameters() { return parameters; }</span>
+<span class="fc" id="L26">    public List&lt;String&gt; getParameters() { return parameters; }</span>
 <span class="nc" id="L27">    public Object getBody() { return body; }</span>
-<span class="nc" id="L28">    public boolean isExpressionBody() { return isExpressionBody; }</span>
+<span class="fc" id="L28">    public boolean isExpressionBody() { return isExpressionBody; }</span>
 
     @SuppressWarnings(&quot;unchecked&quot;)
     public List&lt;StatementNode&gt; getStatementBody() {
@@ -36,10 +36,10 @@ public class FunctionLiteralNode extends ExpressionNode {
     }
 
     public ExpressionNode getExpressionBody() {
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (!isExpressionBody) {</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (!isExpressionBody) {</span>
 <span class="nc" id="L40">            throw new IllegalStateException(&quot;Function has statement body, not expression body&quot;);</span>
         }
-<span class="nc" id="L42">        return (ExpressionNode) body;</span>
+<span class="fc" id="L42">        return (ExpressionNode) body;</span>
     }
 
     @Override

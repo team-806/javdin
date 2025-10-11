@@ -46,11 +46,21 @@ non terminal ProgramNode program;
 non terminal List<StatementNode> statement_list;
 non terminal StatementNode statement;
 non terminal ExpressionNode expression;
+non terminal ExpressionNode relation;
+non terminal ExpressionNode factor;
+non terminal ExpressionNode term;
+non terminal ExpressionNode unary;
+non terminal ExpressionNode primary;
+non terminal ExpressionNode reference;
+non terminal ExpressionNode reference_base;
 non terminal ExpressionNode literal;
+non terminal String type_indicator;
 non terminal ArrayLiteralNode array_literal;
 non terminal TupleLiteralNode tuple_literal;
 non terminal FunctionLiteralNode function_literal;
 non terminal List<ExpressionNode> expression_list;
+non terminal List<ExpressionNode> argument_list_opt;
+non terminal List<ExpressionNode> argument_list;
 non terminal List<TupleLiteralNode.TupleElement> tuple_element_list;
 non terminal TupleLiteralNode.TupleElement tuple_element;
 non terminal List<String> parameter_list_opt;
@@ -61,6 +71,16 @@ non terminal separator_opt;
 non terminal separator_list;
 non terminal separator;
 
+/* Precedence declarations (lowest to highest) */
+precedence left OR;
+precedence left XOR;
+precedence left AND;
+precedence left EQUAL, NOT_EQUAL, NOT_EQUAL_ALT;
+precedence left LESS_THAN, LESS_EQUAL, GREATER_THAN, GREATER_EQUAL;
+precedence left PLUS, MINUS;
+precedence left MULTIPLY, DIVIDE;
+precedence right NOT;
+
 /* Grammar rules */
 program ::= statement_list:stmts
     {: RESULT = new ProgramNode(stmts, 1, 1); :}
@@ -69,9 +89,9 @@ program ::= statement_list:stmts
 
 /* Statement list with optional separators (semicolons or newlines) */
 statement_list ::= 
-    statement_list:list separator_opt statement:stmt
+    statement_list:list separator_opt statement:stmt separator_opt
     {: list.add(stmt); RESULT = list; :}
-    | statement:stmt
+    | statement:stmt separator_opt
     {: List<StatementNode> list = new ArrayList<>(); 
        list.add(stmt); 
        RESULT = list; :};
@@ -115,11 +135,132 @@ variable_definition ::=
     | IDENTIFIER:name
     {: RESULT = new DeclarationNode.VariableDefinition(name, null); :};
 
-expression ::= literal:lit
-    {: RESULT = lit; :}
-    | IDENTIFIER:id
-    {: RESULT = new ReferenceNode(idleft, idright, id); :};
+/* Expression grammar with proper precedence (per Project D spec) */
+/* Expression: Relation { ( or | and | xor ) Relation } */
+expression ::=
+    expression:left OR relation:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "or", right); :}
+    | expression:left XOR relation:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "xor", right); :}
+    | expression:left AND relation:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "and", right); :}
+    | relation:r
+    {: RESULT = r; :}
+    ;
 
+/* Relation: Factor [ ( < | <= | > | >= | = | /= ) Factor ] */
+relation ::=
+    factor:left LESS_THAN factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "<", right); :}
+    | factor:left LESS_EQUAL factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "<=", right); :}
+    | factor:left GREATER_THAN factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, ">", right); :}
+    | factor:left GREATER_EQUAL factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, ">=", right); :}
+    | factor:left EQUAL factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "=", right); :}
+    | factor:left NOT_EQUAL factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "/=", right); :}
+    | factor:left NOT_EQUAL_ALT factor:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "/=", right); :}
+    | factor:f
+    {: RESULT = f; :}
+    ;
+
+/* Factor: Term { [ + | - ] Term } */
+factor ::=
+    factor:left PLUS term:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "+", right); :}
+    | factor:left MINUS term:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "-", right); :}
+    | term:t
+    {: RESULT = t; :}
+    ;
+
+/* Term: Unary { ( * | / ) Unary } */
+term ::=
+    term:left MULTIPLY unary:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "*", right); :}
+    | term:left DIVIDE unary:right
+    {: RESULT = new BinaryOpNode(leftleft, leftright, left, "/", right); :}
+    | unary:u
+    {: RESULT = u; :}
+    ;
+
+/* Unary: Reference | Reference is TypeIndicator | [ + | - | not ] Primary */
+unary ::=
+    PLUS:op primary:expr
+    {: RESULT = new UnaryOpNode(opleft, opright, "+", expr); :}
+    | MINUS:op primary:expr
+    {: RESULT = new UnaryOpNode(opleft, opright, "-", expr); :}
+    | NOT:op primary:expr
+    {: RESULT = new UnaryOpNode(opleft, opright, "not", expr); :}
+    | reference:ref IS type_indicator:type
+    {: RESULT = new TypeCheckNode(refleft, refright, ref, type); :}
+    | primary:p
+    {: RESULT = p; :}
+    ;
+
+/* Type indicators for 'is' operator */
+type_indicator ::=
+    INT_TYPE {: RESULT = "int"; :}
+    | REAL_TYPE {: RESULT = "real"; :}
+    | BOOL_TYPE {: RESULT = "bool"; :}
+    | STRING_TYPE {: RESULT = "string"; :}
+    | NONE_TYPE {: RESULT = "none"; :}
+    | ARRAY_TYPE {: RESULT = "array"; :}
+    | TUPLE_TYPE {: RESULT = "tuple"; :}
+    | FUNC_TYPE {: RESULT = "func"; :}
+    ;
+
+/* Primary: Literal | FunctionLiteral | ( Expression ) */
+primary ::=
+    literal:lit
+    {: RESULT = lit; :}
+    | reference:ref
+    {: RESULT = ref; :}
+    | LEFT_PAREN:lp expression:expr RIGHT_PAREN
+    {: RESULT = expr; :}
+    ;
+
+/* Reference: IDENT | Reference [ Expression ] | Reference ( ArgumentList ) | Reference . IDENT | Reference . INTEGER */
+reference ::=
+    reference_base:base
+    {: RESULT = base; :}
+    | reference:ref LEFT_BRACKET expression:index RIGHT_BRACKET
+    {: RESULT = new ArrayAccessNode(refleft, refright, ref, index); :}
+    | reference:ref LEFT_PAREN argument_list_opt:args RIGHT_PAREN
+    {: RESULT = new FunctionCallNode(refleft, refright, ref, args); :}
+    | reference:ref DOT IDENTIFIER:member
+    {: RESULT = new TupleMemberAccessNode(refleft, refright, ref, member); :}
+    | reference:ref DOT INTEGER:index
+    {: RESULT = new TupleMemberAccessNode(refleft, refright, ref, index); :}
+    ;
+
+reference_base ::=
+    IDENTIFIER:name
+    {: RESULT = new ReferenceNode(nameleft, nameright, name); :}
+    ;
+
+/* Function call arguments */
+argument_list_opt ::=
+    argument_list:list
+    {: RESULT = list; :}
+    | /* empty */
+    {: RESULT = new ArrayList<>(); :}
+    ;
+
+argument_list ::=
+    argument_list:list COMMA expression:expr
+    {: list.add(expr); RESULT = list; :}
+    | expression:expr
+    {: List<ExpressionNode> list = new ArrayList<>();
+       list.add(expr);
+       RESULT = list; :}
+    ;
+
+/* Literals: all literal types */
 literal ::= INTEGER:val
     {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.INTEGER, valleft, valright); :}
     | REAL:val

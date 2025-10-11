@@ -10,12 +10,12 @@ public class ArrayLiteralNode extends ExpressionNode {
     private final List&lt;ExpressionNode&gt; elements;
     
     public ArrayLiteralNode(List&lt;ExpressionNode&gt; elements, int line, int column) {
-<span class="nc" id="L13">        super(line, column);</span>
-<span class="nc bnc" id="L14" title="All 2 branches missed.">        this.elements = elements != null ? elements : List.of();</span>
-<span class="nc" id="L15">    }</span>
+<span class="fc" id="L13">        super(line, column);</span>
+<span class="pc bpc" id="L14" title="1 of 2 branches missed.">        this.elements = elements != null ? elements : List.of();</span>
+<span class="fc" id="L15">    }</span>
     
     public List&lt;ExpressionNode&gt; getElements() {
-<span class="nc" id="L18">        return elements;</span>
+<span class="fc" id="L18">        return elements;</span>
     }
     
     @Override

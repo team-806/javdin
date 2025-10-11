@@ -83,4 +83,6 @@ public class Interpreter implements AstVisitor<Value> {
     @Override public Value visitFunctionLiteral(FunctionLiteralNode node) { return Value.VOID; }
     @Override public Value visitArrayLiteral(ArrayLiteralNode node) { return Value.VOID; }
     @Override public Value visitTupleLiteral(TupleLiteralNode node) { return Value.VOID; }
+    @Override public Value visitTypeCheck(TypeCheckNode node) { return Value.VOID; }
+    @Override public Value visitTupleMemberAccess(TupleMemberAccessNode node) { return Value.VOID; }
 }

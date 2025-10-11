@@ -37,7 +37,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
      * Maps our TokenType enum to CUP's symbol constants.
      */
     private int mapTokenTypeToSymbol(TokenType tokenType) {
-<span class="pc bpc" id="L40" title="49 of 62 branches missed.">        return switch (tokenType) {</span>
+<span class="pc bpc" id="L40" title="40 of 62 branches missed.">        return switch (tokenType) {</span>
             // Literals with values
 <span class="fc" id="L42">            case IDENTIFIER -&gt; Symbols.IDENTIFIER;</span>
 <span class="fc" id="L43">            case INTEGER -&gt; Symbols.INTEGER;</span>
@@ -50,14 +50,14 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L50">            case IF -&gt; Symbols.IF;</span>
 <span class="nc" id="L51">            case THEN -&gt; Symbols.THEN;</span>
 <span class="nc" id="L52">            case ELSE -&gt; Symbols.ELSE;</span>
-<span class="nc" id="L53">            case END -&gt; Symbols.END;</span>
+<span class="fc" id="L53">            case END -&gt; Symbols.END;</span>
 <span class="nc" id="L54">            case WHILE -&gt; Symbols.WHILE;</span>
 <span class="nc" id="L55">            case FOR -&gt; Symbols.FOR;</span>
 <span class="nc" id="L56">            case IN -&gt; Symbols.IN;</span>
 <span class="nc" id="L57">            case LOOP -&gt; Symbols.LOOP;</span>
 <span class="nc" id="L58">            case EXIT -&gt; Symbols.EXIT;</span>
-<span class="nc" id="L59">            case FUNC -&gt; Symbols.FUNC;</span>
-<span class="nc" id="L60">            case IS -&gt; Symbols.IS;</span>
+<span class="fc" id="L59">            case FUNC -&gt; Symbols.FUNC;</span>
+<span class="fc" id="L60">            case IS -&gt; Symbols.IS;</span>
 <span class="nc" id="L61">            case RETURN -&gt; Symbols.RETURN;</span>
 <span class="fc" id="L62">            case PRINT -&gt; Symbols.PRINT;</span>
 <span class="fc" id="L63">            case TRUE -&gt; Symbols.TRUE;</span>
@@ -75,11 +75,11 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L75">            case FUNC_TYPE -&gt; Symbols.FUNC_TYPE;</span>
             
             //  Operators
-<span class="nc" id="L78">            case PLUS -&gt; Symbols.PLUS;</span>
+<span class="fc" id="L78">            case PLUS -&gt; Symbols.PLUS;</span>
 <span class="nc" id="L79">            case MINUS -&gt; Symbols.MINUS;</span>
-<span class="nc" id="L80">            case MULTIPLY -&gt; Symbols.MULTIPLY;</span>
+<span class="fc" id="L80">            case MULTIPLY -&gt; Symbols.MULTIPLY;</span>
 <span class="nc" id="L81">            case DIVIDE -&gt; Symbols.DIVIDE;</span>
-<span class="fc" id="L82">            case ASSIGN -&gt; Symbols.ASSIGN_OP;  // Map = to := for backward compatibility</span>
+<span class="nc" id="L82">            case ASSIGN -&gt; Symbols.ASSIGN_OP;  // Map = to := for backward compatibility</span>
 <span class="fc" id="L83">            case ASSIGN_OP -&gt; Symbols.ASSIGN_OP;</span>
 <span class="nc" id="L84">            case EQUAL -&gt; Symbols.EQUAL;</span>
 <span class="nc" id="L85">            case NOT_EQUAL -&gt; Symbols.NOT_EQUAL;</span>
@@ -93,15 +93,15 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L93">            case XOR -&gt; Symbols.XOR;</span>
 <span class="nc" id="L94">            case NOT -&gt; Symbols.NOT;</span>
 <span class="nc" id="L95">            case RANGE -&gt; Symbols.RANGE;</span>
-<span class="nc" id="L96">            case SHORT_IF -&gt; Symbols.SHORT_IF;</span>
+<span class="fc" id="L96">            case SHORT_IF -&gt; Symbols.SHORT_IF;</span>
             
             // Delimiters
-<span class="nc" id="L99">            case LEFT_PAREN -&gt; Symbols.LEFT_PAREN;</span>
-<span class="nc" id="L100">            case RIGHT_PAREN -&gt; Symbols.RIGHT_PAREN;</span>
+<span class="fc" id="L99">            case LEFT_PAREN -&gt; Symbols.LEFT_PAREN;</span>
+<span class="fc" id="L100">            case RIGHT_PAREN -&gt; Symbols.RIGHT_PAREN;</span>
 <span class="nc" id="L101">            case LEFT_BRACE -&gt; Symbols.LEFT_BRACE;</span>
 <span class="nc" id="L102">            case RIGHT_BRACE -&gt; Symbols.RIGHT_BRACE;</span>
-<span class="nc" id="L103">            case LEFT_BRACKET -&gt; Symbols.LEFT_BRACKET;</span>
-<span class="nc" id="L104">            case RIGHT_BRACKET -&gt; Symbols.RIGHT_BRACKET;</span>
+<span class="fc" id="L103">            case LEFT_BRACKET -&gt; Symbols.LEFT_BRACKET;</span>
+<span class="fc" id="L104">            case RIGHT_BRACKET -&gt; Symbols.RIGHT_BRACKET;</span>
 <span class="fc" id="L105">            case SEMICOLON -&gt; Symbols.SEMICOLON;</span>
 <span class="fc" id="L106">            case COMMA -&gt; Symbols.COMMA;</span>
 <span class="nc" id="L107">            case DOT -&gt; Symbols.DOT;</span>

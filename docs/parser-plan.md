@@ -315,8 +315,10 @@ public class Parser {
 
 ---
 
-## MILESTONE 3: Expression Grammar with Proper Precedence
+## MILESTONE 3: Expression Grammar with Proper Precedence ✅ COMPLETED
 **Goal**: Implement complete expression grammar with correct operator precedence
+
+**Status**: COMPLETED - All expression hierarchy productions implemented with proper precedence
 
 ### Task 3.1: Define Operator Precedence
 **File**: `src/main/resources/parser.cup`
@@ -446,11 +448,15 @@ public class Parser {
 - ✅ Type checking with `is` works
 - ✅ Parenthesized expressions override precedence
 - ✅ Tests for complex expressions pass
+- ✅ CUP precedence declarations properly ordered after non-terminals
+- ✅ Expression hierarchy follows Project D spec exactly: Expression → Relation → Factor → Term → Unary → Primary
 
 ---
 
-## MILESTONE 4: References and Postfix Operations
+## MILESTONE 4: References and Postfix Operations ✅ COMPLETED
 **Goal**: Implement array access, function calls, and tuple member access
+
+**Status**: COMPLETED - All reference types and postfix operations implemented
 
 ### Task 4.1: Implement Reference Production
 **File**: `src/main/resources/parser.cup`
@@ -521,6 +527,8 @@ public class Parser {
 - ✅ Tuple member access works: `tuple.name` and `tuple.1`
 - ✅ Chained operations work: `obj.method()[0].field`
 - ✅ Tests for all reference types pass
+- ✅ TupleMemberAccessNode created and integrated with visitor pattern
+- ✅ Reference productions support all postfix operations
 
 ---
 

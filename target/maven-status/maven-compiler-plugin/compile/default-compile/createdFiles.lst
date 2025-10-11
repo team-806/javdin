@@ -11,6 +11,7 @@ com/javdin/ast/ContinueNode.class
 com/javdin/parser/LexerAdapter.class
 com/javdin/parser/ParseException.class
 com/javdin/ast/AssignmentNode.class
+com/javdin/ast/TypeCheckNode.class
 com/javdin/ast/ExpressionStatementNode.class
 com/javdin/ast/ForNode.class
 com/javdin/utils/ErrorHandler$Error.class
@@ -36,6 +37,7 @@ com/javdin/debug/ParserDebug.class
 com/javdin/lexer/LexicalException.class
 com/javdin/lexer/InteractiveLexerDemo.class
 com/javdin/main/Main.class
+com/javdin/ast/TupleMemberAccessNode.class
 com/javdin/ast/LiteralNode$LiteralType.class
 com/javdin/ast/WhileNode.class
 com/javdin/parser/LexerAdapter$1.class
