@@ -1,6 +1,7 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/interpreter/Environment.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/semantics/SymbolTable.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/parser/ParseException.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/parser/LexerAdapter.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ArrayAccessNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/WhileNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/DeclarationNode.java
@@ -12,6 +13,8 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ExpressionStatementNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/LiteralNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/utils/ErrorHandler.java
+/home/timofey/Desktop/javdin/target/generated-sources/cup/com/javdin/parser/generated/CupParser.java
+/home/timofey/Desktop/javdin/target/generated-sources/cup/com/javdin/parser/generated/Symbols.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ExpressionNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/FunctionCallNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/AstVisitor.java

@@ -4,15 +4,15 @@ public class PrintNode extends StatementNode {
     private final ExpressionNode expression; // Can be null for empty print statements
 
     public PrintNode(int line, int column, ExpressionNode expression) { 
-<span class="fc" id="L7">        super(line, column);</span>
-<span class="fc" id="L8">        this.expression = expression;</span>
-<span class="fc" id="L9">    }</span>
+<span class="nc" id="L7">        super(line, column);</span>
+<span class="nc" id="L8">        this.expression = expression;</span>
+<span class="nc" id="L9">    }</span>
 
 <span class="nc" id="L11">    public ExpressionNode getExpression() { return expression; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 
-<span class="fc" id="L15">        return visitor.visitPrint(this); </span>
+<span class="nc" id="L15">        return visitor.visitPrint(this); </span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

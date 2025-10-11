@@ -1,164 +1,43 @@
 package com.javdin.parser;
 
 import com.javdin.lexer.Lexer;
-import com.javdin.lexer.Token;
-import com.javdin.lexer.TokenType;
-import com.javdin.ast.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.javdin.ast.ProgramNode;
+import com.javdin.parser.generated.CupParser;
 
 /**
  * Parser for the Javdin language.
- * Implements a recursive descent parser.
- * In the future, this will be replaced by CUP-generated parser.
+ * Wraps the CUP-generated parser to provide a clean API.
  */
 public class Parser {
     private final Lexer lexer;
-    private Token currentToken;
     
     public Parser(Lexer lexer) {
         this.lexer = lexer;
-        this.currentToken = lexer.nextToken();
     }
     
     /**
      * Parse the input and return the AST root node.
+     * @return The root ProgramNode of the parsed AST
+     * @throws ParseException if there is a syntax error
      */
-    public ProgramNode parse() {
-        List<StatementNode> statements = new ArrayList<>();
-        
-        while (currentToken.type() != TokenType.EOF) {
-            if (currentToken.type() == TokenType.NEWLINE) {
-                advance();
-                continue;
-            }
+    public ProgramNode parse() throws ParseException {
+        try {
+            // Create an adapter to bridge our Lexer to CUP's Scanner interface
+            LexerAdapter scanner = new LexerAdapter(lexer);
             
-            if (currentToken.type() == TokenType.SEMICOLON) {
-                advance(); // Skip semicolons
-                continue;
-            }
+            // Create the CUP parser with the adapted lexer
+            CupParser cupParser = new CupParser(scanner);
             
-            StatementNode stmt = parseStatement();
-            if (stmt != null) {
-                statements.add(stmt);
-                
-                // Consume optional semicolon after statement
-                if (currentToken.type() == TokenType.SEMICOLON) {
-                    advance();
-                }
-            }
+            // Parse and extract the result
+            java_cup.runtime.Symbol result = cupParser.parse();
+            
+            // The semantic value of the parse result is the ProgramNode
+            return (ProgramNode) result.value;
+            
+        } catch (Exception e) {
+            // Wrap any parsing exceptions in our ParseException
+            String message = e.getMessage() != null ? e.getMessage() : "Syntax error";
+            throw new ParseException(message, 0, 0, e);
         }
-        
-        return new ProgramNode(statements, 1, 1);
-    }
-    
-    private StatementNode parseStatement() {
-        return switch (currentToken.type()) {
-            case VAR -> parseDeclaration();
-            case PRINT -> parsePrint();
-            // Add more statement types here
-            default -> parseExpressionStatement();
-        };
-    }
-    
-    private DeclarationNode parseDeclaration() {
-        int line = currentToken.line();
-        int column = currentToken.column();
-        
-        expect(TokenType.VAR);
-        
-        if (currentToken.type() != TokenType.IDENTIFIER) {
-            throw new ParseException("Expected identifier after 'var'", currentToken.line(), currentToken.column());
-        }
-        
-        String varName = currentToken.value();
-        advance();
-        
-        ExpressionNode initialValue = null;
-        if (currentToken.type() == TokenType.ASSIGN) {
-            advance();
-            initialValue = parseExpression();
-        }
-        
-        return new DeclarationNode(varName, initialValue, line, column);
-    }
-    
-    private PrintNode parsePrint() {
-        int line = currentToken.line();
-        int column = currentToken.column();
-        
-        expect(TokenType.PRINT);
-        
-        // Print statements can optionally have an expression
-        ExpressionNode expression = null;
-        if (currentToken.type() != TokenType.SEMICOLON && 
-            currentToken.type() != TokenType.NEWLINE && 
-            currentToken.type() != TokenType.EOF) {
-            expression = parseExpression();
-        }
-        
-        return new PrintNode(line, column, expression);
-    }
-    
-    private ExpressionStatementNode parseExpressionStatement() {
-        int line = currentToken.line();
-        int column = currentToken.column();
-        
-        // Parse the expression
-        ExpressionNode expression = parseExpression();
-        
-        return new ExpressionStatementNode(line, column, expression);
-    }
-    
-    private ExpressionNode parseExpression() {
-        return parseLiteral();
-    }
-    
-    private LiteralNode parseLiteral() {
-        Token token = currentToken;
-        
-        switch (token.type()) {
-            case INTEGER -> {
-                advance();
-                return new LiteralNode(Integer.parseInt(token.value()), 
-                                     LiteralNode.LiteralType.INTEGER, 
-                                     token.line(), token.column());
-            }
-            case REAL -> {
-                advance();
-                return new LiteralNode(Double.parseDouble(token.value()), 
-                                     LiteralNode.LiteralType.REAL, 
-                                     token.line(), token.column());
-            }
-            case TRUE -> {
-                advance();
-                return new LiteralNode(true, LiteralNode.LiteralType.BOOLEAN, 
-                                     token.line(), token.column());
-            }
-            case FALSE -> {
-                advance();
-                return new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, 
-                                     token.line(), token.column());
-            }
-            case STRING -> {
-                advance();
-                return new LiteralNode(token.value(), LiteralNode.LiteralType.STRING, 
-                                     token.line(), token.column());
-            }
-            default -> throw new ParseException("Expected literal", token.line(), token.column());
-        }
-    }
-    
-    private void expect(TokenType expected) {
-        if (currentToken.type() != expected) {
-            throw new ParseException("Expected " + expected + " but got " + currentToken.type(), 
-                                   currentToken.line(), currentToken.column());
-        }
-        advance();
-    }
-    
-    private void advance() {
-        currentToken = lexer.nextToken();
     }
 }

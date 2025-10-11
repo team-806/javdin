@@ -10,10 +10,10 @@ import java.util.Stack;
 public class Environment {
     private final Stack&lt;Map&lt;String, Value&gt;&gt; scopes;
     
-<span class="fc" id="L13">    public Environment() {</span>
-<span class="fc" id="L14">        this.scopes = new Stack&lt;&gt;();</span>
-<span class="fc" id="L15">        this.scopes.push(new HashMap&lt;&gt;()); // Global scope</span>
-<span class="fc" id="L16">    }</span>
+<span class="nc" id="L13">    public Environment() {</span>
+<span class="nc" id="L14">        this.scopes = new Stack&lt;&gt;();</span>
+<span class="nc" id="L15">        this.scopes.push(new HashMap&lt;&gt;()); // Global scope</span>
+<span class="nc" id="L16">    }</span>
     
     public void enterScope() {
 <span class="nc" id="L19">        scopes.push(new HashMap&lt;&gt;());</span>
@@ -26,8 +26,8 @@ public class Environment {
 <span class="nc" id="L26">    }</span>
     
     public void define(String name, Value value) {
-<span class="fc" id="L29">        scopes.peek().put(name, value);</span>
-<span class="fc" id="L30">    }</span>
+<span class="nc" id="L29">        scopes.peek().put(name, value);</span>
+<span class="nc" id="L30">    }</span>
     
     public Value get(String name) {
 <span class="nc bnc" id="L33" title="All 2 branches missed.">        for (int i = scopes.size() - 1; i &gt;= 0; i--) {</span>

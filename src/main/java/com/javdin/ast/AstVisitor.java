@@ -26,4 +26,6 @@ public interface AstVisitor<T> {
     T visitFunctionCall(FunctionCallNode node);
     T visitArrayAccess(ArrayAccessNode node);
     T visitFunctionLiteral(FunctionLiteralNode node);
+    T visitArrayLiteral(ArrayLiteralNode node);
+    T visitTupleLiteral(TupleLiteralNode node);
 }

@@ -9,16 +9,16 @@ import java.util.Map;
 public class Scope {
     private final Map&lt;String, String&gt; symbols;
     
-<span class="fc" id="L12">    public Scope() {</span>
-<span class="fc" id="L13">        this.symbols = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L14">    }</span>
+<span class="nc" id="L12">    public Scope() {</span>
+<span class="nc" id="L13">        this.symbols = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L14">    }</span>
     
     public void declare(String name, String type) {
-<span class="fc" id="L17">        symbols.put(name, type);</span>
-<span class="fc" id="L18">    }</span>
+<span class="nc" id="L17">        symbols.put(name, type);</span>
+<span class="nc" id="L18">    }</span>
     
     public boolean isDeclared(String name) {
-<span class="fc" id="L21">        return symbols.containsKey(name);</span>
+<span class="nc" id="L21">        return symbols.containsKey(name);</span>
     }
     
     public String getType(String name) {

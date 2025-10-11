@@ -22,5 +22,6 @@
     
     // Terminal settings for clean output
     "terminal.integrated.scrollback": 5000,
-    "terminal.integrated.enableVisualBell": false
+    "terminal.integrated.enableVisualBell": false,
+    "chat.agent.maxRequests": 1000
 }

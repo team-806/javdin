@@ -11,46 +11,46 @@ public class Interpreter implements AstVisitor&lt;Value&gt; {
     private final ErrorHandler errorHandler;
     private final Environment environment;
     
-<span class="fc" id="L14">    public Interpreter(ErrorHandler errorHandler) {</span>
-<span class="fc" id="L15">        this.errorHandler = errorHandler;</span>
-<span class="fc" id="L16">        this.environment = new Environment();</span>
-<span class="fc" id="L17">    }</span>
+<span class="nc" id="L14">    public Interpreter(ErrorHandler errorHandler) {</span>
+<span class="nc" id="L15">        this.errorHandler = errorHandler;</span>
+<span class="nc" id="L16">        this.environment = new Environment();</span>
+<span class="nc" id="L17">    }</span>
     
     public void interpret(ProgramNode program) {
         try {
-<span class="fc" id="L21">            program.accept(this);</span>
+<span class="nc" id="L21">            program.accept(this);</span>
 <span class="nc" id="L22">        } catch (RuntimeException e) {</span>
 <span class="nc" id="L23">            errorHandler.addError(&quot;Runtime error: &quot; + e.getMessage(), 0, 0);</span>
-<span class="fc" id="L24">        }</span>
-<span class="fc" id="L25">    }</span>
+<span class="nc" id="L24">        }</span>
+<span class="nc" id="L25">    }</span>
     
     @Override
     public Value visitProgram(ProgramNode node) {
-<span class="fc" id="L29">        Value lastValue = Value.VOID;</span>
+<span class="nc" id="L29">        Value lastValue = Value.VOID;</span>
         
-<span class="fc bfc" id="L31" title="All 2 branches covered.">        for (StatementNode statement : node.getStatements()) {</span>
-<span class="fc" id="L32">            lastValue = statement.accept(this);</span>
-<span class="fc" id="L33">        }</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        for (StatementNode statement : node.getStatements()) {</span>
+<span class="nc" id="L32">            lastValue = statement.accept(this);</span>
+<span class="nc" id="L33">        }</span>
         
-<span class="fc" id="L35">        return lastValue;</span>
+<span class="nc" id="L35">        return lastValue;</span>
     }
     
     @Override
     public Value visitDeclaration(DeclarationNode node) {
-<span class="fc" id="L40">        Value initialValue = Value.VOID;</span>
+<span class="nc" id="L40">        Value initialValue = Value.VOID;</span>
         
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (node.getInitialValue() != null) {</span>
-<span class="fc" id="L43">            initialValue = node.getInitialValue().accept(this);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (node.getInitialValue() != null) {</span>
+<span class="nc" id="L43">            initialValue = node.getInitialValue().accept(this);</span>
         }
         
-<span class="fc" id="L46">        environment.define(node.getVariableName(), initialValue);</span>
-<span class="fc" id="L47">        return Value.VOID;</span>
+<span class="nc" id="L46">        environment.define(node.getVariableName(), initialValue);</span>
+<span class="nc" id="L47">        return Value.VOID;</span>
     }
     
     @Override
     public Value visitLiteral(LiteralNode node) {
-<span class="pc bpc" id="L52" title="3 of 4 branches missed.">        return switch (node.getType()) {</span>
-<span class="fc" id="L53">            case INTEGER -&gt; new Value(node.getValue());</span>
+<span class="nc bnc" id="L52" title="All 4 branches missed.">        return switch (node.getType()) {</span>
+<span class="nc" id="L53">            case INTEGER -&gt; new Value(node.getValue());</span>
 <span class="nc" id="L54">            case REAL -&gt; new Value(node.getValue());</span>
 <span class="nc" id="L55">            case BOOLEAN -&gt; new Value(node.getValue());</span>
 <span class="nc" id="L56">            case STRING -&gt; new Value(node.getValue());</span>
@@ -60,8 +60,8 @@ public class Interpreter implements AstVisitor&lt;Value&gt; {
     @Override
     public Value visitPrint(PrintNode node) {
         // For now, just print a placeholder
-<span class="fc" id="L63">        System.out.println(&quot;Print statement executed&quot;);</span>
-<span class="fc" id="L64">        return Value.VOID;</span>
+<span class="nc" id="L63">        System.out.println(&quot;Print statement executed&quot;);</span>
+<span class="nc" id="L64">        return Value.VOID;</span>
     }
     
     // Stub implementations for other visitor methods

@@ -8,7 +8,7 @@ public class LiteralNode extends ExpressionNode {
     private final LiteralType type;
     
     public enum LiteralType {
-        INTEGER, REAL, BOOLEAN, STRING
+        INTEGER, REAL, BOOLEAN, STRING, NONE
     }
     
     public LiteralNode(Object value, LiteralType type, int line, int column) {

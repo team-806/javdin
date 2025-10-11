@@ -3,7 +3,7 @@
  * This will be used to generate the parser
  */
 
-package com.javdin.parser;
+package com.javdin.parser.generated;
 
 import com.javdin.lexer.*;
 import com.javdin.ast.*;
@@ -17,19 +17,28 @@ terminal Double REAL;
 terminal String STRING;
 terminal Boolean BOOL;
 
-terminal VAR, IF, ELSE, WHILE, FOR, FUNCTION, RETURN;
-terminal PRINT, INPUT, TRUE, FALSE, LAMBDA;
-terminal BREAK, CONTINUE;
+/* Keywords */
+terminal VAR, IF, THEN, ELSE, END, WHILE, FOR, IN, LOOP, EXIT;
+terminal FUNC, IS, RETURN, PRINT, TRUE, FALSE, NONE;
 
-terminal PLUS, MINUS, MULTIPLY, DIVIDE, MODULO;
-terminal ASSIGN, EQUAL, NOT_EQUAL;
+/* Type indicators */
+terminal INT_TYPE, REAL_TYPE, BOOL_TYPE, STRING_TYPE, NONE_TYPE;
+terminal ARRAY_TYPE, TUPLE_TYPE, FUNC_TYPE;
+
+/* Operators */
+terminal PLUS, MINUS, MULTIPLY, DIVIDE;
+terminal ASSIGN_OP, EQUAL, NOT_EQUAL, NOT_EQUAL_ALT;
 terminal LESS_THAN, LESS_EQUAL, GREATER_THAN, GREATER_EQUAL;
-terminal AND, OR, NOT;
+terminal AND, OR, XOR, NOT;
+terminal RANGE, SHORT_IF;
 
+/* Delimiters */
 terminal LEFT_PAREN, RIGHT_PAREN;
 terminal LEFT_BRACE, RIGHT_BRACE;
 terminal LEFT_BRACKET, RIGHT_BRACKET;
-terminal SEMICOLON, COMMA, DOT, COLON, ARROW;
+terminal SEMICOLON, COMMA, DOT, COLON;
+
+/* Special */
 terminal NEWLINE;
 
 /* Non-terminals */
@@ -38,6 +47,16 @@ non terminal List<StatementNode> statement_list;
 non terminal StatementNode statement;
 non terminal ExpressionNode expression;
 non terminal LiteralNode literal;
+non terminal ArrayLiteralNode array_literal;
+non terminal TupleLiteralNode tuple_literal;
+non terminal FunctionLiteralNode function_literal;
+non terminal List<ExpressionNode> expression_list_opt;
+non terminal List<ExpressionNode> expression_list;
+non terminal List<TupleLiteralNode.TupleElement> tuple_element_list;
+non terminal List<TupleLiteralNode.TupleElement> tuple_element_list_opt;
+non terminal TupleLiteralNode.TupleElement tuple_element;
+non terminal List<String> parameter_list_opt;
+non terminal List<String> parameter_list;
 
 /* Grammar rules */
 program ::= statement_list:stmts
@@ -52,12 +71,12 @@ statement_list ::= statement_list:list statement:stmt
        list.add(stmt); 
        RESULT = list; :};
 
-statement ::= VAR IDENTIFIER:name ASSIGN expression:expr SEMICOLON
+statement ::= VAR IDENTIFIER:name ASSIGN_OP expression:expr SEMICOLON
     {: RESULT = new DeclarationNode(name, expr, nameleft, nameright); :}
     | VAR IDENTIFIER:name SEMICOLON
     {: RESULT = new DeclarationNode(name, null, nameleft, nameright); :}
-    | PRINT expression:expr SEMICOLON
-    {: RESULT = new PrintNode(exprleft, exprright); :};
+    | PRINT:p expression:expr SEMICOLON
+    {: RESULT = new PrintNode(pleft, pright, expr); :};
 
 expression ::= literal:lit
     {: RESULT = lit; :};
@@ -68,7 +87,83 @@ literal ::= INTEGER:val
     {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.REAL, valleft, valright); :}
     | STRING:val
     {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.STRING, valleft, valright); :}
-    | TRUE
-    {: RESULT = new LiteralNode(true, LiteralNode.LiteralType.BOOLEAN, TRUEleft, TRUEright); :}
-    | FALSE
-    {: RESULT = new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, FALSEleft, FALSEright); :};
+    | TRUE:t
+    {: RESULT = new LiteralNode(true, LiteralNode.LiteralType.BOOLEAN, tleft, tright); :}
+    | FALSE:f
+    {: RESULT = new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, fleft, fright); :}
+    | NONE:n
+    {: RESULT = new LiteralNode(null, LiteralNode.LiteralType.NONE, nleft, nright); :}
+    | array_literal:arr
+    {: RESULT = arr; :}
+    | tuple_literal:tup
+    {: RESULT = tup; :}
+    | function_literal:func
+    {: RESULT = func; :};
+
+/* Array literals: [1, 2, 3] or [] */
+array_literal ::=
+    LEFT_BRACKET:lb expression_list_opt:exprs RIGHT_BRACKET
+    {: RESULT = new ArrayLiteralNode(exprs, lbleft, lbright); :};
+
+expression_list_opt ::=
+    expression_list:list
+    {: RESULT = list; :}
+    | /* empty */
+    {: RESULT = new ArrayList<>(); :};
+
+expression_list ::=
+    expression_list:list COMMA expression:expr
+    {: list.add(expr); RESULT = list; :}
+    | expression:expr
+    {: List<ExpressionNode> list = new ArrayList<>();
+       list.add(expr);
+       RESULT = list; :};
+
+/* Tuple literals: {a := 1, b := 2} or {1, 2, 3} or {} */
+tuple_literal ::=
+    LEFT_BRACE:lb tuple_element_list_opt:elements RIGHT_BRACE
+    {: RESULT = new TupleLiteralNode(elements, lbleft, lbright); :};
+
+tuple_element_list_opt ::=
+    tuple_element_list:list
+    {: RESULT = list; :}
+    | /* empty */
+    {: RESULT = new ArrayList<>(); :};
+
+tuple_element_list ::=
+    tuple_element_list:list COMMA tuple_element:elem
+    {: list.add(elem); RESULT = list; :}
+    | tuple_element:elem
+    {: List<TupleLiteralNode.TupleElement> list = new ArrayList<>();
+       list.add(elem);
+       RESULT = list; :};
+
+tuple_element ::=
+    IDENTIFIER:name ASSIGN_OP expression:expr
+    {: RESULT = new TupleLiteralNode.TupleElement(name, expr); :}
+    | expression:expr
+    {: RESULT = new TupleLiteralNode.TupleElement(null, expr); :};
+
+/* Function literals: func(x, y) is ... end or func(x) => expr */
+function_literal ::=
+    FUNC:f parameter_list_opt:params IS statement_list:body END
+    {: RESULT = new FunctionLiteralNode(fleft, fright, params, body, false); :}
+    | FUNC:f parameter_list_opt:params SHORT_IF expression:expr
+    {: RESULT = new FunctionLiteralNode(fleft, fright, params, expr, true); :};
+
+parameter_list_opt ::=
+    LEFT_PAREN parameter_list:params RIGHT_PAREN
+    {: RESULT = params; :}
+    | LEFT_PAREN RIGHT_PAREN
+    {: RESULT = new ArrayList<>(); :}
+    | /* empty - no parentheses */
+    {: RESULT = new ArrayList<>(); :};
+
+parameter_list ::=
+    parameter_list:list COMMA IDENTIFIER:param
+    {: list.add(param); RESULT = list; :}
+    | IDENTIFIER:param
+    {: List<String> list = new ArrayList<>();
+       list.add(param);
+       RESULT = list; :};
+

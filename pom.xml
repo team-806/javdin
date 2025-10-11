@@ -102,8 +102,7 @@
                 </executions>
             </plugin>
             
-            <!-- CUP Plugin for parser generation (temporarily disabled) -->
-            <!--
+            <!-- CUP Plugin for parser generation -->
             <plugin>
                 <groupId>com.github.vbmacher</groupId>
                 <artifactId>cup-maven-plugin</artifactId>
@@ -117,11 +116,33 @@
                 </executions>
                 <configuration>
                     <cupDefinition>src/main/resources/parser.cup</cupDefinition>
-                    <outputDirectory>src/main/java</outputDirectory>
-                    <packageName>com.javdin.parser</packageName>
+                    <outputDirectory>target/generated-sources/cup</outputDirectory>
+                    <className>CupParser</className>
+                    <symbolsName>Symbols</symbolsName>
+                    <packageName>com.javdin.parser.generated</packageName>
                 </configuration>
             </plugin>
-            -->
+            
+            <!-- Build Helper Plugin to add generated sources -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/cup</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             
             <!-- JFlex Plugin for lexer generation (temporarily disabled) -->
             <!--

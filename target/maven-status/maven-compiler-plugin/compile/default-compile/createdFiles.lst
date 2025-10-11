@@ -1,11 +1,14 @@
+com/javdin/parser/generated/CupParser$CUP$CupParser$actions.class
+com/javdin/parser/generated/CupParser.class
 com/javdin/ast/AstNode.class
 com/javdin/interpreter/Interpreter.class
 com/javdin/ast/FunctionCallNode.class
 com/javdin/lexer/TokenType.class
+com/javdin/parser/generated/Symbols.class
 com/javdin/ast/StatementNode.class
-com/javdin/parser/Parser$1.class
 com/javdin/ast/BlockNode.class
 com/javdin/ast/ContinueNode.class
+com/javdin/parser/LexerAdapter.class
 com/javdin/parser/ParseException.class
 com/javdin/ast/AssignmentNode.class
 com/javdin/ast/ExpressionStatementNode.class
@@ -30,9 +33,11 @@ com/javdin/lexer/LexerDebug.class
 com/javdin/interpreter/Value$ValueType.class
 com/javdin/debug/ParserDebug.class
 com/javdin/lexer/LexicalException.class
+com/javdin/lexer/InteractiveLexerDemo.class
 com/javdin/main/Main.class
 com/javdin/ast/LiteralNode$LiteralType.class
 com/javdin/ast/WhileNode.class
+com/javdin/parser/LexerAdapter$1.class
 com/javdin/ast/PrintNode.class
 com/javdin/ast/ReturnNode.class
 com/javdin/ast/ArrayAccessNode.class
