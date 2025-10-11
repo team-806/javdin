@@ -10,17 +10,17 @@ public class TypeCheckNode extends ExpressionNode {
     private final String typeIndicator;
 
     public TypeCheckNode(int line, int column, ExpressionNode expression, String typeIndicator) { 
-<span class="fc" id="L13">        super(line, column);</span>
-<span class="fc" id="L14">        this.expression = expression;</span>
-<span class="fc" id="L15">        this.typeIndicator = typeIndicator;</span>
-<span class="fc" id="L16">    }</span>
+<span class="nc" id="L13">        super(line, column);</span>
+<span class="nc" id="L14">        this.expression = expression;</span>
+<span class="nc" id="L15">        this.typeIndicator = typeIndicator;</span>
+<span class="nc" id="L16">    }</span>
 
     public ExpressionNode getExpression() { 
-<span class="fc" id="L19">        return expression; </span>
+<span class="nc" id="L19">        return expression; </span>
     }
     
     public String getTypeIndicator() { 
-<span class="fc" id="L23">        return typeIndicator; </span>
+<span class="nc" id="L23">        return typeIndicator; </span>
     }
 
     @Override

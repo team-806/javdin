@@ -37,6 +37,7 @@ com/javdin/debug/ParserDebug.class
 com/javdin/lexer/LexicalException.class
 com/javdin/lexer/InteractiveLexerDemo.class
 com/javdin/main/Main.class
+com/javdin/debug/TestParse.class
 com/javdin/ast/TupleMemberAccessNode.class
 com/javdin/ast/LiteralNode$LiteralType.class
 com/javdin/ast/WhileNode.class

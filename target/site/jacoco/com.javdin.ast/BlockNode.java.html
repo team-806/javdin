@@ -6,11 +6,11 @@ public class BlockNode extends StatementNode {
     private final List&lt;StatementNode&gt; statements;
 
     public BlockNode(int line, int column, List&lt;StatementNode&gt; statements) { 
-<span class="nc" id="L9">        super(line, column);</span>
-<span class="nc" id="L10">        this.statements = statements;</span>
-<span class="nc" id="L11">    }</span>
+<span class="fc" id="L9">        super(line, column);</span>
+<span class="fc" id="L10">        this.statements = statements;</span>
+<span class="fc" id="L11">    }</span>
 
-<span class="nc" id="L13">    public List&lt;StatementNode&gt; getStatements() { return statements; }</span>
+<span class="fc" id="L13">    public List&lt;StatementNode&gt; getStatements() { return statements; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 

@@ -6,15 +6,15 @@ public class IfNode extends StatementNode {
     private final StatementNode elseStatement;
 
     public IfNode(int line, int column, ExpressionNode condition, StatementNode thenStatement, StatementNode elseStatement) { 
-<span class="nc" id="L9">        super(line, column);</span>
-<span class="nc" id="L10">        this.condition = condition;</span>
-<span class="nc" id="L11">        this.thenStatement = thenStatement;</span>
-<span class="nc" id="L12">        this.elseStatement = elseStatement;</span>
-<span class="nc" id="L13">    }</span>
+<span class="fc" id="L9">        super(line, column);</span>
+<span class="fc" id="L10">        this.condition = condition;</span>
+<span class="fc" id="L11">        this.thenStatement = thenStatement;</span>
+<span class="fc" id="L12">        this.elseStatement = elseStatement;</span>
+<span class="fc" id="L13">    }</span>
 
-<span class="nc" id="L15">    public ExpressionNode getCondition() { return condition; }</span>
-<span class="nc" id="L16">    public StatementNode getThenStatement() { return thenStatement; }</span>
-<span class="nc" id="L17">    public StatementNode getElseStatement() { return elseStatement; }</span>
+<span class="fc" id="L15">    public ExpressionNode getCondition() { return condition; }</span>
+<span class="fc" id="L16">    public StatementNode getThenStatement() { return thenStatement; }</span>
+<span class="fc" id="L17">    public StatementNode getElseStatement() { return elseStatement; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 

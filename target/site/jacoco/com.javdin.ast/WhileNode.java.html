@@ -5,13 +5,13 @@ public class WhileNode extends StatementNode {
     private final StatementNode body;
 
     public WhileNode(int line, int column, ExpressionNode condition, StatementNode body) { 
-<span class="nc" id="L8">        super(line, column);</span>
-<span class="nc" id="L9">        this.condition = condition;</span>
-<span class="nc" id="L10">        this.body = body;</span>
-<span class="nc" id="L11">    }</span>
+<span class="fc" id="L8">        super(line, column);</span>
+<span class="fc" id="L9">        this.condition = condition;</span>
+<span class="fc" id="L10">        this.body = body;</span>
+<span class="fc" id="L11">    }</span>
 
-<span class="nc" id="L13">    public ExpressionNode getCondition() { return condition; }</span>
-<span class="nc" id="L14">    public StatementNode getBody() { return body; }</span>
+<span class="fc" id="L13">    public ExpressionNode getCondition() { return condition; }</span>
+<span class="fc" id="L14">    public StatementNode getBody() { return body; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 

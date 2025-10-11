@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.javdin.lexer.LexerTest" time="0.127" tests="22" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.javdin.parser.ControlFlowTest" time="0.033" tests="23" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,26 +53,27 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testOperators" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLineAndColumnTracking" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testBasicTokens" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testMultiLineComments" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testStringEscapeSequences" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLogicalOperators" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testUnterminatedStringLiteral" classname="com.javdin.lexer.LexerTest" time="0.007"/>
-  <testcase name="testNestedComments" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testStringLiteralsWithBothQuotes" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testComments" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testComplexExpression" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testUnterminatedMultiLineComment" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testFunctionDefinition" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testKeywords" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLexicalException" classname="com.javdin.lexer.LexerTest" time="0.004"/>
-  <testcase name="testMixedTokenTypes" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLiterals(String, String, String)[1]" classname="com.javdin.lexer.LexerTest" time="0.02"/>
-  <testcase name="testLiterals(String, String, String)[2]" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLiterals(String, String, String)[3]" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLiterals(String, String, String)[4]" classname="com.javdin.lexer.LexerTest" time="0.001"/>
-  <testcase name="testLiterals(String, String, String)[5]" classname="com.javdin.lexer.LexerTest" time="0.0"/>
-  <testcase name="testLiterals(String, String, String)[6]" classname="com.javdin.lexer.LexerTest" time="0.001"/>
+  <testcase name="testReturnWithExpression" classname="com.javdin.parser.ControlFlowTest" time="0.002"/>
+  <testcase name="testIfWithMultipleStatements" classname="com.javdin.parser.ControlFlowTest" time="0.002"/>
+  <testcase name="testIfThenElseEnd" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testReturnWithValue" classname="com.javdin.parser.ControlFlowTest" time="0.0"/>
+  <testcase name="testInfiniteLoop" classname="com.javdin.parser.ControlFlowTest" time="0.003"/>
+  <testcase name="testForIterableWithoutVariable" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testExitInLoop" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testSimpleIfThenEnd" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testExitStatement" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testReturnWithoutValue" classname="com.javdin.parser.ControlFlowTest" time="0.0"/>
+  <testcase name="testComplexControlFlow" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testShortIfArrow" classname="com.javdin.parser.ControlFlowTest" time="0.0"/>
+  <testcase name="testAllControlFlowTogether" classname="com.javdin.parser.ControlFlowTest" time="0.0"/>
+  <testcase name="testForLoopWithComplexBody" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testForRangeWithoutVariable" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testSimpleWhileLoop" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testWhileWithMultipleStatements" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testConditionalExit" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testNestedForLoops" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testForInRangeLoop" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testForInLoop" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testNestedWhile" classname="com.javdin.parser.ControlFlowTest" time="0.001"/>
+  <testcase name="testNestedIf" classname="com.javdin.parser.ControlFlowTest" time="0.0"/>
 </testsuite>

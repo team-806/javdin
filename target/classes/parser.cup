@@ -44,7 +44,11 @@ terminal NEWLINE;
 /* Non-terminals */
 non terminal ProgramNode program;
 non terminal List<StatementNode> statement_list;
+non terminal List<StatementNode> statement_list_core;
 non terminal StatementNode statement;
+non terminal StatementNode if_statement;
+non terminal StatementNode while_statement;
+non terminal StatementNode for_statement;
 non terminal ExpressionNode expression;
 non terminal ExpressionNode relation;
 non terminal ExpressionNode factor;
@@ -90,7 +94,12 @@ program ::= statement_list:stmts
 /* Statement list with optional separators (semicolons or newlines) */
 /* Allows trailing separator before end/else/etc. */
 statement_list ::= 
-    statement_list:list separator_list statement:stmt
+    separator_opt statement_list_core:stmts separator_opt
+    {: RESULT = stmts; :}
+    ;
+
+statement_list_core ::=
+    statement_list_core:list separator_list statement:stmt
     {: list.add(stmt); RESULT = list; :}
     | statement:stmt
     {: List<StatementNode> list = new ArrayList<>(); 
@@ -120,7 +129,20 @@ statement ::=
     | PRINT:p expression_list:exprs
     {: RESULT = new PrintNode(pleft, pright, exprs); :}
     | reference:target ASSIGN_OP expression:value
-    {: RESULT = new AssignmentNode(targetleft, targetright, target, value); :};
+    {: RESULT = new AssignmentNode(targetleft, targetright, target, value); :}
+    | if_statement:stmt
+    {: RESULT = stmt; :}
+    | while_statement:stmt
+    {: RESULT = stmt; :}
+    | for_statement:stmt
+    {: RESULT = stmt; :}
+    | EXIT:e
+    {: RESULT = new BreakNode(eleft, eright); :}
+    | RETURN:r expression:expr
+    {: RESULT = new ReturnNode(rleft, rright, expr); :}
+    | RETURN:r
+    {: RESULT = new ReturnNode(rleft, rright, null); :}
+    ;
 
 /* Variable definition list: var x := 1, y := 2, z */
 variable_definition_list ::=
@@ -345,4 +367,47 @@ parameter_list ::=
     {: List<String> list = new ArrayList<>();
        list.add(param);
        RESULT = list; :};
+
+/* Control Flow Statements */
+
+/* If statements: if expr then ... end, if expr then ... else ... end, if expr => stmt */
+if_statement ::=
+    IF:i expression:cond THEN statement_list:thenBody END
+    {: RESULT = new IfNode(ileft, iright, cond, 
+                           new BlockNode(ileft, iright, thenBody), null); :}
+    | IF:i expression:cond THEN statement_list:thenBody ELSE statement_list:elseBody END
+    {: RESULT = new IfNode(ileft, iright, cond,
+                           new BlockNode(ileft, iright, thenBody),
+                           new BlockNode(ileft, iright, elseBody)); :}
+    | IF:i expression:cond SHORT_IF statement:body
+    {: List<StatementNode> bodyList = new ArrayList<>();
+       bodyList.add(body);
+       RESULT = new IfNode(ileft, iright, cond,
+                           new BlockNode(ileft, iright, bodyList), null); :}
+    ;
+
+/* While loop: while expr loop ... end */
+while_statement ::=
+    WHILE:w expression:cond LOOP statement_list:body END
+    {: RESULT = new WhileNode(wleft, wright, cond,
+                              new BlockNode(wleft, wright, body)); :}
+    ;
+
+/* For loops: for [var in] expr [.. expr] loop ... end, or just loop ... end (infinite) */
+for_statement ::=
+    FOR:f IDENTIFIER:var IN expression:iterable LOOP statement_list:body END
+    {: RESULT = new ForNode(fleft, fright, var, iterable,
+                            new BlockNode(fleft, fright, body)); :}
+    | FOR:f IDENTIFIER:var IN expression:start RANGE expression:end LOOP statement_list:body END
+    {: RESULT = new ForNode(fleft, fright, var, start, end,
+                            new BlockNode(fleft, fright, body)); :}
+    | FOR:f expression:start RANGE expression:end LOOP statement_list:body END
+    {: RESULT = new ForNode(fleft, fright, null, start, end,
+                            new BlockNode(fleft, fright, body)); :}
+    | FOR:f expression:iterable LOOP statement_list:body END
+    {: RESULT = new ForNode(fleft, fright, null, iterable,
+                            new BlockNode(fleft, fright, body)); :}
+    | LOOP:l statement_list:body END
+    {: RESULT = new ForNode(lleft, lright, new BlockNode(lleft, lright, body)); :}
+    ;
 

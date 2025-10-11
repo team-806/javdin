@@ -655,7 +655,7 @@ public class Parser {
 
 ---
 
-## MILESTONE 7: Control Flow Statements
+## ✅ MILESTONE 7: Control Flow Statements [COMPLETED 2025-10-11]
 **Goal**: Implement if, while, for, and loop statements
 
 ### Task 7.1: Implement If Statements

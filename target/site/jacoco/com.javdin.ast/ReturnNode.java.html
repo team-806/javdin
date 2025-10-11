@@ -4,11 +4,11 @@ public class ReturnNode extends StatementNode {
     private final ExpressionNode value;
 
     public ReturnNode(int line, int column, ExpressionNode value) { 
-<span class="nc" id="L7">        super(line, column);</span>
-<span class="nc" id="L8">        this.value = value;</span>
-<span class="nc" id="L9">    }</span>
+<span class="fc" id="L7">        super(line, column);</span>
+<span class="fc" id="L8">        this.value = value;</span>
+<span class="fc" id="L9">    }</span>
 
-<span class="nc" id="L11">    public ExpressionNode getValue() { return value; }</span>
+<span class="fc" id="L11">    public ExpressionNode getValue() { return value; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 
