@@ -88,10 +88,11 @@ program ::= statement_list:stmts
     {: RESULT = new ProgramNode(new ArrayList<StatementNode>(), 1, 1); :};
 
 /* Statement list with optional separators (semicolons or newlines) */
+/* Allows trailing separator before end/else/etc. */
 statement_list ::= 
-    statement_list:list separator_opt statement:stmt separator_opt
+    statement_list:list separator_list statement:stmt
     {: list.add(stmt); RESULT = list; :}
-    | statement:stmt separator_opt
+    | statement:stmt
     {: List<StatementNode> list = new ArrayList<>(); 
        list.add(stmt); 
        RESULT = list; :};

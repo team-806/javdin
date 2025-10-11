@@ -7,7 +7,7 @@ Javdin,com.javdin.utils,ErrorHandler.Error,53,0,4,0,11,0,7,0,5,0
 Javdin,com.javdin.utils,ErrorHandler,39,14,3,1,9,4,6,2,4,2
 Javdin,com.javdin.utils,IoUtils,35,8,0,0,11,2,6,1,6,1
 Javdin,com.javdin.parser.generated,Symbols,0,248,0,0,0,1,0,1,0,1
-Javdin,com.javdin.parser.generated,CupParser.CUP.CupParser.actions,2581,1872,49,41,387,312,49,43,0,3
+Javdin,com.javdin.parser.generated,CupParser.CUP.CupParser.actions,2495,1958,49,41,377,322,49,43,0,3
 Javdin,com.javdin.parser.generated,CupParser,10,59,0,0,3,17,3,11,3,11
 Javdin,com.javdin.parser,Parser,1,40,1,1,0,10,1,2,0,2
 Javdin,com.javdin.parser,LexerAdapter,119,125,41,28,50,38,41,30,0,4
@@ -34,7 +34,7 @@ Javdin,com.javdin.ast,TupleMemberAccessNode,42,0,0,0,14,0,6,0,6,0
 Javdin,com.javdin.ast,BreakNode,9,0,0,0,3,0,2,0,2,0
 Javdin,com.javdin.ast,ExpressionNode,6,9,0,0,2,4,2,1,2,1
 Javdin,com.javdin.ast,LiteralNode.LiteralType,0,33,0,0,0,2,0,1,0,1
-Javdin,com.javdin.ast,FunctionLiteralNode,38,27,3,1,11,9,6,4,4,4
+Javdin,com.javdin.ast,FunctionLiteralNode,17,48,2,2,4,16,4,6,2,6
 Javdin,com.javdin.ast,BlockNode,15,0,0,0,5,0,3,0,3,0
 Javdin,com.javdin.ast,StatementNode,6,9,0,0,2,4,2,1,2,1
 Javdin,com.javdin.ast,TupleLiteralNode.TupleElement,22,0,2,0,7,0,5,0,4,0

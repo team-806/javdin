@@ -9,11 +9,11 @@ public class FunctionLiteralNode extends ExpressionNode {
 
     // Constructor for statement body: func(params) is ... end
     public FunctionLiteralNode(int line, int column, List&lt;String&gt; parameters, List&lt;StatementNode&gt; body, boolean isExpressionBody) { 
-<span class="nc" id="L12">        super(line, column);</span>
-<span class="nc" id="L13">        this.parameters = parameters;</span>
-<span class="nc" id="L14">        this.body = body;</span>
-<span class="nc" id="L15">        this.isExpressionBody = isExpressionBody;</span>
-<span class="nc" id="L16">    }</span>
+<span class="fc" id="L12">        super(line, column);</span>
+<span class="fc" id="L13">        this.parameters = parameters;</span>
+<span class="fc" id="L14">        this.body = body;</span>
+<span class="fc" id="L15">        this.isExpressionBody = isExpressionBody;</span>
+<span class="fc" id="L16">    }</span>
 
     // Constructor for expression body: func(params) =&gt; expr
     public FunctionLiteralNode(int line, int column, List&lt;String&gt; parameters, ExpressionNode body, boolean isExpressionBody) { 
@@ -29,10 +29,10 @@ public class FunctionLiteralNode extends ExpressionNode {
 
     @SuppressWarnings(&quot;unchecked&quot;)
     public List&lt;StatementNode&gt; getStatementBody() {
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (isExpressionBody) {</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (isExpressionBody) {</span>
 <span class="nc" id="L33">            throw new IllegalStateException(&quot;Function has expression body, not statement body&quot;);</span>
         }
-<span class="nc" id="L35">        return (List&lt;StatementNode&gt;) body;</span>
+<span class="fc" id="L35">        return (List&lt;StatementNode&gt;) body;</span>
     }
 
     public ExpressionNode getExpressionBody() {

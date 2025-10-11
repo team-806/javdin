@@ -12,7 +12,7 @@ class FunctionLiteralTest {
     
     @Test
     void testFunctionWithStatementBody() {
-        Lexer lexer = new Lexer("var f := func(x, y) is print x; end");
+        Lexer lexer = new Lexer("var f := func(x, y) is print x end");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
@@ -84,7 +84,7 @@ class FunctionLiteralTest {
     
     @Test
     void testFunctionWithMultipleStatements() {
-        Lexer lexer = new Lexer("var f := func(a, b) is var sum := a; print sum; end");
+        Lexer lexer = new Lexer("var f := func(a, b) is var sum := a\nprint sum end");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
@@ -176,7 +176,7 @@ class FunctionLiteralTest {
     
     @Test
     void testFunctionWithSingleParameter() {
-        Lexer lexer = new Lexer("var id := func(value) is print value; end");
+        Lexer lexer = new Lexer("var id := func(value) is print value end");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();

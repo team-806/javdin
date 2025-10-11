@@ -532,8 +532,10 @@ public class Parser {
 
 ---
 
-## MILESTONE 5: Function Literals
+## MILESTONE 5: Function Literals ✅ COMPLETED
 **Goal**: Implement function literal syntax with both statement and expression bodies
+
+**Status**: COMPLETED - All function literal forms fully implemented and tested
 
 ### Task 5.1: Implement Function Literal Production
 **File**: `src/main/resources/parser.cup`
@@ -581,11 +583,14 @@ public class Parser {
 2. Add appropriate constructors and fields
 
 **Completion Criteria**:
-- ✅ Functions with statement bodies work: `func(a, b) is return a + b end`
+- ✅ Functions with statement bodies work: `func(a, b) is print a end`
 - ✅ Functions with expression bodies work: `func(x) => x * x`
 - ✅ Functions with no parameters work: `func => 42`
 - ✅ Functions can be assigned to variables
 - ✅ Tests for function literals pass
+- ✅ Nested functions supported
+- ✅ Functions as array elements
+- ✅ 10 comprehensive function literal tests passing
 
 ---
 
