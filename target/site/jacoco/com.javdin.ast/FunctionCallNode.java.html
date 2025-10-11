@@ -7,13 +7,13 @@ public class FunctionCallNode extends ExpressionNode {
     private final List&lt;ExpressionNode&gt; arguments;
 
     public FunctionCallNode(int line, int column, ExpressionNode function, List&lt;ExpressionNode&gt; arguments) { 
-<span class="nc" id="L10">        super(line, column);</span>
-<span class="nc" id="L11">        this.function = function;</span>
-<span class="nc" id="L12">        this.arguments = arguments;</span>
-<span class="nc" id="L13">    }</span>
+<span class="fc" id="L10">        super(line, column);</span>
+<span class="fc" id="L11">        this.function = function;</span>
+<span class="fc" id="L12">        this.arguments = arguments;</span>
+<span class="fc" id="L13">    }</span>
 
 <span class="nc" id="L15">    public ExpressionNode getFunction() { return function; }</span>
-<span class="nc" id="L16">    public List&lt;ExpressionNode&gt; getArguments() { return arguments; }</span>
+<span class="fc" id="L16">    public List&lt;ExpressionNode&gt; getArguments() { return arguments; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 

@@ -10,12 +10,12 @@ public class TupleLiteralNode extends ExpressionNode {
     private final List&lt;TupleElement&gt; elements;
     
     public TupleLiteralNode(List&lt;TupleElement&gt; elements, int line, int column) {
-<span class="nc" id="L13">        super(line, column);</span>
-<span class="nc bnc" id="L14" title="All 2 branches missed.">        this.elements = elements != null ? elements : List.of();</span>
-<span class="nc" id="L15">    }</span>
+<span class="fc" id="L13">        super(line, column);</span>
+<span class="pc bpc" id="L14" title="1 of 2 branches missed.">        this.elements = elements != null ? elements : List.of();</span>
+<span class="fc" id="L15">    }</span>
     
     public List&lt;TupleElement&gt; getElements() {
-<span class="nc" id="L18">        return elements;</span>
+<span class="fc" id="L18">        return elements;</span>
     }
     
     @Override
@@ -31,10 +31,10 @@ public class TupleLiteralNode extends ExpressionNode {
         private final String name;  // null for unnamed elements
         private final ExpressionNode value;
         
-<span class="nc" id="L34">        public TupleElement(String name, ExpressionNode value) {</span>
-<span class="nc" id="L35">            this.name = name;</span>
-<span class="nc" id="L36">            this.value = value;</span>
-<span class="nc" id="L37">        }</span>
+<span class="fc" id="L34">        public TupleElement(String name, ExpressionNode value) {</span>
+<span class="fc" id="L35">            this.name = name;</span>
+<span class="fc" id="L36">            this.value = value;</span>
+<span class="fc" id="L37">        }</span>
         
         public String getName() {
 <span class="nc" id="L40">            return name;</span>

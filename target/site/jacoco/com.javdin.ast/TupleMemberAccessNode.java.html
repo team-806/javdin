@@ -14,32 +14,32 @@ public class TupleMemberAccessNode extends ExpressionNode {
      * Constructor for named member access (tuple.name)
      */
     public TupleMemberAccessNode(int line, int column, ExpressionNode tuple, String memberName) { 
-<span class="nc" id="L17">        super(line, column);</span>
-<span class="nc" id="L18">        this.tuple = tuple;</span>
-<span class="nc" id="L19">        this.memberName = memberName;</span>
-<span class="nc" id="L20">        this.isNumericIndex = false;</span>
-<span class="nc" id="L21">    }</span>
+<span class="fc" id="L17">        super(line, column);</span>
+<span class="fc" id="L18">        this.tuple = tuple;</span>
+<span class="fc" id="L19">        this.memberName = memberName;</span>
+<span class="fc" id="L20">        this.isNumericIndex = false;</span>
+<span class="fc" id="L21">    }</span>
     
     /**
      * Constructor for numeric index access (tuple.1)
      */
     public TupleMemberAccessNode(int line, int column, ExpressionNode tuple, int index) { 
-<span class="nc" id="L27">        super(line, column);</span>
-<span class="nc" id="L28">        this.tuple = tuple;</span>
-<span class="nc" id="L29">        this.memberName = String.valueOf(index);</span>
-<span class="nc" id="L30">        this.isNumericIndex = true;</span>
-<span class="nc" id="L31">    }</span>
+<span class="fc" id="L27">        super(line, column);</span>
+<span class="fc" id="L28">        this.tuple = tuple;</span>
+<span class="fc" id="L29">        this.memberName = String.valueOf(index);</span>
+<span class="fc" id="L30">        this.isNumericIndex = true;</span>
+<span class="fc" id="L31">    }</span>
 
     public ExpressionNode getTuple() { 
-<span class="nc" id="L34">        return tuple; </span>
+<span class="fc" id="L34">        return tuple; </span>
     }
     
     public String getMemberName() { 
-<span class="nc" id="L38">        return memberName; </span>
+<span class="fc" id="L38">        return memberName; </span>
     }
     
     public boolean isNumericIndex() {
-<span class="nc" id="L42">        return isNumericIndex;</span>
+<span class="fc" id="L42">        return isNumericIndex;</span>
     }
 
     @Override

@@ -118,7 +118,9 @@ statement ::=
     VAR:v variable_definition_list:vars
     {: RESULT = new DeclarationNode(vars, vleft, vright); :}
     | PRINT:p expression_list:exprs
-    {: RESULT = new PrintNode(pleft, pright, exprs); :};
+    {: RESULT = new PrintNode(pleft, pright, exprs); :}
+    | reference:target ASSIGN_OP expression:value
+    {: RESULT = new AssignmentNode(targetleft, targetright, target, value); :};
 
 /* Variable definition list: var x := 1, y := 2, z */
 variable_definition_list ::=

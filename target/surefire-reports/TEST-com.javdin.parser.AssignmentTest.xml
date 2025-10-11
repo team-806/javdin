@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.javdin.parser.ParserTest" time="0.025" tests="11" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.javdin.parser.AssignmentTest" time="0.027" tests="13" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,21 +53,17 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testMultipleVariableDeclaration" classname="com.javdin.parser.ParserTest" time="0.011"/>
-  <testcase name="testPrintStatement" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testParseError" classname="com.javdin.parser.ParserTest" time="0.002">
-    <system-out><![CDATA[instead expected token classes are []
-]]></system-out>
-    <system-err><![CDATA[Syntax error at character 1 of input
-Couldn't repair and continue parse at character 1 of input
-]]></system-err>
-  </testcase>
-  <testcase name="testOptionalSemicolons" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testMixedSeparators" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testSimpleDeclaration" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testMultipleExpressionPrint" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testDifferentLiterals" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testEmptyProgram" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testMultipleStatements" classname="com.javdin.parser.ParserTest" time="0.001"/>
-  <testcase name="testDeclarationWithoutInitializer" classname="com.javdin.parser.ParserTest" time="0.001"/>
+  <testcase name="testArrayElementAssignment" classname="com.javdin.parser.AssignmentTest" time="0.003"/>
+  <testcase name="testAssignmentWithExpression" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testDeclarationFollowedByAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testAssignmentWithTupleLiteral" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
+  <testcase name="testSimpleVariableAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testComplexLeftHandSide" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testNestedArrayAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testAssignmentWithArrayLiteral" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
+  <testcase name="testAssignmentWithFunctionLiteral" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
+  <testcase name="testTupleMemberAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testTupleNumericMemberAssignment" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
+  <testcase name="testAssignmentWithFunctionCall" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testMultipleAssignments" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
 </testsuite>

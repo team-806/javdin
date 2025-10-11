@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AssignmentNode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Javdin</a> &gt; <a href="index.source.html" class="el_package">com.javdin.ast</a> &gt; <span class="el_source">AssignmentNode.java</span></div><h1>AssignmentNode.java</h1><pre class="source lang-java linenums">package com.javdin.ast;
 
 public class AssignmentNode extends StatementNode {
-    private final String variable;
+    private final ExpressionNode target;  // Can be ReferenceNode, ArrayAccessNode, TupleMemberAccessNode, etc.
     private final ExpressionNode value;
 
-    public AssignmentNode(int line, int column, String variable, ExpressionNode value) { 
-<span class="nc" id="L8">        super(line, column);</span>
-<span class="nc" id="L9">        this.variable = variable;</span>
-<span class="nc" id="L10">        this.value = value;</span>
-<span class="nc" id="L11">    }</span>
+    // Constructor for general reference assignment
+    public AssignmentNode(int line, int column, ExpressionNode target, ExpressionNode value) { 
+<span class="fc" id="L9">        super(line, column);</span>
+<span class="fc" id="L10">        this.target = target;</span>
+<span class="fc" id="L11">        this.value = value;</span>
+<span class="fc" id="L12">    }</span>
 
-<span class="nc" id="L13">    public String getVariable() { return variable; }</span>
-<span class="nc" id="L14">    public ExpressionNode getValue() { return value; }</span>
+    // Legacy constructor for simple variable assignment (for backward compatibility)
+    @Deprecated
+    public AssignmentNode(int line, int column, String variable, ExpressionNode value) { 
+<span class="nc" id="L17">        super(line, column);</span>
+<span class="nc" id="L18">        this.target = new ReferenceNode(line, column, variable);</span>
+<span class="nc" id="L19">        this.value = value;</span>
+<span class="nc" id="L20">    }</span>
+
+<span class="fc" id="L22">    public ExpressionNode getTarget() { return target; }</span>
+    
+    // Legacy getter for backward compatibility
+    @Deprecated
+    public String getVariable() { 
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (target instanceof ReferenceNode) {</span>
+<span class="nc" id="L28">            return ((ReferenceNode) target).getName();</span>
+        }
+<span class="nc" id="L30">        throw new UnsupportedOperationException(&quot;Target is not a simple variable reference&quot;);</span>
+    }
+    
+<span class="fc" id="L33">    public ExpressionNode getValue() { return value; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 
-<span class="nc" id="L18">        return visitor.visitAssignment(this); </span>
+<span class="nc" id="L37">        return visitor.visitAssignment(this); </span>
     }
 }
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -5,13 +5,13 @@ public class ArrayAccessNode extends ExpressionNode {
     private final ExpressionNode index;
 
     public ArrayAccessNode(int line, int column, ExpressionNode array, ExpressionNode index) { 
-<span class="nc" id="L8">        super(line, column);</span>
-<span class="nc" id="L9">        this.array = array;</span>
-<span class="nc" id="L10">        this.index = index;</span>
-<span class="nc" id="L11">    }</span>
+<span class="fc" id="L8">        super(line, column);</span>
+<span class="fc" id="L9">        this.array = array;</span>
+<span class="fc" id="L10">        this.index = index;</span>
+<span class="fc" id="L11">    }</span>
 
-<span class="nc" id="L13">    public ExpressionNode getArray() { return array; }</span>
-<span class="nc" id="L14">    public ExpressionNode getIndex() { return index; }</span>
+<span class="fc" id="L13">    public ExpressionNode getArray() { return array; }</span>
+<span class="fc" id="L14">    public ExpressionNode getIndex() { return index; }</span>
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 

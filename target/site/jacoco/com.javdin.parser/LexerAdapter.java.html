@@ -37,7 +37,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
      * Maps our TokenType enum to CUP's symbol constants.
      */
     private int mapTokenTypeToSymbol(TokenType tokenType) {
-<span class="pc bpc" id="L40" title="40 of 62 branches missed.">        return switch (tokenType) {</span>
+<span class="pc bpc" id="L40" title="37 of 62 branches missed.">        return switch (tokenType) {</span>
             // Literals with values
 <span class="fc" id="L42">            case IDENTIFIER -&gt; Symbols.IDENTIFIER;</span>
 <span class="fc" id="L43">            case INTEGER -&gt; Symbols.INTEGER;</span>
@@ -98,13 +98,13 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
             // Delimiters
 <span class="fc" id="L99">            case LEFT_PAREN -&gt; Symbols.LEFT_PAREN;</span>
 <span class="fc" id="L100">            case RIGHT_PAREN -&gt; Symbols.RIGHT_PAREN;</span>
-<span class="nc" id="L101">            case LEFT_BRACE -&gt; Symbols.LEFT_BRACE;</span>
-<span class="nc" id="L102">            case RIGHT_BRACE -&gt; Symbols.RIGHT_BRACE;</span>
+<span class="fc" id="L101">            case LEFT_BRACE -&gt; Symbols.LEFT_BRACE;</span>
+<span class="fc" id="L102">            case RIGHT_BRACE -&gt; Symbols.RIGHT_BRACE;</span>
 <span class="fc" id="L103">            case LEFT_BRACKET -&gt; Symbols.LEFT_BRACKET;</span>
 <span class="fc" id="L104">            case RIGHT_BRACKET -&gt; Symbols.RIGHT_BRACKET;</span>
 <span class="fc" id="L105">            case SEMICOLON -&gt; Symbols.SEMICOLON;</span>
 <span class="fc" id="L106">            case COMMA -&gt; Symbols.COMMA;</span>
-<span class="nc" id="L107">            case DOT -&gt; Symbols.DOT;</span>
+<span class="fc" id="L107">            case DOT -&gt; Symbols.DOT;</span>
 <span class="nc" id="L108">            case COLON -&gt; Symbols.COLON;</span>
             
             // Special

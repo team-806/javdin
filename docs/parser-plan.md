@@ -594,8 +594,10 @@ public class Parser {
 
 ---
 
-## MILESTONE 6: Declarations and Assignments
+## MILESTONE 6: Declarations and Assignments ✅ COMPLETED
 **Goal**: Implement variable declarations with Project D syntax and assignment statements
+
+**Status**: COMPLETED - Declarations already working, assignment statements fully implemented
 
 ### Task 6.1: Update Declaration Production
 **File**: `src/main/resources/parser.cup`
@@ -647,6 +649,9 @@ public class Parser {
 - ✅ Assignments work: `x := 42`
 - ✅ Complex left-hand sides work: `arr[i] := value`, `tuple.field := value`
 - ✅ Tests for declarations and assignments pass
+- ✅ AssignmentNode updated to support general references
+- ✅ Nested array/tuple access: `matrix[i][j] := value`, `obj.field[5].data := value`
+- ✅ 13 comprehensive assignment tests passing
 
 ---
 
