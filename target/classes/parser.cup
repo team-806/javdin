@@ -284,10 +284,10 @@ literal ::= INTEGER:val
     {: RESULT = func; :};
 
 /* Array literals: [1, 2, 3] or [] */
+/* Note: Removed redundant ARRAY_TYPE alternative - lexer recognizes [] as ARRAY_TYPE
+ * but that token should only be used in type_indicator production, not here */
 array_literal ::=
-    ARRAY_TYPE:at
-    {: RESULT = new ArrayLiteralNode(new ArrayList<>(), atleft, atright); :}
-    | LEFT_BRACKET:lb RIGHT_BRACKET
+    LEFT_BRACKET:lb RIGHT_BRACKET
     {: RESULT = new ArrayLiteralNode(new ArrayList<>(), lbleft, lbright); :}
     | LEFT_BRACKET:lb expression_list:exprs RIGHT_BRACKET
     {: RESULT = new ArrayLiteralNode(exprs, lbleft, lbright); :};
@@ -301,10 +301,10 @@ expression_list ::=
        RESULT = list; :};
 
 /* Tuple literals: {a := 1, b := 2} or {1, 2, 3} or {} */
+/* Note: Removed redundant TUPLE_TYPE alternative - lexer recognizes {} as TUPLE_TYPE
+ * but that token should only be used in type_indicator production, not here */
 tuple_literal ::=
-    TUPLE_TYPE:tt
-    {: RESULT = new TupleLiteralNode(new ArrayList<>(), ttleft, ttright); :}
-    | LEFT_BRACE:lb RIGHT_BRACE
+    LEFT_BRACE:lb RIGHT_BRACE
     {: RESULT = new TupleLiteralNode(new ArrayList<>(), lbleft, lbright); :}
     | LEFT_BRACE:lb tuple_element_list:elements RIGHT_BRACE
     {: RESULT = new TupleLiteralNode(elements, lbleft, lbright); :};

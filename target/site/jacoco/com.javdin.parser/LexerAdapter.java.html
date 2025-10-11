@@ -37,7 +37,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
      * Maps our TokenType enum to CUP's symbol constants.
      */
     private int mapTokenTypeToSymbol(TokenType tokenType) {
-<span class="pc bpc" id="L40" title="37 of 62 branches missed.">        return switch (tokenType) {</span>
+<span class="pc bpc" id="L40" title="27 of 62 branches missed.">        return switch (tokenType) {</span>
             // Literals with values
 <span class="fc" id="L42">            case IDENTIFIER -&gt; Symbols.IDENTIFIER;</span>
 <span class="fc" id="L43">            case INTEGER -&gt; Symbols.INTEGER;</span>
@@ -62,21 +62,21 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="fc" id="L62">            case PRINT -&gt; Symbols.PRINT;</span>
 <span class="fc" id="L63">            case TRUE -&gt; Symbols.TRUE;</span>
 <span class="nc" id="L64">            case FALSE -&gt; Symbols.FALSE;</span>
-<span class="nc" id="L65">            case NONE -&gt; Symbols.NONE;</span>
+<span class="fc" id="L65">            case NONE -&gt; Symbols.NONE;</span>
             
             // Type indicators
-<span class="nc" id="L68">            case INT_TYPE -&gt; Symbols.INT_TYPE;</span>
-<span class="nc" id="L69">            case REAL_TYPE -&gt; Symbols.REAL_TYPE;</span>
-<span class="nc" id="L70">            case BOOL_TYPE -&gt; Symbols.BOOL_TYPE;</span>
-<span class="nc" id="L71">            case STRING_TYPE -&gt; Symbols.STRING_TYPE;</span>
+<span class="fc" id="L68">            case INT_TYPE -&gt; Symbols.INT_TYPE;</span>
+<span class="fc" id="L69">            case REAL_TYPE -&gt; Symbols.REAL_TYPE;</span>
+<span class="fc" id="L70">            case BOOL_TYPE -&gt; Symbols.BOOL_TYPE;</span>
+<span class="fc" id="L71">            case STRING_TYPE -&gt; Symbols.STRING_TYPE;</span>
 <span class="nc" id="L72">            case NONE_TYPE -&gt; Symbols.NONE_TYPE;</span>
-<span class="nc" id="L73">            case ARRAY_TYPE -&gt; Symbols.ARRAY_TYPE;</span>
-<span class="nc" id="L74">            case TUPLE_TYPE -&gt; Symbols.TUPLE_TYPE;</span>
+<span class="fc" id="L73">            case ARRAY_TYPE -&gt; Symbols.ARRAY_TYPE;</span>
+<span class="fc" id="L74">            case TUPLE_TYPE -&gt; Symbols.TUPLE_TYPE;</span>
 <span class="nc" id="L75">            case FUNC_TYPE -&gt; Symbols.FUNC_TYPE;</span>
             
             //  Operators
 <span class="fc" id="L78">            case PLUS -&gt; Symbols.PLUS;</span>
-<span class="nc" id="L79">            case MINUS -&gt; Symbols.MINUS;</span>
+<span class="fc" id="L79">            case MINUS -&gt; Symbols.MINUS;</span>
 <span class="fc" id="L80">            case MULTIPLY -&gt; Symbols.MULTIPLY;</span>
 <span class="nc" id="L81">            case DIVIDE -&gt; Symbols.DIVIDE;</span>
 <span class="nc" id="L82">            case ASSIGN -&gt; Symbols.ASSIGN_OP;  // Map = to := for backward compatibility</span>
@@ -88,10 +88,10 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L88">            case LESS_EQUAL -&gt; Symbols.LESS_EQUAL;</span>
 <span class="nc" id="L89">            case GREATER_THAN -&gt; Symbols.GREATER_THAN;</span>
 <span class="nc" id="L90">            case GREATER_EQUAL -&gt; Symbols.GREATER_EQUAL;</span>
-<span class="nc" id="L91">            case AND -&gt; Symbols.AND;</span>
+<span class="fc" id="L91">            case AND -&gt; Symbols.AND;</span>
 <span class="nc" id="L92">            case OR -&gt; Symbols.OR;</span>
 <span class="nc" id="L93">            case XOR -&gt; Symbols.XOR;</span>
-<span class="nc" id="L94">            case NOT -&gt; Symbols.NOT;</span>
+<span class="fc" id="L94">            case NOT -&gt; Symbols.NOT;</span>
 <span class="nc" id="L95">            case RANGE -&gt; Symbols.RANGE;</span>
 <span class="fc" id="L96">            case SHORT_IF -&gt; Symbols.SHORT_IF;</span>
             
