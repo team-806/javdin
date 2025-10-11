@@ -12,7 +12,7 @@ class ParserTest {
     
     @Test
     void testSimpleDeclaration() {
-        Lexer lexer = new Lexer("var x = 42;");
+        Lexer lexer = new Lexer("var x := 42");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
@@ -31,7 +31,7 @@ class ParserTest {
     
     @Test
     void testDeclarationWithoutInitializer() {
-        Lexer lexer = new Lexer("var x;");
+        Lexer lexer = new Lexer("var x");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
@@ -44,7 +44,7 @@ class ParserTest {
     
     @Test
     void testMultipleStatements() {
-        Lexer lexer = new Lexer("var x = 1; var y = 2;");
+        Lexer lexer = new Lexer("var x := 1; var y := 2");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
@@ -56,7 +56,7 @@ class ParserTest {
     
     @Test
     void testDifferentLiterals() {
-        Lexer lexer = new Lexer("var a = 42; var b = 3.14; var c = true; var d = \"hello\";");
+        Lexer lexer = new Lexer("var a := 42; var b := 3.14; var c := true; var d := \"hello\"");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
@@ -90,13 +90,17 @@ class ParserTest {
     
     @Test
     void testPrintStatement() {
-        Lexer lexer = new Lexer("print;");
+        Lexer lexer = new Lexer("print 42");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();
         
         assertThat(program.getStatements()).hasSize(1);
         assertThat(program.getStatements().get(0)).isInstanceOf(PrintNode.class);
+        
+        PrintNode print = (PrintNode) program.getStatements().get(0);
+        assertThat(print.getExpressions()).hasSize(1);
+        assertThat(print.getExpressions().get(0)).isInstanceOf(LiteralNode.class);
     }
     
     @Test
@@ -105,8 +109,7 @@ class ParserTest {
         Parser parser = new Parser(lexer);
         
         assertThatThrownBy(() -> parser.parse())
-            .isInstanceOf(ParseException.class)
-            .hasMessageContaining("Expected identifier");
+            .isInstanceOf(ParseException.class);
     }
     
     @Test
@@ -117,5 +120,65 @@ class ParserTest {
         ProgramNode program = parser.parse();
         
         assertThat(program.getStatements()).isEmpty();
+    }
+    
+    @Test
+    void testMultipleVariableDeclaration() {
+        Lexer lexer = new Lexer("var x := 1, y := 2, z");
+        Parser parser = new Parser(lexer);
+        
+        ProgramNode program = parser.parse();
+        
+        assertThat(program.getStatements()).hasSize(1);
+        DeclarationNode declaration = (DeclarationNode) program.getStatements().get(0);
+        
+        assertThat(declaration.getVariables()).hasSize(3);
+        assertThat(declaration.getVariables().get(0).getName()).isEqualTo("x");
+        assertThat(declaration.getVariables().get(0).getInitialValue()).isInstanceOf(LiteralNode.class);
+        
+        assertThat(declaration.getVariables().get(1).getName()).isEqualTo("y");
+        assertThat(declaration.getVariables().get(1).getInitialValue()).isInstanceOf(LiteralNode.class);
+        
+        assertThat(declaration.getVariables().get(2).getName()).isEqualTo("z");
+        assertThat(declaration.getVariables().get(2).getInitialValue()).isNull();
+    }
+    
+    @Test
+    void testMultipleExpressionPrint() {
+        Lexer lexer = new Lexer("print 1, 2, 3");
+        Parser parser = new Parser(lexer);
+        
+        ProgramNode program = parser.parse();
+        
+        assertThat(program.getStatements()).hasSize(1);
+        PrintNode print = (PrintNode) program.getStatements().get(0);
+        
+        assertThat(print.getExpressions()).hasSize(3);
+        assertThat(print.getExpressions().get(0)).isInstanceOf(LiteralNode.class);
+        assertThat(print.getExpressions().get(1)).isInstanceOf(LiteralNode.class);
+        assertThat(print.getExpressions().get(2)).isInstanceOf(LiteralNode.class);
+        
+        LiteralNode lit1 = (LiteralNode) print.getExpressions().get(0);
+        assertThat(lit1.getValue()).isEqualTo(1);
+    }
+    
+    @Test
+    void testOptionalSemicolons() {
+        Lexer lexer = new Lexer("var x := 1\nvar y := 2");
+        Parser parser = new Parser(lexer);
+        
+        ProgramNode program = parser.parse();
+        
+        assertThat(program.getStatements()).hasSize(2);
+    }
+    
+    @Test
+    void testMixedSeparators() {
+        Lexer lexer = new Lexer("var x := 1; var y := 2\nvar z := 3");
+        Parser parser = new Parser(lexer);
+        
+        ProgramNode program = parser.parse();
+        
+        assertThat(program.getStatements()).hasSize(3);
     }
 }

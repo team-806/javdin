@@ -54,6 +54,7 @@ public class Interpreter implements AstVisitor<Value> {
             case REAL -> new Value(node.getValue());
             case BOOLEAN -> new Value(node.getValue());
             case STRING -> new Value(node.getValue());
+            case NONE -> Value.VOID;
         };
     }
     
@@ -80,4 +81,6 @@ public class Interpreter implements AstVisitor<Value> {
     @Override public Value visitFunctionCall(FunctionCallNode node) { return Value.VOID; }
     @Override public Value visitArrayAccess(ArrayAccessNode node) { return Value.VOID; }
     @Override public Value visitFunctionLiteral(FunctionLiteralNode node) { return Value.VOID; }
+    @Override public Value visitArrayLiteral(ArrayLiteralNode node) { return Value.VOID; }
+    @Override public Value visitTupleLiteral(TupleLiteralNode node) { return Value.VOID; }
 }

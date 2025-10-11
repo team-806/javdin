@@ -23,6 +23,7 @@ com/javdin/lexer/Token.class
 com/javdin/ast/DeclarationNode.class
 com/javdin/parser/Parser.class
 com/javdin/interpreter/Interpreter$1.class
+com/javdin/ast/ArrayLiteralNode.class
 com/javdin/utils/ErrorHandler.class
 com/javdin/ast/UnaryOpNode.class
 com/javdin/ast/FunctionLiteralNode.class
@@ -38,9 +39,11 @@ com/javdin/main/Main.class
 com/javdin/ast/LiteralNode$LiteralType.class
 com/javdin/ast/WhileNode.class
 com/javdin/parser/LexerAdapter$1.class
+com/javdin/ast/TupleLiteralNode$TupleElement.class
 com/javdin/ast/PrintNode.class
 com/javdin/ast/ReturnNode.class
 com/javdin/ast/ArrayAccessNode.class
+com/javdin/ast/TupleLiteralNode.class
 com/javdin/ast/ProgramNode.class
 com/javdin/utils/IoUtils.class
 com/javdin/semantics/SemanticAnalyzer.class
@@ -48,4 +51,5 @@ com/javdin/lexer/Lexer.class
 com/javdin/ast/ReferenceNode.class
 com/javdin/ast/ExpressionNode.class
 com/javdin/interpreter/Value.class
+com/javdin/ast/DeclarationNode$VariableDefinition.class
 com/javdin/lexer/LexerDebug$1.class

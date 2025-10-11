@@ -37,12 +37,12 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
      * Maps our TokenType enum to CUP's symbol constants.
      */
     private int mapTokenTypeToSymbol(TokenType tokenType) {
-<span class="pc bpc" id="L40" title="56 of 62 branches missed.">        return switch (tokenType) {</span>
+<span class="pc bpc" id="L40" title="49 of 62 branches missed.">        return switch (tokenType) {</span>
             // Literals with values
 <span class="fc" id="L42">            case IDENTIFIER -&gt; Symbols.IDENTIFIER;</span>
 <span class="fc" id="L43">            case INTEGER -&gt; Symbols.INTEGER;</span>
-<span class="nc" id="L44">            case REAL -&gt; Symbols.REAL;</span>
-<span class="nc" id="L45">            case STRING -&gt; Symbols.STRING;</span>
+<span class="fc" id="L44">            case REAL -&gt; Symbols.REAL;</span>
+<span class="fc" id="L45">            case STRING -&gt; Symbols.STRING;</span>
 <span class="nc" id="L46">            case BOOL -&gt; Symbols.BOOL;</span>
             
             // Keywords
@@ -59,8 +59,8 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L59">            case FUNC -&gt; Symbols.FUNC;</span>
 <span class="nc" id="L60">            case IS -&gt; Symbols.IS;</span>
 <span class="nc" id="L61">            case RETURN -&gt; Symbols.RETURN;</span>
-<span class="nc" id="L62">            case PRINT -&gt; Symbols.PRINT;</span>
-<span class="nc" id="L63">            case TRUE -&gt; Symbols.TRUE;</span>
+<span class="fc" id="L62">            case PRINT -&gt; Symbols.PRINT;</span>
+<span class="fc" id="L63">            case TRUE -&gt; Symbols.TRUE;</span>
 <span class="nc" id="L64">            case FALSE -&gt; Symbols.FALSE;</span>
 <span class="nc" id="L65">            case NONE -&gt; Symbols.NONE;</span>
             
@@ -80,7 +80,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L80">            case MULTIPLY -&gt; Symbols.MULTIPLY;</span>
 <span class="nc" id="L81">            case DIVIDE -&gt; Symbols.DIVIDE;</span>
 <span class="fc" id="L82">            case ASSIGN -&gt; Symbols.ASSIGN_OP;  // Map = to := for backward compatibility</span>
-<span class="nc" id="L83">            case ASSIGN_OP -&gt; Symbols.ASSIGN_OP;</span>
+<span class="fc" id="L83">            case ASSIGN_OP -&gt; Symbols.ASSIGN_OP;</span>
 <span class="nc" id="L84">            case EQUAL -&gt; Symbols.EQUAL;</span>
 <span class="nc" id="L85">            case NOT_EQUAL -&gt; Symbols.NOT_EQUAL;</span>
 <span class="nc" id="L86">            case NOT_EQUAL_ALT -&gt; Symbols.NOT_EQUAL_ALT;</span>
@@ -103,12 +103,12 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L103">            case LEFT_BRACKET -&gt; Symbols.LEFT_BRACKET;</span>
 <span class="nc" id="L104">            case RIGHT_BRACKET -&gt; Symbols.RIGHT_BRACKET;</span>
 <span class="fc" id="L105">            case SEMICOLON -&gt; Symbols.SEMICOLON;</span>
-<span class="nc" id="L106">            case COMMA -&gt; Symbols.COMMA;</span>
+<span class="fc" id="L106">            case COMMA -&gt; Symbols.COMMA;</span>
 <span class="nc" id="L107">            case DOT -&gt; Symbols.DOT;</span>
 <span class="nc" id="L108">            case COLON -&gt; Symbols.COLON;</span>
             
             // Special
-<span class="nc" id="L111">            case NEWLINE -&gt; Symbols.NEWLINE;</span>
+<span class="fc" id="L111">            case NEWLINE -&gt; Symbols.NEWLINE;</span>
 <span class="fc" id="L112">            case EOF -&gt; Symbols.EOF;</span>
             
             // Fallback for any unmapped tokens
@@ -125,7 +125,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
      * For keywords and operators, returns null (they're recognized by their symbol ID).
      */
     private Object extractTokenValue(Token token) {
-<span class="pc bpc" id="L128" title="4 of 7 branches missed.">        return switch (token.type()) {</span>
+<span class="pc bpc" id="L128" title="1 of 7 branches missed.">        return switch (token.type()) {</span>
 <span class="fc" id="L129">            case IDENTIFIER -&gt; token.value(); // String</span>
             case INTEGER -&gt; {
                 // Convert string to Integer
@@ -141,7 +141,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
             case REAL -&gt; {
                 // Convert string to Double
                 try {
-<span class="nc" id="L144">                    yield Double.parseDouble(token.value());</span>
+<span class="fc" id="L144">                    yield Double.parseDouble(token.value());</span>
 <span class="nc" id="L145">                } catch (NumberFormatException e) {</span>
 <span class="nc" id="L146">                    throw new RuntimeException(</span>
 <span class="nc" id="L147">                        &quot;Invalid real literal: &quot; + token.value() + </span>
@@ -149,8 +149,8 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
                     );
                 }
             }
-<span class="nc" id="L152">            case STRING -&gt; token.value(); // String (without quotes)</span>
-<span class="nc" id="L153">            case TRUE -&gt; Boolean.TRUE;</span>
+<span class="fc" id="L152">            case STRING -&gt; token.value(); // String (without quotes)</span>
+<span class="fc" id="L153">            case TRUE -&gt; Boolean.TRUE;</span>
 <span class="nc" id="L154">            case FALSE -&gt; Boolean.FALSE;</span>
             // For all other tokens (keywords, operators, etc.), no semantic value needed
 <span class="fc" id="L156">            default -&gt; null;</span>

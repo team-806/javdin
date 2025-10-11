@@ -4,20 +4,47 @@ import java.util.List;
 
 public class FunctionLiteralNode extends ExpressionNode {
     private final List&lt;String&gt; parameters;
-    private final StatementNode body;
+    private final Object body; // Can be List&lt;StatementNode&gt; or ExpressionNode
+    private final boolean isExpressionBody;
 
-    public FunctionLiteralNode(int line, int column, List&lt;String&gt; parameters, StatementNode body) { 
-<span class="nc" id="L10">        super(line, column);</span>
-<span class="nc" id="L11">        this.parameters = parameters;</span>
-<span class="nc" id="L12">        this.body = body;</span>
-<span class="nc" id="L13">    }</span>
+    // Constructor for statement body: func(params) is ... end
+    public FunctionLiteralNode(int line, int column, List&lt;String&gt; parameters, List&lt;StatementNode&gt; body, boolean isExpressionBody) { 
+<span class="nc" id="L12">        super(line, column);</span>
+<span class="nc" id="L13">        this.parameters = parameters;</span>
+<span class="nc" id="L14">        this.body = body;</span>
+<span class="nc" id="L15">        this.isExpressionBody = isExpressionBody;</span>
+<span class="nc" id="L16">    }</span>
 
-<span class="nc" id="L15">    public List&lt;String&gt; getParameters() { return parameters; }</span>
-<span class="nc" id="L16">    public StatementNode getBody() { return body; }</span>
+    // Constructor for expression body: func(params) =&gt; expr
+    public FunctionLiteralNode(int line, int column, List&lt;String&gt; parameters, ExpressionNode body, boolean isExpressionBody) { 
+<span class="nc" id="L20">        super(line, column);</span>
+<span class="nc" id="L21">        this.parameters = parameters;</span>
+<span class="nc" id="L22">        this.body = body;</span>
+<span class="nc" id="L23">        this.isExpressionBody = isExpressionBody;</span>
+<span class="nc" id="L24">    }</span>
+
+<span class="nc" id="L26">    public List&lt;String&gt; getParameters() { return parameters; }</span>
+<span class="nc" id="L27">    public Object getBody() { return body; }</span>
+<span class="nc" id="L28">    public boolean isExpressionBody() { return isExpressionBody; }</span>
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public List&lt;StatementNode&gt; getStatementBody() {
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (isExpressionBody) {</span>
+<span class="nc" id="L33">            throw new IllegalStateException(&quot;Function has expression body, not statement body&quot;);</span>
+        }
+<span class="nc" id="L35">        return (List&lt;StatementNode&gt;) body;</span>
+    }
+
+    public ExpressionNode getExpressionBody() {
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (!isExpressionBody) {</span>
+<span class="nc" id="L40">            throw new IllegalStateException(&quot;Function has statement body, not expression body&quot;);</span>
+        }
+<span class="nc" id="L42">        return (ExpressionNode) body;</span>
+    }
 
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) { 
-<span class="nc" id="L20">        return visitor.visitFunctionLiteral(this); </span>
+<span class="nc" id="L47">        return visitor.visitFunctionLiteral(this); </span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

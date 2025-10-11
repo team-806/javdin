@@ -7,23 +7,23 @@ import java.util.Map;
  * Runtime value wrapper for dynamic typing.
  */
 public class Value {
-<span class="nc" id="L10">    public static final Value VOID = new Value(null);</span>
+<span class="fc" id="L10">    public static final Value VOID = new Value(null);</span>
     
     private final Object value;
     private final ValueType type;
     
-<span class="nc" id="L15">    public enum ValueType {</span>
-<span class="nc" id="L16">        INTEGER, REAL, BOOLEAN, STRING, ARRAY, TUPLE, FUNCTION, VOID</span>
+<span class="fc" id="L15">    public enum ValueType {</span>
+<span class="fc" id="L16">        INTEGER, REAL, BOOLEAN, STRING, ARRAY, TUPLE, FUNCTION, VOID</span>
     }
     
-<span class="nc" id="L19">    public Value(Object value) {</span>
-<span class="nc" id="L20">        this.value = value;</span>
-<span class="nc" id="L21">        this.type = determineType(value);</span>
-<span class="nc" id="L22">    }</span>
+<span class="fc" id="L19">    public Value(Object value) {</span>
+<span class="fc" id="L20">        this.value = value;</span>
+<span class="fc" id="L21">        this.type = determineType(value);</span>
+<span class="fc" id="L22">    }</span>
     
     private ValueType determineType(Object value) {
-<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (value == null) return ValueType.VOID;</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (value instanceof Integer) return ValueType.INTEGER;</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (value == null) return ValueType.VOID;</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (value instanceof Integer) return ValueType.INTEGER;</span>
 <span class="nc bnc" id="L27" title="All 2 branches missed.">        if (value instanceof Double) return ValueType.REAL;</span>
 <span class="nc bnc" id="L28" title="All 2 branches missed.">        if (value instanceof Boolean) return ValueType.BOOLEAN;</span>
 <span class="nc bnc" id="L29" title="All 2 branches missed.">        if (value instanceof String) return ValueType.STRING;</span>

@@ -8,7 +8,7 @@ public class LiteralNode extends ExpressionNode {
     private final LiteralType type;
     
 <span class="fc" id="L10">    public enum LiteralType {</span>
-<span class="fc" id="L11">        INTEGER, REAL, BOOLEAN, STRING</span>
+<span class="fc" id="L11">        INTEGER, REAL, BOOLEAN, STRING, NONE</span>
     }
     
     public LiteralNode(Object value, LiteralType type, int line, int column) {
@@ -27,7 +27,7 @@ public class LiteralNode extends ExpressionNode {
     
     @Override
     public &lt;T&gt; T accept(AstVisitor&lt;T&gt; visitor) {
-<span class="nc" id="L30">        return visitor.visitLiteral(this);</span>
+<span class="fc" id="L30">        return visitor.visitLiteral(this);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

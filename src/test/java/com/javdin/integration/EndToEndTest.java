@@ -21,7 +21,7 @@ class EndToEndTest {
     void testSimpleProgram() throws IOException {
         // Create a simple test program
         Path testFile = tempDir.resolve("test.d");
-        Files.writeString(testFile, "var x = 42;\nprint;");
+        Files.writeString(testFile, "var x := 42\nprint x");
         
         // Capture stdout
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

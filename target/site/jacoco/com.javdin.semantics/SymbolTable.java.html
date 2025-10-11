@@ -8,28 +8,28 @@ import java.util.*;
 public class SymbolTable {
     private final Stack&lt;Scope&gt; scopes;
     
-<span class="nc" id="L11">    public SymbolTable() {</span>
-<span class="nc" id="L12">        this.scopes = new Stack&lt;&gt;();</span>
-<span class="nc" id="L13">    }</span>
+<span class="fc" id="L11">    public SymbolTable() {</span>
+<span class="fc" id="L12">        this.scopes = new Stack&lt;&gt;();</span>
+<span class="fc" id="L13">    }</span>
     
     public void enterScope() {
-<span class="nc" id="L16">        scopes.push(new Scope());</span>
-<span class="nc" id="L17">    }</span>
+<span class="fc" id="L16">        scopes.push(new Scope());</span>
+<span class="fc" id="L17">    }</span>
     
     public void exitScope() {
-<span class="nc bnc" id="L20" title="All 2 branches missed.">        if (!scopes.isEmpty()) {</span>
-<span class="nc" id="L21">            scopes.pop();</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (!scopes.isEmpty()) {</span>
+<span class="fc" id="L21">            scopes.pop();</span>
         }
-<span class="nc" id="L23">    }</span>
+<span class="fc" id="L23">    }</span>
     
     public void declare(String name, String type) {
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (!scopes.isEmpty()) {</span>
-<span class="nc" id="L27">            scopes.peek().declare(name, type);</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (!scopes.isEmpty()) {</span>
+<span class="fc" id="L27">            scopes.peek().declare(name, type);</span>
         }
-<span class="nc" id="L29">    }</span>
+<span class="fc" id="L29">    }</span>
     
     public boolean isDeclaredInCurrentScope(String name) {
-<span class="nc bnc" id="L32" title="All 4 branches missed.">        return !scopes.isEmpty() &amp;&amp; scopes.peek().isDeclared(name);</span>
+<span class="pc bpc" id="L32" title="2 of 4 branches missed.">        return !scopes.isEmpty() &amp;&amp; scopes.peek().isDeclared(name);</span>
     }
     
     public boolean isDeclared(String name) {

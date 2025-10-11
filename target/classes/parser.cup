@@ -46,17 +46,20 @@ non terminal ProgramNode program;
 non terminal List<StatementNode> statement_list;
 non terminal StatementNode statement;
 non terminal ExpressionNode expression;
-non terminal LiteralNode literal;
+non terminal ExpressionNode literal;
 non terminal ArrayLiteralNode array_literal;
 non terminal TupleLiteralNode tuple_literal;
 non terminal FunctionLiteralNode function_literal;
-non terminal List<ExpressionNode> expression_list_opt;
 non terminal List<ExpressionNode> expression_list;
 non terminal List<TupleLiteralNode.TupleElement> tuple_element_list;
-non terminal List<TupleLiteralNode.TupleElement> tuple_element_list_opt;
 non terminal TupleLiteralNode.TupleElement tuple_element;
 non terminal List<String> parameter_list_opt;
 non terminal List<String> parameter_list;
+non terminal List<DeclarationNode.VariableDefinition> variable_definition_list;
+non terminal DeclarationNode.VariableDefinition variable_definition;
+non terminal separator_opt;
+non terminal separator_list;
+non terminal separator;
 
 /* Grammar rules */
 program ::= statement_list:stmts
@@ -64,22 +67,58 @@ program ::= statement_list:stmts
     | /* empty */
     {: RESULT = new ProgramNode(new ArrayList<StatementNode>(), 1, 1); :};
 
-statement_list ::= statement_list:list statement:stmt
+/* Statement list with optional separators (semicolons or newlines) */
+statement_list ::= 
+    statement_list:list separator_opt statement:stmt
     {: list.add(stmt); RESULT = list; :}
     | statement:stmt
     {: List<StatementNode> list = new ArrayList<>(); 
        list.add(stmt); 
        RESULT = list; :};
 
-statement ::= VAR IDENTIFIER:name ASSIGN_OP expression:expr SEMICOLON
-    {: RESULT = new DeclarationNode(name, expr, nameleft, nameright); :}
-    | VAR IDENTIFIER:name SEMICOLON
-    {: RESULT = new DeclarationNode(name, null, nameleft, nameright); :}
-    | PRINT:p expression:expr SEMICOLON
-    {: RESULT = new PrintNode(pleft, pright, expr); :};
+/* Optional separators - one or more semicolons/newlines or nothing */
+separator_opt ::=
+    separator_list
+    | /* empty */
+    ;
+
+separator_list ::=
+    separator_list separator
+    | separator
+    ;
+
+separator ::=
+    SEMICOLON
+    | NEWLINE
+    ;
+
+/* Statements - note: NO semicolons in statement productions */
+statement ::= 
+    VAR:v variable_definition_list:vars
+    {: RESULT = new DeclarationNode(vars, vleft, vright); :}
+    | PRINT:p expression_list:exprs
+    {: RESULT = new PrintNode(pleft, pright, exprs); :};
+
+/* Variable definition list: var x := 1, y := 2, z */
+variable_definition_list ::=
+    variable_definition_list:list COMMA variable_definition:def
+    {: list.add(def); RESULT = list; :}
+    | variable_definition:def
+    {: List<DeclarationNode.VariableDefinition> list = new ArrayList<>();
+       list.add(def);
+       RESULT = list; :};
+
+/* Single variable definition: name or name := expr */
+variable_definition ::=
+    IDENTIFIER:name ASSIGN_OP expression:expr
+    {: RESULT = new DeclarationNode.VariableDefinition(name, expr); :}
+    | IDENTIFIER:name
+    {: RESULT = new DeclarationNode.VariableDefinition(name, null); :};
 
 expression ::= literal:lit
-    {: RESULT = lit; :};
+    {: RESULT = lit; :}
+    | IDENTIFIER:id
+    {: RESULT = new ReferenceNode(idleft, idright, id); :};
 
 literal ::= INTEGER:val
     {: RESULT = new LiteralNode(val, LiteralNode.LiteralType.INTEGER, valleft, valright); :}
@@ -102,14 +141,12 @@ literal ::= INTEGER:val
 
 /* Array literals: [1, 2, 3] or [] */
 array_literal ::=
-    LEFT_BRACKET:lb expression_list_opt:exprs RIGHT_BRACKET
+    ARRAY_TYPE:at
+    {: RESULT = new ArrayLiteralNode(new ArrayList<>(), atleft, atright); :}
+    | LEFT_BRACKET:lb RIGHT_BRACKET
+    {: RESULT = new ArrayLiteralNode(new ArrayList<>(), lbleft, lbright); :}
+    | LEFT_BRACKET:lb expression_list:exprs RIGHT_BRACKET
     {: RESULT = new ArrayLiteralNode(exprs, lbleft, lbright); :};
-
-expression_list_opt ::=
-    expression_list:list
-    {: RESULT = list; :}
-    | /* empty */
-    {: RESULT = new ArrayList<>(); :};
 
 expression_list ::=
     expression_list:list COMMA expression:expr
@@ -121,14 +158,12 @@ expression_list ::=
 
 /* Tuple literals: {a := 1, b := 2} or {1, 2, 3} or {} */
 tuple_literal ::=
-    LEFT_BRACE:lb tuple_element_list_opt:elements RIGHT_BRACE
+    TUPLE_TYPE:tt
+    {: RESULT = new TupleLiteralNode(new ArrayList<>(), ttleft, ttright); :}
+    | LEFT_BRACE:lb RIGHT_BRACE
+    {: RESULT = new TupleLiteralNode(new ArrayList<>(), lbleft, lbright); :}
+    | LEFT_BRACE:lb tuple_element_list:elements RIGHT_BRACE
     {: RESULT = new TupleLiteralNode(elements, lbleft, lbright); :};
-
-tuple_element_list_opt ::=
-    tuple_element_list:list
-    {: RESULT = list; :}
-    | /* empty */
-    {: RESULT = new ArrayList<>(); :};
 
 tuple_element_list ::=
     tuple_element_list:list COMMA tuple_element:elem

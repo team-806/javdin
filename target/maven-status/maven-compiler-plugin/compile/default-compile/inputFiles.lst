@@ -1,4 +1,5 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/interpreter/Environment.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/TupleLiteralNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/semantics/SymbolTable.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/parser/ParseException.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/parser/LexerAdapter.java
@@ -6,6 +7,7 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/WhileNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/DeclarationNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/LexerDebug.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ArrayLiteralNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/IfNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/TokenType.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ContinueNode.java
