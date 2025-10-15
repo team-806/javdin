@@ -17,7 +17,7 @@ import java_cup.runtime.XMLElement;
 public class CupParser extends java_cup.runtime.lr_parser {
 
  public final Class getSymbolContainer() {
-<span class="nc" id="L20">    return Symbols.class;</span>
+<span class="fc" id="L20">    return Symbols.class;</span>
 }
 
   /** Default constructor. */
@@ -696,7 +696,7 @@ public class CupParser extends java_cup.runtime.lr_parser {
   /** Indicates start state. */
 <span class="fc" id="L697">  public int start_state() {return 0;}</span>
   /** Indicates start production. */
-<span class="nc" id="L699">  public int start_production() {return 1;}</span>
+<span class="fc" id="L699">  public int start_production() {return 1;}</span>
 
   /** &lt;code&gt;EOF&lt;/code&gt; Symbol index. */
 <span class="nc" id="L702">  public int EOF_sym() {return 0;}</span>
@@ -727,7 +727,7 @@ class CUP$CupParser$actions {
       java_cup.runtime.Symbol CUP$CupParser$result;
 
       /* select the action based on the action number */
-<span class="pc bpc" id="L730" title="25 of 105 branches missed.">      switch (CUP$CupParser$act_num)</span>
+<span class="pc bpc" id="L730" title="18 of 105 branches missed.">      switch (CUP$CupParser$act_num)</span>
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 0: // program ::= statement_list 
@@ -826,11 +826,11 @@ class CUP$CupParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 8: // separator_list ::= separator_list separator 
             {
-<span class="nc" id="L829">              Object RESULT =null;</span>
+<span class="fc" id="L829">              Object RESULT =null;</span>
 
-<span class="nc" id="L831">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;separator_list&quot;,30, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L831">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;separator_list&quot;,30, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L833">          return CUP$CupParser$result;</span>
+<span class="fc" id="L833">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 9: // separator_list ::= separator 
@@ -1227,17 +1227,17 @@ class CUP$CupParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 38: // factor ::= factor MINUS term 
             {
-<span class="nc" id="L1230">              ExpressionNode RESULT =null;</span>
-<span class="nc" id="L1231">		int leftleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).left;</span>
-<span class="nc" id="L1232">		int leftright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).right;</span>
-<span class="nc" id="L1233">		ExpressionNode left = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).value;</span>
-<span class="nc" id="L1234">		int rightleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
-<span class="nc" id="L1235">		int rightright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
-<span class="nc" id="L1236">		ExpressionNode right = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
-<span class="nc" id="L1237">		 RESULT = new BinaryOpNode(leftleft, leftright, left, &quot;-&quot;, right); </span>
-<span class="nc" id="L1238">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;factor&quot;,9, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L1230">              ExpressionNode RESULT =null;</span>
+<span class="fc" id="L1231">		int leftleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).left;</span>
+<span class="fc" id="L1232">		int leftright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).right;</span>
+<span class="fc" id="L1233">		ExpressionNode left = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).value;</span>
+<span class="fc" id="L1234">		int rightleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
+<span class="fc" id="L1235">		int rightright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
+<span class="fc" id="L1236">		ExpressionNode right = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
+<span class="fc" id="L1237">		 RESULT = new BinaryOpNode(leftleft, leftright, left, &quot;-&quot;, right); </span>
+<span class="fc" id="L1238">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;factor&quot;,9, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L1240">          return CUP$CupParser$result;</span>
+<span class="fc" id="L1240">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 39: // factor ::= term 
@@ -1269,17 +1269,17 @@ class CUP$CupParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 41: // term ::= term DIVIDE unary 
             {
-<span class="nc" id="L1272">              ExpressionNode RESULT =null;</span>
-<span class="nc" id="L1273">		int leftleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).left;</span>
-<span class="nc" id="L1274">		int leftright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).right;</span>
-<span class="nc" id="L1275">		ExpressionNode left = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).value;</span>
-<span class="nc" id="L1276">		int rightleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
-<span class="nc" id="L1277">		int rightright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
-<span class="nc" id="L1278">		ExpressionNode right = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
-<span class="nc" id="L1279">		 RESULT = new BinaryOpNode(leftleft, leftright, left, &quot;/&quot;, right); </span>
-<span class="nc" id="L1280">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;term&quot;,10, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L1272">              ExpressionNode RESULT =null;</span>
+<span class="fc" id="L1273">		int leftleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).left;</span>
+<span class="fc" id="L1274">		int leftright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).right;</span>
+<span class="fc" id="L1275">		ExpressionNode left = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).value;</span>
+<span class="fc" id="L1276">		int rightleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
+<span class="fc" id="L1277">		int rightright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
+<span class="fc" id="L1278">		ExpressionNode right = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
+<span class="fc" id="L1279">		 RESULT = new BinaryOpNode(leftleft, leftright, left, &quot;/&quot;, right); </span>
+<span class="fc" id="L1280">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;term&quot;,10, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L1282">          return CUP$CupParser$result;</span>
+<span class="fc" id="L1282">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 42: // term ::= unary 
@@ -1296,17 +1296,17 @@ class CUP$CupParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 43: // unary ::= PLUS primary 
             {
-<span class="nc" id="L1299">              ExpressionNode RESULT =null;</span>
-<span class="nc" id="L1300">		int opleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).left;</span>
-<span class="nc" id="L1301">		int opright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).right;</span>
-<span class="nc" id="L1302">		Object op = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).value;</span>
-<span class="nc" id="L1303">		int exprleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
-<span class="nc" id="L1304">		int exprright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
-<span class="nc" id="L1305">		ExpressionNode expr = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
-<span class="nc" id="L1306">		 RESULT = new UnaryOpNode(opleft, opright, &quot;+&quot;, expr); </span>
-<span class="nc" id="L1307">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;unary&quot;,11, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L1299">              ExpressionNode RESULT =null;</span>
+<span class="fc" id="L1300">		int opleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).left;</span>
+<span class="fc" id="L1301">		int opright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).right;</span>
+<span class="fc" id="L1302">		Object op = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).value;</span>
+<span class="fc" id="L1303">		int exprleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
+<span class="fc" id="L1304">		int exprright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
+<span class="fc" id="L1305">		ExpressionNode expr = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
+<span class="fc" id="L1306">		 RESULT = new UnaryOpNode(opleft, opright, &quot;+&quot;, expr); </span>
+<span class="fc" id="L1307">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;unary&quot;,11, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L1309">          return CUP$CupParser$result;</span>
+<span class="fc" id="L1309">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 44: // unary ::= MINUS primary 
@@ -1464,17 +1464,17 @@ class CUP$CupParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 58: // primary ::= LEFT_PAREN expression RIGHT_PAREN 
             {
-<span class="nc" id="L1467">              ExpressionNode RESULT =null;</span>
-<span class="nc" id="L1468">		int lpleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).left;</span>
-<span class="nc" id="L1469">		int lpright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).right;</span>
-<span class="nc" id="L1470">		Object lp = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).value;</span>
-<span class="nc" id="L1471">		int exprleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).left;</span>
-<span class="nc" id="L1472">		int exprright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).right;</span>
-<span class="nc" id="L1473">		ExpressionNode expr = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).value;</span>
-<span class="nc" id="L1474">		 RESULT = expr; </span>
-<span class="nc" id="L1475">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;primary&quot;,12, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L1467">              ExpressionNode RESULT =null;</span>
+<span class="fc" id="L1468">		int lpleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).left;</span>
+<span class="fc" id="L1469">		int lpright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).right;</span>
+<span class="fc" id="L1470">		Object lp = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)).value;</span>
+<span class="fc" id="L1471">		int exprleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).left;</span>
+<span class="fc" id="L1472">		int exprright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).right;</span>
+<span class="fc" id="L1473">		ExpressionNode expr = (ExpressionNode)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).value;</span>
+<span class="fc" id="L1474">		 RESULT = expr; </span>
+<span class="fc" id="L1475">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;primary&quot;,12, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L1477">          return CUP$CupParser$result;</span>
+<span class="fc" id="L1477">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 59: // reference ::= reference_base 
@@ -1661,26 +1661,26 @@ class CUP$CupParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 73: // literal ::= FALSE 
             {
-<span class="nc" id="L1664">              ExpressionNode RESULT =null;</span>
-<span class="nc" id="L1665">		int fleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
-<span class="nc" id="L1666">		int fright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
-<span class="nc" id="L1667">		Object f = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
-<span class="nc" id="L1668">		 RESULT = new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, fleft, fright); </span>
-<span class="nc" id="L1669">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;literal&quot;,15, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L1664">              ExpressionNode RESULT =null;</span>
+<span class="fc" id="L1665">		int fleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
+<span class="fc" id="L1666">		int fright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
+<span class="fc" id="L1667">		Object f = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
+<span class="fc" id="L1668">		 RESULT = new LiteralNode(false, LiteralNode.LiteralType.BOOLEAN, fleft, fright); </span>
+<span class="fc" id="L1669">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;literal&quot;,15, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L1671">          return CUP$CupParser$result;</span>
+<span class="fc" id="L1671">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 74: // literal ::= NONE 
             {
-<span class="nc" id="L1676">              ExpressionNode RESULT =null;</span>
-<span class="nc" id="L1677">		int nleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
-<span class="nc" id="L1678">		int nright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
-<span class="nc" id="L1679">		Object n = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
-<span class="nc" id="L1680">		 RESULT = new LiteralNode(null, LiteralNode.LiteralType.NONE, nleft, nright); </span>
-<span class="nc" id="L1681">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;literal&quot;,15, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
+<span class="fc" id="L1676">              ExpressionNode RESULT =null;</span>
+<span class="fc" id="L1677">		int nleft = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).left;</span>
+<span class="fc" id="L1678">		int nright = ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()).right;</span>
+<span class="fc" id="L1679">		Object n = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;</span>
+<span class="fc" id="L1680">		 RESULT = new LiteralNode(null, LiteralNode.LiteralType.NONE, nleft, nright); </span>
+<span class="fc" id="L1681">              CUP$CupParser$result = parser.getSymbolFactory().newSymbol(&quot;literal&quot;,15, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);</span>
             }
-<span class="nc" id="L1683">          return CUP$CupParser$result;</span>
+<span class="fc" id="L1683">          return CUP$CupParser$result;</span>
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 75: // literal ::= array_literal 

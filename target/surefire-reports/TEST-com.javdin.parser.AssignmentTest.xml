@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.javdin.parser.AssignmentTest" time="0.023" tests="13" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.javdin.parser.AssignmentTest" time="0.01" tests="13" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/timofey/Desktop/javdin/target/surefire/surefirebooter-20251015145554747_3.jar /home/timofey/Desktop/javdin/target/surefire 2025-10-15T14-55-54_674-jvmRun1 surefire-20251015145554747_1tmp surefire_0-20251015145554747_2tmp"/>
+    <property name="sun.java.command" value="/home/timofey/Desktop/javdin/target/surefire/surefirebooter-20251015153334089_3.jar /home/timofey/Desktop/javdin/target/surefire 2025-10-15T15-33-34_018-jvmRun1 surefire-20251015153334089_1tmp surefire_0-20251015153334089_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/timofey/Desktop/javdin/target/test-classes:/home/timofey/Desktop/javdin/target/classes:/home/timofey/.m2/repository/com/github/vbmacher/java-cup-runtime/11b-20160615/java-cup-runtime-11b-20160615.jar:/home/timofey/.m2/repository/de/jflex/jflex/1.9.1/jflex-1.9.1.jar:/home/timofey/.m2/repository/org/apache/ant/ant/1.10.13/ant-1.10.13.jar:/home/timofey/.m2/repository/org/apache/ant/ant-launcher/1.10.13/ant-launcher-1.10.13.jar:/home/timofey/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/timofey/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.0/junit-jupiter-5.10.0.jar:/home/timofey/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.0/junit-jupiter-api-5.10.0.jar:/home/timofey/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/timofey/.m2/repository/org/junit/platform/junit-platform-commons/1.10.0/junit-platform-commons-1.10.0.jar:/home/timofey/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.0/junit-jupiter-engine-5.10.0.jar:/home/timofey/.m2/repository/org/junit/platform/junit-platform-engine/1.10.0/junit-platform-engine-1.10.0.jar:/home/timofey/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.0/junit-jupiter-params-5.10.0.jar:/home/timofey/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/timofey/.m2/repository/org/assertj/assertj-core/3.24.2/assertj-core-3.24.2.jar:/home/timofey/.m2/repository/net/bytebuddy/byte-buddy/1.12.21/byte-buddy-1.12.21.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/timofey/Desktop/javdin/target/surefire/surefirebooter-20251015145554747_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/timofey/Desktop/javdin/target/surefire/surefirebooter-20251015153334089_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.8+9-Ubuntu-0ubuntu124.04.1"/>
     <property name="user.name" value="timofey"/>
@@ -53,16 +53,16 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testArrayElementAssignment" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
-  <testcase name="testAssignmentWithExpression" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testArrayElementAssignment" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
+  <testcase name="testAssignmentWithExpression" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
   <testcase name="testDeclarationFollowedByAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
-  <testcase name="testAssignmentWithTupleLiteral" classname="com.javdin.parser.AssignmentTest" time="0.003"/>
-  <testcase name="testSimpleVariableAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
-  <testcase name="testComplexLeftHandSide" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
+  <testcase name="testAssignmentWithTupleLiteral" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testSimpleVariableAssignment" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
+  <testcase name="testComplexLeftHandSide" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
   <testcase name="testNestedArrayAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
-  <testcase name="testAssignmentWithArrayLiteral" classname="com.javdin.parser.AssignmentTest" time="0.002"/>
+  <testcase name="testAssignmentWithArrayLiteral" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
   <testcase name="testAssignmentWithFunctionLiteral" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
-  <testcase name="testTupleMemberAssignment" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
+  <testcase name="testTupleMemberAssignment" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
   <testcase name="testTupleNumericMemberAssignment" classname="com.javdin.parser.AssignmentTest" time="0.0"/>
   <testcase name="testAssignmentWithFunctionCall" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
   <testcase name="testMultipleAssignments" classname="com.javdin.parser.AssignmentTest" time="0.001"/>
