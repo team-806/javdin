@@ -7,10 +7,10 @@ Javdin,com.javdin.utils,ErrorHandler.Error,53,0,4,0,11,0,7,0,5,0
 Javdin,com.javdin.utils,ErrorHandler,39,14,3,1,9,4,6,2,4,2
 Javdin,com.javdin.utils,IoUtils,35,8,0,0,11,2,6,1,6,1
 Javdin,com.javdin.parser.generated,Symbols,0,248,0,0,0,1,0,1,0,1
-Javdin,com.javdin.parser.generated,CupParser.CUP.CupParser.actions,687,5139,18,87,108,770,18,89,0,3
+Javdin,com.javdin.parser.generated,CupParser.CUP.CupParser.actions,576,5250,16,89,91,787,16,91,0,3
 Javdin,com.javdin.parser.generated,CupParser,10,59,0,0,3,17,3,11,3,11
 Javdin,com.javdin.parser,Parser,1,40,1,1,0,10,1,2,0,2
-Javdin,com.javdin.parser,LexerAdapter,65,179,15,54,24,64,15,56,0,4
+Javdin,com.javdin.parser,LexerAdapter,50,194,13,56,21,67,13,58,0,4
 Javdin,com.javdin.parser,ParseException,16,33,0,0,6,5,3,2,3,2
 Javdin,com.javdin.lexer,InteractiveLexerDemo,3,0,0,0,1,0,1,0,1,0
 Javdin,com.javdin.lexer,LexerDebug,390,0,54,0,112,0,56,0,7,0

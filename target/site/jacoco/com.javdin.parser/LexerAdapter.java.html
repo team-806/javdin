@@ -37,7 +37,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
      * Maps our TokenType enum to CUP's symbol constants.
      */
     private int mapTokenTypeToSymbol(TokenType tokenType) {
-<span class="pc bpc" id="L40" title="15 of 62 branches missed.">        return switch (tokenType) {</span>
+<span class="pc bpc" id="L40" title="13 of 62 branches missed.">        return switch (tokenType) {</span>
             // Literals with values
 <span class="fc" id="L42">            case IDENTIFIER -&gt; Symbols.IDENTIFIER;</span>
 <span class="fc" id="L43">            case INTEGER -&gt; Symbols.INTEGER;</span>
@@ -85,7 +85,7 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="nc" id="L85">            case NOT_EQUAL -&gt; Symbols.NOT_EQUAL;</span>
 <span class="nc" id="L86">            case NOT_EQUAL_ALT -&gt; Symbols.NOT_EQUAL_ALT;</span>
 <span class="fc" id="L87">            case LESS_THAN -&gt; Symbols.LESS_THAN;</span>
-<span class="nc" id="L88">            case LESS_EQUAL -&gt; Symbols.LESS_EQUAL;</span>
+<span class="fc" id="L88">            case LESS_EQUAL -&gt; Symbols.LESS_EQUAL;</span>
 <span class="fc" id="L89">            case GREATER_THAN -&gt; Symbols.GREATER_THAN;</span>
 <span class="nc" id="L90">            case GREATER_EQUAL -&gt; Symbols.GREATER_EQUAL;</span>
 <span class="fc" id="L91">            case AND -&gt; Symbols.AND;</span>
@@ -112,9 +112,9 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
 <span class="fc" id="L112">            case EOF -&gt; Symbols.EOF;</span>
             
             // Fallback for any unmapped tokens
-<span class="nc" id="L115">            default -&gt; throw new RuntimeException(</span>
+<span class="fc" id="L115">            default -&gt; throw new RuntimeException(</span>
                 &quot;Unmapped token type: &quot; + tokenType + &quot; at line &quot; + 
-<span class="nc" id="L117">                currentToken.line() + &quot;, column &quot; + currentToken.column()</span>
+<span class="fc" id="L117">                currentToken.line() + &quot;, column &quot; + currentToken.column()</span>
             );
         };
     }
