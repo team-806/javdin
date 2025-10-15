@@ -76,9 +76,12 @@ non terminal separator_list;
 non terminal separator;
 
 /* Precedence declarations (lowest to highest) */
-precedence left OR;
-precedence left XOR;
-precedence left AND;
+/* Note: Project D spec groups or/and/xor together: "Expression : Relation { ( or | and | xor ) Relation }"
+ * This suggests equal precedence. Changed from separate levels to match spec intent.
+ * Previous (following common conventions): OR < XOR < AND
+ * Current (following spec grammar): OR = XOR = AND (equal precedence, left-associative)
+ */
+precedence left OR, XOR, AND;
 precedence left EQUAL, NOT_EQUAL, NOT_EQUAL_ALT;
 precedence left LESS_THAN, LESS_EQUAL, GREATER_THAN, GREATER_EQUAL;
 precedence left PLUS, MINUS;
