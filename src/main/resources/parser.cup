@@ -84,6 +84,7 @@ non terminal separator;
 precedence left OR, XOR, AND;
 precedence left EQUAL, NOT_EQUAL, NOT_EQUAL_ALT;
 precedence left LESS_THAN, LESS_EQUAL, GREATER_THAN, GREATER_EQUAL;
+precedence left IS;
 precedence left PLUS, MINUS;
 precedence left MULTIPLY, DIVIDE;
 precedence right NOT;
@@ -240,6 +241,7 @@ type_indicator ::=
     | ARRAY_TYPE {: RESULT = "array"; :}
     | TUPLE_TYPE {: RESULT = "tuple"; :}
     | FUNC_TYPE {: RESULT = "func"; :}
+    | FUNC {: RESULT = "func"; :}
     ;
 
 /* Primary: Literal | FunctionLiteral | ( Expression ) */
@@ -312,13 +314,13 @@ literal ::= INTEGER:val
 /* Note: Removed redundant ARRAY_TYPE alternative - lexer recognizes [] as ARRAY_TYPE
  * but that token should only be used in type_indicator production, not here */
 array_literal ::=
-    LEFT_BRACKET:lb RIGHT_BRACKET
+    LEFT_BRACKET:lb separator_opt RIGHT_BRACKET
     {: RESULT = new ArrayLiteralNode(new ArrayList<>(), lbleft, lbright); :}
-    | LEFT_BRACKET:lb expression_list:exprs RIGHT_BRACKET
+    | LEFT_BRACKET:lb separator_opt expression_list:exprs separator_opt RIGHT_BRACKET
     {: RESULT = new ArrayLiteralNode(exprs, lbleft, lbright); :};
 
 expression_list ::=
-    expression_list:list COMMA expression:expr
+    expression_list:list COMMA separator_opt expression:expr
     {: list.add(expr); RESULT = list; :}
     | expression:expr
     {: List<ExpressionNode> list = new ArrayList<>();
@@ -329,13 +331,13 @@ expression_list ::=
 /* Note: Removed redundant TUPLE_TYPE alternative - lexer recognizes {} as TUPLE_TYPE
  * but that token should only be used in type_indicator production, not here */
 tuple_literal ::=
-    LEFT_BRACE:lb RIGHT_BRACE
+    LEFT_BRACE:lb separator_opt RIGHT_BRACE
     {: RESULT = new TupleLiteralNode(new ArrayList<>(), lbleft, lbright); :}
-    | LEFT_BRACE:lb tuple_element_list:elements RIGHT_BRACE
+    | LEFT_BRACE:lb separator_opt tuple_element_list:elements separator_opt RIGHT_BRACE
     {: RESULT = new TupleLiteralNode(elements, lbleft, lbright); :};
 
 tuple_element_list ::=
-    tuple_element_list:list COMMA tuple_element:elem
+    tuple_element_list:list COMMA separator_opt tuple_element:elem
     {: list.add(elem); RESULT = list; :}
     | tuple_element:elem
     {: List<TupleLiteralNode.TupleElement> list = new ArrayList<>();

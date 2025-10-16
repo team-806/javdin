@@ -16,22 +16,28 @@ var tests := [
 // Logical operators  
 var logic := true and false or not true xor false
 
-// Type indicators (used with 'is' operator)
+// Array and tuple for testing
+var arr := [10, 20, 30]
+var t := {first := 'hello', second := 'world', 3.14}
+
+// Type indicators (used with 'is' operator) - only work with references
+var real_val := 3.14
+var bool_val := true
+var string_val := 'hello'
+
 var types := {
     int_check := result is int,
-    real_check := 3.14 is real, 
-    bool_check := true is bool,
-    string_check := 'hello' is string,
+    real_check := real_val is real, 
+    bool_check := bool_val is bool,
+    string_check := string_val is string,
     array_check := arr is [],
     tuple_check := t is {}
 }
 
 // Array access and assignment
-var arr := [10, 20, 30]
 arr[100] := func(x) => x + 1
 arr[1000] := {a := 1, b := 2.7}
 
 // Tuple access
-var t := {first := 'hello', second := 'world', 3.14}
 var x := t.first
 var y := t.2
