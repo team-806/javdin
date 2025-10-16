@@ -1,0 +1,424 @@
+Learning CUP by example
+
+    The Calculator - an introductory example
+    This example is also found in the repository.
+
+    MiniJava - A compiler with CUP via XML-techniques
+        Parsing directly to XML
+        Abstracting the syntax tree
+        Generating a graphical syntax tree
+        Generate code with XQuery
+    This example is also found in the repository.
+
+    MiniJava - this time with manual user actions
+    This example is also found in the repository.
+    ANSI C - creating a parse tree for a context sensitive language
+    This example is also found in the repository.
+
+The inevitable calculator
+
+This example should give You a basic idea of how to start working with CUP. A minimal CUP specification looks like this:
+
+/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
+import java_cup.runtime.*;
+
+parser code {:
+    // Connect this parser to a scanner!
+    scanner s;
+    Parser(scanner s){ this.s=s; }
+:}
+
+/* define how to connect to the scanner! */
+init with {: s.init(); :};
+scan with {: return s.next_token(); :};
+
+/* Terminals (tokens returned by the scanner). */
+terminal            SEMI, PLUS, MINUS, TIMES, UMINUS, LPAREN, RPAREN;
+terminal Integer    NUMBER;        // our scanner provides numbers as integers
+
+/* Non terminals */
+non terminal            expr_list;
+non terminal Integer    expr;      // used to store evaluated subexpressions
+
+/* Precedences */
+precedence left PLUS, MINUS;
+precedence left TIMES;
+precedence left UMINUS;
+
+/* The grammar rules */
+expr_list ::= expr_list expr:e SEMI         {: System.out.println(e);:}
+            | expr:e SEMI                   {: System.out.println(e);:}
+;
+expr      ::= expr:e1 PLUS  expr:e2         {: RESULT = e1+e2;       :}
+             | expr:e1 MINUS expr:e2        {: RESULT = e1-e2;       :}
+             | expr:e1 TIMES expr:e2        {: RESULT = e1*e2;       :}
+             | MINUS expr:e                 {: RESULT = -e;          :}
+  	     %prec UMINUS
+       | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
+       | NUMBER:n	                     {: RESULT = n;           :}
+             ;
+
+Based on this file, You just need to create a Java Specification from this with java -jar java-cup-11b.jar -interface -parser Parser calc.cup . Additionally, You need a basic scanner to produce tokens, which You then can process with your parser. For once, we show, how to handcode such a scanner, reading symbols from the imput:
+
+import java_cup.runtime.*;
+
+class Main {
+    public static void main(String[] argv) throws Exception{
+	System.out.println("Please type your arithmethic expression:");
+	Parser p = new Parser(new scanner());
+	p.parse();
+    }
+}
+
+public class scanner {
+    /* single lookahead character */
+    protected static int next_char;
+
+    /* we use a SymbolFactory to generate Symbols */
+    private SymbolFactory sf = new DefaultSymbolFactory();
+
+    /* advance input by one character */
+    protected static void advance() throws java.io.IOException  { next_char = System.in.read(); }
+
+    /* initialize the scanner */
+    public static void init() throws java.io.IOException        { advance(); }
+
+    /* recognize and return the next complete token */
+    public Symbol next_token() throws java.io.IOException
+    {
+	for (;;)
+	    switch (next_char)
+		{
+		case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+		    /* parse a decimal integer */
+		    int i_val = 0;
+		    do {
+			i_val = i_val * 10 + (next_char - '0');
+			advance();
+		    } while (next_char >= '0' && next_char <= '9');
+		    return sf.newSymbol("NUMBER",sym.NUMBER, new Integer(i_val));
+
+		case ';': advance(); return sf.newSymbol("SEMI",sym.SEMI);
+		case '+': advance(); return sf.newSymbol("PLUS",sym.PLUS);
+		case '-': advance(); return sf.newSymbol("MINUS",sym.MINUS);
+		case '*': advance(); return sf.newSymbol("TIMES",sym.TIMES);
+		case '(': advance(); return sf.newSymbol("LPAREN",sym.LPAREN);
+		case ')': advance(); return sf.newSymbol("RPAREN",sym.RPAREN);
+
+		case -1: return sf.newSymbol("EOF",sym.EOF);
+
+		default:
+		    /* in this simple scanner we just ignore everything else */
+		    advance();
+		    break;
+		}
+    }
+};
+
+Compiling all classes with javac -cp java-cup-11b-runtime.jar:. *.java creates your calculator, that you can call via java -cp ../../dist/java-cup-11b-runtime.jar:. Main
+MiniJava - a toy language
+
+MiniJava is a small artificial toy language, only here to illustrate the basic steps in creating a compiler with CUP. This language has a specification via a grammar ("MiniJava"). It essentially knows branches, loops, declarations and basic i/o. The target is a toy assembler ("MiniJVM"), for which we have a simulator. Typical input in this language looks as follows:
+
+    int x, y;
+    y = 10;
+    x = read();
+    write(x);
+    if (x>=0)
+       write (y);
+    else
+	write (x);
+    while (1-y <= -x) {
+        y = x * (-y + 5);
+    }
+
+A typical usage for syntax trees is generation of target code. This can be either done manually with creating syntax tree classes in action codes for each production alternative and devising a mechansim for traversing this tree, e.g. with recursive function calls or visitor patterns.
+
+CUP however offers the possibility to create an XML document for your syntaxtree automatically, which can then be processed with an XSLT/XQuery processor like baseX or saxon, even for generating target code. You can find an example for such an approach in this section.
+Parsing automatically straight to XML
+
+We start with a direct conversion of the grammar into a CUP-parser specification. We generate the Java based parser via java -jar java-cup-11b.jar -locations -interface -parser Parser -xmlactions minijava.cup
+
+/* Minijava Grammar */
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ScannerBuffer;
+import java_cup.runtime.XMLElement;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
+
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+parser code {:
+  public Parser(Lexer lex, ComplexSymbolFactory sf) {
+    super(lex,sf);
+  }
+  public static void main(String[] args) throws Exception {
+      // initialize the symbol factory
+      ComplexSymbolFactory csf = new ComplexSymbolFactory();
+      // create a buffering scanner wrapper
+      ScannerBuffer lexer = new ScannerBuffer(new Lexer(new BufferedReader(new FileReader(args[0])),csf));
+      // start parsing
+      Parser p = new Parser(lexer,csf);
+      XMLElement e = (XMLElement)p.parse().value;
+      // create XML output file 
+      XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+      XMLStreamWriter sw = outFactory.createXMLStreamWriter(new FileOutputStream(args[1]));
+      // dump XML output to the file
+      XMLElement.dump(lexer,sw,e,"expr","stmt");
+
+       // transform the parse tree into an AST and a rendered HTML version
+      Transformer transformer = TransformerFactory.newInstance()
+	    .newTransformer(new StreamSource(new File("tree.xsl")));
+      Source text = new StreamSource(new File(args[1]));
+      transformer.transform(text, new StreamResult(new File("output.xml")));
+      transformer = TransformerFactory.newInstance()
+	    .newTransformer(new StreamSource(new File("tree-view.xsl")));
+      text = new StreamSource(new File("output.xml"));
+      transformer.transform(text, new StreamResult(new File("ast.html")));
+  }
+:};
+
+terminal SEMICOLON, COMMA, LPAR, RPAR, BEGIN, END, IF, ELSE, WHILE, READ, WRITE, BUNOP, ASSIGN;
+terminal TYPE, BINOP, UNOP, COMP, BBINOP, INTCONST;
+terminal IDENT,STRINGCONST;
+terminal BOOLCONST;
+
+non terminal program, decllist,decl,stmtlist,identlist,stmt,expr,cond;
+
+precedence left ELSE, UNOP, BINOP, BUNOP, BBINOP;
+
+program   ::=  decllist:d stmtlist:s
+    ;
+decllist  ::=  decl:d decllist:dl
+    | /* empty */
+    ;
+stmtlist  ::= stmtlist:sl stmt:s
+    | /* empty */
+        ;
+decl ::= TYPE IDENT:identifier identlist:il  SEMICOLON
+    ;
+identlist  ::= identlist:il COMMA IDENT:identifier
+    | /* empty */
+    ;
+stmt ::= SEMICOLON
+    | BEGIN stmtlist:sl END
+    | IDENT:lhs ASSIGN expr:rhs SEMICOLON
+    | IDENT:lhs ASSIGN READ LPAR RPAR SEMICOLON
+    | IDENT:lhs ASSIGN READ LPAR STRINGCONST:s RPAR SEMICOLON
+    | WRITE LPAR expr:e RPAR SEMICOLON
+    | WRITE LPAR STRINGCONST:s RPAR SEMICOLON
+    | IF LPAR cond:c RPAR stmt:s
+    | IF LPAR cond:c RPAR stmt:t ELSE stmt:e
+    | WHILE LPAR cond:c RPAR stmt:s
+    ;
+cond ::= BOOLCONST:c
+    | LPAR cond:c RPAR
+    | expr:e1 COMP:op expr:e2
+    | BUNOP cond:c
+    | cond:c1 BBINOP:op cond:c2
+    ;
+expr ::= IDENT:identifier
+    | INTCONST:constant
+    | LPAR expr:e RPAR
+    | BINOP expr:e
+    | expr:e1 BINOP:op expr:e2
+    ;
+
+Generated scanner
+
+Instead of teadiously creating a scanner manually by hand as we did in the last example, it is advisable to rely to an automatically generated one, to benefit from technical achievements in the sector of finite automata. For CUP parsers, JFlex is a reasonable scanner generator. The scanner specification for MiniJava looks like this:
+
+// Technische Universitaet Muenchen 
+// Fakultaet fuer Informatik 
+// Michael Petter
+
+import java_cup.runtime.Symbol;
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ComplexSymbolFactory.Location;
+
+%%
+%public
+%class Lexer
+%cup
+%implements sym, minijava.Constants
+%char
+%line
+%column
+
+%{
+    StringBuffer string = new StringBuffer();
+    public Lexer(java.io.Reader in, ComplexSymbolFactory sf){
+	this(in);
+	symbolFactory = sf;
+    }
+    ComplexSymbolFactory symbolFactory;
+
+  private Symbol symbol(String name, int sym) {
+      return symbolFactory.newSymbol(name, sym, new Location(yyline+1,yycolumn+1,yychar), new Location(yyline+1,yycolumn+yylength(),yychar+yylength()));
+  }
+
+  private Symbol symbol(String name, int sym, Object val) {
+      Location left = new Location(yyline+1,yycolumn+1,yychar);
+      Location right= new Location(yyline+1,yycolumn+yylength(), yychar+yylength());
+      return symbolFactory.newSymbol(name, sym, left, right,val);
+  }
+  private Symbol symbol(String name, int sym, Object val,int buflength) {
+      Location left = new Location(yyline+1,yycolumn+yylength()-buflength,yychar+yylength()-buflength);
+      Location right= new Location(yyline+1,yycolumn+yylength(), yychar+yylength());
+      return symbolFactory.newSymbol(name, sym, left, right,val);
+  }
+  private void error(String message) {
+    System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
+  }
+%}
+
+%eofval{
+     return symbolFactory.newSymbol("EOF", EOF, new Location(yyline+1,yycolumn+1,yychar), new Location(yyline+1,yycolumn+1,yychar+1));
+%eofval}
+
+Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
+IntLiteral = 0 | [1-9][0-9]*
+BoolLiteral = true | false
+new_line = \r|\n|\r\n;
+white_space = {new_line} | [ \t\f]
+
+%state STRING
+
+%%
+
+<YYINITIAL>{
+/* keywords */
+"int"             { return symbol("int",TYPE, new Integer( INTTYPE ) ); }
+"if"              { return symbol("if",IF); }
+"else"            { return symbol("else",ELSE); }
+"while"           { return symbol("while",WHILE); }
+"read"            { return symbol("read",READ); }
+"write"           { return symbol("write",WRITE); }
+
+/* names */
+{Ident}           { return symbol("Identifier",IDENT, yytext()); }
+
+/* bool literal */
+{BoolLiteral} { return symbol("Boolconst",BOOLCONST, new Boolean(Boolean.parseBool(yytext()))); }
+
+/* literals */
+{IntLiteral} { return symbol("Intconst",INTCONST, new Integer(Integer.parseInt(yytext()))); }
+
+/* separators */
+  \"              { string.setLength(0); yybegin(STRING); }
+";"               { return symbol("semicolon",SEMICOLON); }
+","               { return symbol("comma",COMMA); }
+"("               { return symbol("(",LPAR); }
+")"               { return symbol(")",RPAR); }
+"{"               { return symbol("{",BEGIN); }
+"}"               { return symbol("}",END); }
+"="               { return symbol("=",ASSIGN); }
+"+"               { return symbol("plus",BINOP, new Integer( PLUS ) ); }
+"-"               { return symbol("minus",BINOP, new Integer( MINUS ) ); }
+"*"               { return symbol("mult",BINOP, new Integer( MULT ) ); }
+"/"               { return symbol("div",BINOP, new Integer( DIV ) ); }
+"%"               { return symbol("mod",BINOP, new Integer( MOD ) ); }
+"<="              { return symbol("leq",COMP,  new Integer( LEQ ) ); }
+">="              { return symbol("gtq",COMP,  new Integer( GTQ ) ); }
+"=="              { return symbol("eq",COMP,  new Integer( EQ  ) ); }
+"!="              { return symbol("neq",COMP,  new Integer( NEQ ) ); }
+"<"               { return symbol("le",COMP,  new Integer( LE  ) ); }
+">"               { return symbol("gt",COMP,  new Integer( GT  ) ); }
+"&&"              { return symbol("and",BBINOP,new Integer( AND ) ); }
+"||"              { return symbol("or",BBINOP,new Integer( OR  ) ); }
+"!"               { return symbol("not",BUNOP); }
+
+{white_space}     { /* ignore */ }
+
+}
+
+<STRING> {
+  \"                             { yybegin(YYINITIAL); 
+      return symbol("StringConst",STRINGCONST,string.toString(),string.length()); }
+  [^\n\r\"\\]+                   { string.append( yytext() ); }
+  \\t                            { string.append('\t'); }
+  \\n                            { string.append('\n'); }
+
+  \\r                            { string.append('\r'); }
+  \\\"                           { string.append('\"'); }
+  \\                             { string.append('\\'); }
+}
+
+
+/* error fallback */
+.|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
+		    error("Illegal character <"+ yytext()+">");
+                  }
+
+From parse tree to abstract syntax tree
+
+As the direct output from the parser generator is made up only from nonterminal and terminal tags, we transform it immediately into a more convenient form with nodes being called as their syntactic counterparts, as well as optimizing expresion nesting depth and flattening of one-branched tree branches into sequences of XML nodes. This is achieved by the XSL-Transformation, called in the last lines of the parser's main method. This applies a stylesheet like the following:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0"
+		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:exsl="http://exslt.org/common"
+		>
+<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
+
+<xsl:include href="tree-view.xsl"/>
+
+<xsl:template match="blacklist"  mode="flatten" />
+
+<xsl:template match="document"  mode="flatten">
+      <xsl:apply-templates  mode="flatten" select="parsetree"/>
+</xsl:template>
+
+<xsl:template match="nonterminal" mode="flatten">
+  <xsl:variable name="temp" select="@id" />
+  <xsl:choose>
+
+    <xsl:when test="count(*)=3 and contains($temp,'expr') and *[contains(@id,'expr')]">
+      <xsl:apply-templates  mode="flatten"/>
+    </xsl:when>
+
+    <!-- collapses degenerated trees like lists, conserving the blacklist subtrees-->
+    <xsl:when test="../@id = @id and count(/document/blacklist[1]/symbol[text() = $temp])=0">
+      <xsl:apply-templates  mode="flatten"/>
+    </xsl:when>
+
+    <!-- collapses unary productions -->
+    <xsl:when test="count(*)=3 and count(/document/blacklist[1]/symbol[text() = $temp])=0">
+      <xsl:apply-templates  mode="flatten"/>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:element name="{@id}" >
+	<xsl:attribute name="variant"><xsl:value-of select="@variant" /></xsl:attribute>
+	<xsl:apply-templates mode="flatten"/>
+      </xsl:element>
+    </xsl:otherwise>
+
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="terminal" mode="flatten">
+  <xsl:element name="{@id}">
+    <xsl:apply-templates  mode="flatten"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="/">
+ <xsl:variable name="flatten">
+     <xsl:apply-templates  mode="flatten"/>
+ </xsl:variable>
+ <xsl:variable name="rendered">
+    <xsl:apply-templates mode="rendered" select="exsl:node-set($flatten)"/>
+ </xsl:variable>
+
+ <!--xsl:copy-of select="$rendered" /-->
+ <xsl:copy-of select="$flatten" />
+</xsl:template>
+
+
+</xsl:stylesheet>
+
+A graphical AST
+
+from this AST in XML it is straightforward to generate a nice graphical AST with an XSLT stylesheet and the according CSS: 

@@ -34,6 +34,7 @@ com/javdin/ast/BreakNode.class
 com/javdin/lexer/LexerDebug.class
 com/javdin/interpreter/Value$ValueType.class
 com/javdin/debug/ParserDebug.class
+com/javdin/demo/AstVisualizationDemo.class
 com/javdin/lexer/LexicalException.class
 com/javdin/lexer/InteractiveLexerDemo.class
 com/javdin/main/Main.class
@@ -42,6 +43,7 @@ com/javdin/ast/TupleMemberAccessNode.class
 com/javdin/ast/LiteralNode$LiteralType.class
 com/javdin/ast/WhileNode.class
 com/javdin/parser/LexerAdapter$1.class
+com/javdin/visualization/AstXmlSerializer.class
 com/javdin/ast/TupleLiteralNode$TupleElement.class
 com/javdin/ast/PrintNode.class
 com/javdin/ast/ReturnNode.class

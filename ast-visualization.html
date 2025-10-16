@@ -1,0 +1,353 @@
+<html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Javdin AST Visualization</title>
+        <style>
+        body {
+          font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+          background: #1e1e1e;
+          color: #d4d4d4;
+          padding: 20px;
+          margin: 0;
+        }
+        
+        h1 {
+          color: #b0b0b0;
+          border-bottom: 2px solid #505050;
+          padding-bottom: 10px;
+        }
+        
+        .info {
+          background: #252526;
+          padding: 15px;
+          border-radius: 5px;
+          margin-bottom: 20px;
+          border-left: 4px solid #505050;
+        }
+        
+        .tree {
+          margin-top: 20px;
+          font-size: 14px;
+        }
+        
+        .node {
+          margin: 3px 0;
+          padding: 4px 8px;
+          border-radius: 3px;
+          display: inline-block;
+        }
+        
+        .node-nonterminal {
+          background: #2d2d30;
+          color: #d4d4d4;
+          font-weight: bold;
+          border: 1px solid #505050;
+        }
+        
+        .node-terminal {
+          background: #1e1e1e;
+          color: #b0b0b0;
+          border: 1px solid #3a3a3a;
+        }
+        
+        .node-keyword {
+          background: #2d2d30;
+          color: #d4d4d4;
+          font-weight: bold;
+        }
+        
+        .node-identifier {
+          background: #252526;
+          color: #9cdcfe;
+        }
+        
+        .node-literal {
+          background: #252526;
+          color: #ce9178;
+        }
+        
+        .children {
+          margin-left: 30px;
+          border-left: 2px solid #3e3e42;
+          padding-left: 10px;
+          margin-top: 5px;
+        }
+        
+        .attribute {
+          color: #808080;
+          font-size: 11px;
+          margin-left: 10px;
+        }
+        
+        .value {
+          color: #b0b0b0;
+          font-style: italic;
+        }
+        
+        .line-info {
+          color: #606060;
+          font-size: 10px;
+          margin-left: 8px;
+        }
+        
+        .node:hover {
+          box-shadow: 0 0 5px rgba(128, 128, 128, 0.3);
+          cursor: pointer;
+        }
+        
+        .collapsible {
+          cursor: pointer;
+          user-select: none;
+        }
+        
+        .collapsible::before {
+          content: '▼ ';
+          display: inline-block;
+          margin-right: 6px;
+          transition: transform 0.2s;
+        }
+        
+        .collapsed::before {
+          transform: rotate(-90deg);
+        }
+        
+        .collapsed + .children {
+          display: none;
+        }
+      </style>
+        <script>
+        
+        function toggleCollapse(element) {
+          element.classList.toggle('collapsed');
+        }
+        
+      </script>
+    </head>
+    <body>
+        <h1>Javdin AST Visualization</h1>
+        <div class="info">
+            <strong>Abstract Syntax Tree</strong>
+            <br>
+                    Generated from parser output
+            <br>
+                    Click on nodes to collapse/expand
+      
+        </div>
+        <div class="tree">
+            <div>
+                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">document</span>
+                <div class="children">
+                    <div>
+                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">program</span>
+                        <div class="children">
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">declaration</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">variable</span>
+                                        <div class="children">
+                                            <div>
+                                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">array_literal</span>
+                                                <div class="children">
+                                                    <div>
+                                                        <span class="node node-terminal">literal<span class="value"> = "
+        1
+        "</span></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-terminal">literal<span class="value"> = "
+        2
+        "</span></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-terminal">literal<span class="value"> = "
+        3
+        "</span></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-terminal">literal<span class="value"> = "
+        4
+        "</span></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-terminal">literal<span class="value"> = "
+        5
+        "</span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">declaration</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">variable</span>
+                                        <div class="children">
+                                            <div>
+                                                <span class="node node-terminal">literal<span class="value"> = "
+      0
+      "</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">declaration</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">variable</span>
+                                        <div class="children">
+                                            <div>
+                                                <span class="node node-terminal">literal<span class="value"> = "
+      0
+      "</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">for_statement</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-terminal">variable<span class="value"> = "i"</span></span>
+                                    </div>
+                                    <div>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">iterable</span>
+                                        <div class="children">
+                                            <div>
+                                                <span class="node node-terminal">identifier<span class="value"> = "
+    numbers
+    "</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">body</span>
+                                        <div class="children">
+                                            <div>
+                                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">block</span>
+                                                <div class="children">
+                                                    <div>
+                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">assignment</span>
+                                                        <div class="children">
+                                                            <div>
+                                                                <span class="node node-terminal">identifier<span class="value"> = "
+        sum
+        "</span></span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">binary_operation</span>
+                                                                <div class="children">
+                                                                    <div>
+                                                                        <span class="node node-terminal">operator<span class="value"> = "+"</span></span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">left</span>
+                                                                        <div class="children">
+                                                                            <div>
+                                                                                <span class="node node-terminal">identifier<span class="value"> = "
+          sum
+          "</span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">right</span>
+                                                                        <div class="children">
+                                                                            <div>
+                                                                                <span class="node node-terminal">identifier<span class="value"> = "
+          i
+          "</span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">print_statement</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-terminal">literal<span class="value"> = "
+    Sum:
+    "</span></span>
+                                    </div>
+                                    <div>
+                                        <span class="node node-terminal">identifier<span class="value"> = "
+    sum
+    "</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">declaration</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">variable</span>
+                                        <div class="children">
+                                            <div>
+                                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">binary_operation</span>
+                                                <div class="children">
+                                                    <div>
+                                                        <span class="node node-terminal">operator<span class="value"> = "/"</span></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">left</span>
+                                                        <div class="children">
+                                                            <div>
+                                                                <span class="node node-terminal">identifier<span class="value"> = "
+        sum
+        "</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">right</span>
+                                                        <div class="children">
+                                                            <div>
+                                                                <span class="node node-terminal">literal<span class="value"> = "
+        5
+        "</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">print_statement</span>
+                                <div class="children">
+                                    <div>
+                                        <span class="node node-terminal">literal<span class="value"> = "
+    Average:
+    "</span></span>
+                                    </div>
+                                    <div>
+                                        <span class="node node-terminal">identifier<span class="value"> = "
+    average
+    "</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

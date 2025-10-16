@@ -75,6 +75,14 @@ public class Lexer {
             return token;
         }
         
+        // Handle /= (not equal) before checking for // comments
+        if (current == '/' && peek() == '=') {
+            Token token = new Token(TokenType.NOT_EQUAL_ALT, line, column);
+            advance();
+            advance();
+            return token;
+        }
+        
         // Handle comments
         if (current == '/' && peek() == '/') {
             skipLineComment();
@@ -110,13 +118,6 @@ public class Lexer {
 
         if (current == '!' && peek() == '=') {
             Token token = new Token(TokenType.NOT_EQUAL, line, column);
-            advance();
-            advance();
-            return token;
-        }
-        
-        if (current == '/' && peek() == '=') {
-            Token token = new Token(TokenType.NOT_EQUAL_ALT, line, column);
             advance();
             advance();
             return token;
@@ -310,7 +311,7 @@ public class Lexer {
             case '*' -> TokenType.MULTIPLY;
             case '/' -> TokenType.DIVIDE;
             case '%' -> TokenType.MODULO;
-            case '=' -> TokenType.ASSIGN;
+            case '=' -> TokenType.EQUAL;
             case '<' -> TokenType.LESS_THAN;
             case '>' -> TokenType.GREATER_THAN;
             case '(' -> TokenType.LEFT_PAREN;

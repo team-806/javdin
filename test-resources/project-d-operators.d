@@ -16,14 +16,14 @@ var tests := [
 // Logical operators  
 var logic := true and false or not true xor false
 
-// Type indicators
+// Type indicators (used with 'is' operator)
 var types := {
-    int_type := int,
-    real_type := real, 
-    bool_type := bool,
-    string_type := string,
-    array_type := [],
-    tuple_type := {}
+    int_check := result is int,
+    real_check := 3.14 is real, 
+    bool_check := true is bool,
+    string_check := 'hello' is string,
+    array_check := arr is [],
+    tuple_check := t is {}
 }
 
 // Array access and assignment

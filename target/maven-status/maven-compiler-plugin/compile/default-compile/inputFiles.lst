@@ -27,9 +27,11 @@
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/semantics/SymbolTable.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/parser/LexerAdapter.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ArrayAccessNode.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/demo/AstVisualizationDemo.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/lexer/LexerDebug.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ArrayLiteralNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/ExpressionStatementNode.java
+/home/timofey/Desktop/javdin/src/main/java/com/javdin/visualization/AstXmlSerializer.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/TupleMemberAccessNode.java
 /home/timofey/Desktop/javdin/src/main/java/com/javdin/ast/LiteralNode.java
 /home/timofey/Desktop/javdin/target/generated-sources/cup/com/javdin/parser/generated/CupParser.java

@@ -1,9 +1,0 @@
-com/javdin/lexer/LexerEnhancedTest.class
-com/javdin/parser/ParserTest.class
-com/javdin/parser/SimpleTest.class
-com/javdin/integration/EndToEndTest.class
-com/javdin/lexer/LexerTest.class
-com/javdin/parser/ControlFlowTest.class
-com/javdin/parser/FunctionLiteralTest.class
-com/javdin/parser/LiteralTest.class
-com/javdin/parser/AssignmentTest.class
