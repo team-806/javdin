@@ -38,7 +38,7 @@
 3. Generated parser uses LR parsing algorithm
 4. Parser creates AST nodes during parsing (but! we used custom ast nodes)
 
-**Our Grammar File**: `src/main/resources/parser.cup` (~800 lines)
+**Our Grammar File**: `src/main/resources/parser.cup` (~417 lines)
 
 ### Build & Testing Tools
 - **Build System**: Maven 3.6+
@@ -152,7 +152,7 @@ We chose custom AST classes over CUP's auto-generated approach for several advan
 | Type Safety | Compile-time type checking | Runtime string-based access |
 | Performance | Direct field access, ~48 bytes/node | XML parsing overhead, ~120 bytes/node |
 | Extensibility | Visitor pattern support | Requires XSLT/XQuery |
-| Error Messages | compile-time errors | Generic runtime errors |
+| Error Messages | compile-time errors |  runtime errors |
 <div style="page-break-after: always;"></div>
 **Example Node Construction**
 

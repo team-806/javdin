@@ -1,10 +1,1 @@
-var factorial := func(n) is
-    if n <= 1 then
-        return 1
-    else
-        return n * factorial(n - 1)
-    end
-end
-
-var result := factorial(5)
-print result
+var a := 2 + 2 * 2

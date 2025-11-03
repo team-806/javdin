@@ -2,102 +2,31 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="numbers">
-      <array_literal>
-        <literal type="integer">
-        1
-        </literal>
+    <variable name="a">
+      <binary_operation>
+        <operator>+</operator>
+        <left>
         <literal type="integer">
         2
         </literal>
-        <literal type="integer">
-        3
-        </literal>
-        <literal type="integer">
-        4
-        </literal>
-        <literal type="integer">
-        5
-        </literal>
-      </array_literal>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="sum">
-      <literal type="integer">
-      0
-      </literal>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="i">
-      <literal type="integer">
-      0
-      </literal>
-    </variable>
-  </declaration>
-  <for_statement>
-    <variable>i</variable>
-    <iterable>
-    <identifier>
-    numbers
-    </identifier>
-    </iterable>
-    <body>
-    <block>
-      <assignment>
-        <identifier>
-        sum
-        </identifier>
-        <binary_operation>
-          <operator>+</operator>
-          <left>
-          <identifier>
-          sum
-          </identifier>
-          </left>
-          <right>
-          <identifier>
-          i
-          </identifier>
-          </right>
-        </binary_operation>
-      </assignment>
-    </block>
-    </body>
-  </for_statement>
-  <print_statement>
-    <literal type="string">
-    Sum:
-    </literal>
-    <identifier>
-    sum
-    </identifier>
-  </print_statement>
-  <declaration type="var">
-    <variable name="average">
-      <binary_operation>
-        <operator>/</operator>
-        <left>
-        <identifier>
-        sum
-        </identifier>
         </left>
         <right>
-        <literal type="integer">
-        5
-        </literal>
+        <binary_operation>
+          <operator>*</operator>
+          <left>
+          <literal type="integer">
+          2
+          </literal>
+          </left>
+          <right>
+          <literal type="integer">
+          2
+          </literal>
+          </right>
+        </binary_operation>
         </right>
       </binary_operation>
     </variable>
   </declaration>
-  <print_statement>
-    <literal type="string">
-    Average:
-    </literal>
-    <identifier>
-    average
-    </identifier>
-  </print_statement>
 </program>
 </document>
