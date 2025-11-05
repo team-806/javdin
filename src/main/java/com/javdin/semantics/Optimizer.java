@@ -2,7 +2,6 @@ package com.javdin.semantics;
 
 import com.javdin.ast.*;
 import com.javdin.utils.ErrorHandler;
-import com.javdin.interpreter.Value;
 
 import java.util.*;
 
@@ -38,14 +37,74 @@ public class Optimizer implements AstVisitor<AstNode> {
         } else if (node instanceof IfNode) {
             IfNode ifNode = (IfNode) node;
             collectUsedVariables(ifNode.getCondition());
-            collectUsedVariables(ifNode.getThenBranch());
-            if (ifNode.getElseBranch() != null) {
-                collectUsedVariables(ifNode.getElseBranch());
+            collectUsedVariables(ifNode.getThenStatement());
+            if (ifNode.getElseStatement() != null) {
+                collectUsedVariables(ifNode.getElseStatement());
             }
         } else if (node instanceof WhileNode) {
             WhileNode whileNode = (WhileNode) node;
             collectUsedVariables(whileNode.getCondition());
             collectUsedVariables(whileNode.getBody());
+        } else if (node instanceof AssignmentNode) {
+            AssignmentNode assignment = (AssignmentNode) node;
+            collectUsedVariables(assignment.getTarget());
+            collectUsedVariables(assignment.getValue());
+        } else if (node instanceof BinaryOpNode) {
+            BinaryOpNode binaryOp = (BinaryOpNode) node;
+            collectUsedVariables(binaryOp.getLeft());
+            collectUsedVariables(binaryOp.getRight());
+        } else if (node instanceof UnaryOpNode) {
+            collectUsedVariables(((UnaryOpNode) node).getOperand());
+        } else if (node instanceof FunctionCallNode) {
+            FunctionCallNode callNode = (FunctionCallNode) node;
+            collectUsedVariables(callNode.getFunction());
+            callNode.getArguments().forEach(this::collectUsedVariables);
+        } else if (node instanceof ArrayAccessNode) {
+            ArrayAccessNode arrayAccess = (ArrayAccessNode) node;
+            collectUsedVariables(arrayAccess.getArray());
+            collectUsedVariables(arrayAccess.getIndex());
+        } else if (node instanceof ArrayLiteralNode) {
+            ((ArrayLiteralNode) node).getElements().forEach(this::collectUsedVariables);
+        } else if (node instanceof TupleLiteralNode) {
+            ((TupleLiteralNode) node).getElements().forEach(e -> {
+                if (e.getValue() != null) collectUsedVariables(e.getValue());
+            });
+        } else if (node instanceof DeclarationNode) {
+            DeclarationNode decl = (DeclarationNode) node;
+            for (DeclarationNode.VariableDefinition varDef : decl.getVariables()) {
+                if (varDef.getInitialValue() != null) {
+                    collectUsedVariables(varDef.getInitialValue());
+                }
+            }
+        } else if (node instanceof ReturnNode) {
+            ReturnNode returnNode = (ReturnNode) node;
+            if (returnNode.getValue() != null) {
+                collectUsedVariables(returnNode.getValue());
+            }
+        } else if (node instanceof PrintNode) {
+            ((PrintNode) node).getExpressions().forEach(this::collectUsedVariables);
+        } else if (node instanceof ForNode) {
+            ForNode forNode = (ForNode) node;
+            if (forNode.getIterable() != null) {
+                collectUsedVariables(forNode.getIterable());
+            }
+            if (forNode.getRangeEnd() != null) {
+                collectUsedVariables(forNode.getRangeEnd());
+            }
+            collectUsedVariables(forNode.getBody());
+        } else if (node instanceof ExpressionStatementNode) {
+            collectUsedVariables(((ExpressionStatementNode) node).getExpression());
+        } else if (node instanceof FunctionLiteralNode) {
+            FunctionLiteralNode funcNode = (FunctionLiteralNode) node;
+            if (funcNode.isExpressionBody()) {
+                collectUsedVariables(funcNode.getExpressionBody());
+            } else {
+                funcNode.getStatementBody().forEach(this::collectUsedVariables);
+            }
+        } else if (node instanceof TypeCheckNode) {
+            collectUsedVariables(((TypeCheckNode) node).getExpression());
+        } else if (node instanceof TupleMemberAccessNode) {
+            collectUsedVariables(((TupleMemberAccessNode) node).getTuple());
         }
         // Add more cases as needed
     }
@@ -73,21 +132,33 @@ public class Optimizer implements AstVisitor<AstNode> {
     
     @Override
     public AstNode visitDeclaration(DeclarationNode node) {
-        // Optimization 2: Remove unused variables
-        if (!usedVariables.contains(node.getVariableName()) && 
-            !node.getVariableName().startsWith("_")) { // Keep variables starting with _
-            errorHandler.addError("Unused variable '" + node.getVariableName() + "'", 
-                                node.getLine(), node.getColumn());
-            return null; // Remove this declaration
+        // Handle multi-variable declarations
+        List<DeclarationNode.VariableDefinition> optimizedVars = new ArrayList<>();
+        
+        for (DeclarationNode.VariableDefinition varDef : node.getVariables()) {
+            // Optimization 2: Remove unused variables
+            if (!usedVariables.contains(varDef.getName()) && 
+                !varDef.getName().startsWith("_")) { // Keep variables starting with _
+                errorHandler.addError("Unused variable '" + varDef.getName() + "'", 
+                                    node.getLine(), node.getColumn());
+                // Skip this variable
+                continue;
+            }
+            
+            ExpressionNode optimizedInitialValue = null;
+            if (varDef.getInitialValue() != null) {
+                optimizedInitialValue = (ExpressionNode) varDef.getInitialValue().accept(this);
+            }
+            
+            optimizedVars.add(new DeclarationNode.VariableDefinition(varDef.getName(), optimizedInitialValue));
         }
         
-        ExpressionNode optimizedInitialValue = null;
-        if (node.getInitialValue() != null) {
-            optimizedInitialValue = (ExpressionNode) node.getInitialValue().accept(this);
+        // If all variables were removed, return null
+        if (optimizedVars.isEmpty()) {
+            return null;
         }
         
-        return new DeclarationNode(node.getLine(), node.getColumn(), 
-                                 node.getVariableName(), optimizedInitialValue);
+        return new DeclarationNode(optimizedVars, node.getLine(), node.getColumn());
     }
     
     @Override
@@ -110,18 +181,18 @@ public class Optimizer implements AstVisitor<AstNode> {
     public AstNode visitIf(IfNode node) {
         ExpressionNode condition = (ExpressionNode) node.getCondition().accept(this);
         
-        // Optimization 4: Simplify conditional structures
+        // Optimization 3: Simplify conditional structures
         if (condition instanceof LiteralNode) {
             LiteralNode literal = (LiteralNode) condition;
             if (literal.getType() == LiteralNode.LiteralType.BOOLEAN) {
-                boolean value = Boolean.parseBoolean(literal.getValue());
+                boolean value = (Boolean) literal.getValue();
                 if (value) {
                     // Always true, keep only then branch
-                    return node.getThenBranch().accept(this);
+                    return node.getThenStatement().accept(this);
                 } else {
                     // Always false, keep only else branch if exists
-                    if (node.getElseBranch() != null) {
-                        return node.getElseBranch().accept(this);
+                    if (node.getElseStatement() != null) {
+                        return node.getElseStatement().accept(this);
                     } else {
                         return new BlockNode(node.getLine(), node.getColumn(), new ArrayList<>());
                     }
@@ -129,9 +200,9 @@ public class Optimizer implements AstVisitor<AstNode> {
             }
         }
         
-        StatementNode thenBranch = (StatementNode) node.getThenBranch().accept(this);
-        StatementNode elseBranch = node.getElseBranch() != null ? 
-            (StatementNode) node.getElseBranch().accept(this) : null;
+        StatementNode thenBranch = (StatementNode) node.getThenStatement().accept(this);
+        StatementNode elseBranch = node.getElseStatement() != null ? 
+            (StatementNode) node.getElseStatement().accept(this) : null;
             
         return new IfNode(node.getLine(), node.getColumn(), condition, thenBranch, elseBranch);
     }
@@ -205,9 +276,9 @@ public class Optimizer implements AstVisitor<AstNode> {
     
     private LiteralNode foldNumericConstants(LiteralNode left, LiteralNode right, String operator) {
         double leftVal = left.getType() == LiteralNode.LiteralType.INTEGER ? 
-            Integer.parseInt(left.getValue()) : Double.parseDouble(left.getValue());
+            ((Number) left.getValue()).doubleValue() : ((Number) left.getValue()).doubleValue();
         double rightVal = right.getType() == LiteralNode.LiteralType.INTEGER ? 
-            Integer.parseInt(right.getValue()) : Double.parseDouble(right.getValue());
+            ((Number) right.getValue()).doubleValue() : ((Number) right.getValue()).doubleValue();
             
         double result = 0;
         switch (operator) {
@@ -225,17 +296,17 @@ public class Optimizer implements AstVisitor<AstNode> {
         if (left.getType() == LiteralNode.LiteralType.INTEGER && 
             right.getType() == LiteralNode.LiteralType.INTEGER &&
             result == (int)result) {
-            return new LiteralNode(left.getLine(), left.getColumn(), 
-                                 LiteralNode.LiteralType.INTEGER, String.valueOf((int)result));
+            return new LiteralNode((int)result, LiteralNode.LiteralType.INTEGER, 
+                                 left.getLine(), left.getColumn());
         }
         
-        return new LiteralNode(left.getLine(), left.getColumn(), 
-                             LiteralNode.LiteralType.REAL, String.valueOf(result));
+        return new LiteralNode(result, LiteralNode.LiteralType.REAL, 
+                             left.getLine(), left.getColumn());
     }
     
     private LiteralNode foldBooleanConstants(LiteralNode left, LiteralNode right, String operator) {
-        boolean leftVal = Boolean.parseBoolean(left.getValue());
-        boolean rightVal = Boolean.parseBoolean(right.getValue());
+        boolean leftVal = (Boolean) left.getValue();
+        boolean rightVal = (Boolean) right.getValue();
         boolean result = false;
         
         switch (operator) {
@@ -245,15 +316,15 @@ public class Optimizer implements AstVisitor<AstNode> {
             default: return null;
         }
         
-        return new LiteralNode(left.getLine(), left.getColumn(), 
-                             LiteralNode.LiteralType.BOOLEAN, String.valueOf(result));
+        return new LiteralNode(result, LiteralNode.LiteralType.BOOLEAN, 
+                             left.getLine(), left.getColumn());
     }
     
     private LiteralNode foldComparisonConstants(LiteralNode left, LiteralNode right, String operator) {
         double leftVal = left.getType() == LiteralNode.LiteralType.INTEGER ? 
-            Integer.parseInt(left.getValue()) : Double.parseDouble(left.getValue());
+            ((Number) left.getValue()).doubleValue() : ((Number) left.getValue()).doubleValue();
         double rightVal = right.getType() == LiteralNode.LiteralType.INTEGER ? 
-            Integer.parseInt(right.getValue()) : Double.parseDouble(right.getValue());
+            ((Number) right.getValue()).doubleValue() : ((Number) right.getValue()).doubleValue();
             
         boolean result = false;
         switch (operator) {
@@ -266,14 +337,15 @@ public class Optimizer implements AstVisitor<AstNode> {
             default: return null;
         }
         
-        return new LiteralNode(left.getLine(), left.getColumn(), 
-                             LiteralNode.LiteralType.BOOLEAN, String.valueOf(result));
+        return new LiteralNode(result, LiteralNode.LiteralType.BOOLEAN, 
+                             left.getLine(), left.getColumn());
     }
     
     // Default implementations for other nodes (pass-through)
     @Override public AstNode visitAssignment(AssignmentNode node) { 
+        ExpressionNode target = (ExpressionNode) node.getTarget().accept(this);
         ExpressionNode value = (ExpressionNode) node.getValue().accept(this);
-        return new AssignmentNode(node.getLine(), node.getColumn(), node.getReference(), value);
+        return new AssignmentNode(node.getLine(), node.getColumn(), target, value);
     }
     
     @Override public AstNode visitWhile(WhileNode node) {
@@ -283,10 +355,21 @@ public class Optimizer implements AstVisitor<AstNode> {
     }
     
     @Override public AstNode visitFor(ForNode node) {
-        ExpressionNode start = node.getStart() != null ? (ExpressionNode) node.getStart().accept(this) : null;
-        ExpressionNode end = node.getEnd() != null ? (ExpressionNode) node.getEnd().accept(this) : null;
+        ExpressionNode iterable = node.getIterable() != null ? (ExpressionNode) node.getIterable().accept(this) : null;
+        ExpressionNode rangeEnd = node.getRangeEnd() != null ? (ExpressionNode) node.getRangeEnd().accept(this) : null;
         StatementNode body = (StatementNode) node.getBody().accept(this);
-        return new ForNode(node.getLine(), node.getColumn(), node.getVariable(), start, end, body);
+        
+        // Use appropriate constructor based on what's available
+        if (rangeEnd != null) {
+            // Range loop
+            return new ForNode(node.getLine(), node.getColumn(), node.getVariable(), iterable, rangeEnd, body);
+        } else if (iterable != null) {
+            // For-in loop
+            return new ForNode(node.getLine(), node.getColumn(), node.getVariable(), iterable, body);
+        } else {
+            // Infinite loop
+            return new ForNode(node.getLine(), node.getColumn(), body);
+        }
     }
     
     @Override public AstNode visitBreak(BreakNode node) { return node; }
@@ -326,8 +409,19 @@ public class Optimizer implements AstVisitor<AstNode> {
     }
     
     @Override public AstNode visitFunctionLiteral(FunctionLiteralNode node) {
-        StatementNode body = (StatementNode) node.getBody().accept(this);
-        return new FunctionLiteralNode(node.getLine(), node.getColumn(), node.getParameters(), body);
+        if (node.isExpressionBody()) {
+            ExpressionNode body = (ExpressionNode) node.getExpressionBody().accept(this);
+            return new FunctionLiteralNode(node.getLine(), node.getColumn(), node.getParameters(), body, true);
+        } else {
+            List<StatementNode> optimizedBody = new ArrayList<>();
+            for (StatementNode stmt : node.getStatementBody()) {
+                AstNode optimized = stmt.accept(this);
+                if (optimized != null) {
+                    optimizedBody.add((StatementNode) optimized);
+                }
+            }
+            return new FunctionLiteralNode(node.getLine(), node.getColumn(), node.getParameters(), optimizedBody, false);
+        }
     }
     
     @Override public AstNode visitArrayLiteral(ArrayLiteralNode node) {
@@ -335,28 +429,27 @@ public class Optimizer implements AstVisitor<AstNode> {
         for (ExpressionNode element : node.getElements()) {
             optimizedElements.add((ExpressionNode) element.accept(this));
         }
-        return new ArrayLiteralNode(node.getLine(), node.getColumn(), optimizedElements);
+        return new ArrayLiteralNode(optimizedElements, node.getLine(), node.getColumn());
     }
     
     @Override public AstNode visitTupleLiteral(TupleLiteralNode node) {
         List<TupleLiteralNode.TupleElement> optimizedElements = new ArrayList<>();
         for (TupleLiteralNode.TupleElement element : node.getElements()) {
-            ExpressionNode optimizedExpr = element.expression() != null ? 
-                (ExpressionNode) element.expression().accept(this) : null;
-            optimizedElements.add(new TupleLiteralNode.TupleElement(
-                element.name(), optimizedExpr, element.line(), element.column()));
+            ExpressionNode optimizedExpr = element.getValue() != null ? 
+                (ExpressionNode) element.getValue().accept(this) : null;
+            optimizedElements.add(new TupleLiteralNode.TupleElement(element.getName(), optimizedExpr));
         }
-        return new TupleLiteralNode(node.getLine(), node.getColumn(), optimizedElements);
+        return new TupleLiteralNode(optimizedElements, node.getLine(), node.getColumn());
     }
     
     @Override public AstNode visitTypeCheck(TypeCheckNode node) {
         ExpressionNode expr = (ExpressionNode) node.getExpression().accept(this);
-        return new TypeCheckNode(node.getLine(), node.getColumn(), expr, node.getType());
+        return new TypeCheckNode(node.getLine(), node.getColumn(), expr, node.getTypeIndicator());
     }
     
     @Override public AstNode visitTupleMemberAccess(TupleMemberAccessNode node) {
         ExpressionNode tuple = (ExpressionNode) node.getTuple().accept(this);
-        return new TupleMemberAccessNode(node.getLine(), node.getColumn(), tuple, node.getMember());
+        return new TupleMemberAccessNode(node.getLine(), node.getColumn(), tuple, node.getMemberName());
     }
     
     @Override public AstNode visitLiteral(LiteralNode node) { return node; }

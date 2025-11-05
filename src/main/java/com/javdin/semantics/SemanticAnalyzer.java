@@ -44,19 +44,22 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
     
     @Override
     public Void visitDeclaration(DeclarationNode node) {
-        // Check if variable is already declared in current scope
-        if (symbolTable.isDeclaredInCurrentScope(node.getVariableName())) {
-            errorHandler.addError("Variable '" + node.getVariableName() + "' is already declared", 
-                                node.getLine(), node.getColumn());
-            return null;
-        }
-        
-        // Add variable to symbol table
-        symbolTable.declare(node.getVariableName(), "var");
-        
-        // Analyze initial value if present
-        if (node.getInitialValue() != null) {
-            node.getInitialValue().accept(this);
+        // Handle multi-variable declarations
+        for (DeclarationNode.VariableDefinition varDef : node.getVariables()) {
+            // Check if variable is already declared in current scope
+            if (symbolTable.isDeclaredInCurrentScope(varDef.getName())) {
+                errorHandler.addError("Variable '" + varDef.getName() + "' is already declared", 
+                                    node.getLine(), node.getColumn());
+                continue;
+            }
+            
+            // Add variable to symbol table
+            symbolTable.declare(varDef.getName(), "var");
+            
+            // Analyze initial value if present
+            if (varDef.getInitialValue() != null) {
+                varDef.getInitialValue().accept(this);
+            }
         }
         
         return null;
@@ -64,8 +67,13 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
     
     @Override
     public Void visitAssignment(AssignmentNode node) {
-        // Check if the reference is declared
-        checkReference(node.getReference());
+        // Check if the target is a reference and is declared
+        if (node.getTarget() instanceof ReferenceNode) {
+            checkReference((ReferenceNode) node.getTarget());
+        } else {
+            // For other targets (array access, tuple member), analyze them
+            node.getTarget().accept(this);
+        }
         node.getValue().accept(this);
         return null;
     }
@@ -73,9 +81,9 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
     @Override
     public Void visitIf(IfNode node) {
         node.getCondition().accept(this);
-        node.getThenBranch().accept(this);
-        if (node.getElseBranch() != null) {
-            node.getElseBranch().accept(this);
+        node.getThenStatement().accept(this);
+        if (node.getElseStatement() != null) {
+            node.getElseStatement().accept(this);
         }
         return null;
     }
@@ -103,11 +111,11 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
             symbolTable.declare(node.getVariable(), "loop_var");
         }
         
-        if (node.getStart() != null) {
-            node.getStart().accept(this);
+        if (node.getIterable() != null) {
+            node.getIterable().accept(this);
         }
-        if (node.getEnd() != null) {
-            node.getEnd().accept(this);
+        if (node.getRangeEnd() != null) {
+            node.getRangeEnd().accept(this);
         }
         
         node.getBody().accept(this);
@@ -225,7 +233,14 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
             symbolTable.declare(param, "parameter");
         }
         
-        node.getBody().accept(this);
+        // Analyze function body
+        if (node.isExpressionBody()) {
+            node.getExpressionBody().accept(this);
+        } else {
+            for (StatementNode stmt : node.getStatementBody()) {
+                stmt.accept(this);
+            }
+        }
         
         symbolTable.exitScope();
         context.pop();
@@ -243,8 +258,8 @@ public class SemanticAnalyzer implements AstVisitor<Void> {
     @Override
     public Void visitTupleLiteral(TupleLiteralNode node) {
         for (TupleLiteralNode.TupleElement element : node.getElements()) {
-            if (element.expression() != null) {
-                element.expression().accept(this);
+            if (element.getValue() != null) {
+                element.getValue().accept(this);
             }
         }
         return null;

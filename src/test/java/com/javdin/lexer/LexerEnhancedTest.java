@@ -225,7 +225,7 @@ class LexerEnhancedTest {
     
     @Test
     void testComparisonOperators() {
-        lexer = new Lexer("x < y <= z > a >= b = c /= d != e");
+        lexer = new Lexer("x < y <= z > a >= b = c /= d");
         
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // x
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LESS_THAN);
@@ -236,12 +236,10 @@ class LexerEnhancedTest {
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // a
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.GREATER_EQUAL);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // b
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN); // =
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.EQUAL); // = (equality comparison)
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // c
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.NOT_EQUAL_ALT); // /=
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.NOT_EQUAL_ALT); // /= (not-equal in Project D)
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // d
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.NOT_EQUAL); // !=
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // e
     }
     
     @Test

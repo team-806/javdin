@@ -15,7 +15,7 @@ class LexerTest {
     
     @Test
     void testBasicTokens() {
-        lexer = new Lexer("var x = 42;");
+        lexer = new Lexer("var x := 42;");
         
         Token token1 = lexer.nextToken();
         assertThat(token1.type()).isEqualTo(TokenType.VAR);
@@ -25,7 +25,7 @@ class LexerTest {
         assertThat(token2.value()).isEqualTo("x");
         
         Token token3 = lexer.nextToken();
-        assertThat(token3.type()).isEqualTo(TokenType.ASSIGN);
+        assertThat(token3.type()).isEqualTo(TokenType.ASSIGN_OP);
         
         Token token4 = lexer.nextToken();
         assertThat(token4.type()).isEqualTo(TokenType.INTEGER);
@@ -70,17 +70,17 @@ class LexerTest {
     
     @Test
     void testOperators() {
-        lexer = new Lexer("+ - * / == != <= >= = < >");
+        lexer = new Lexer("+ - * / := /= <= >= = < >");
         
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.PLUS);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.MINUS);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.MULTIPLY);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.DIVIDE);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.EQUAL);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.NOT_EQUAL);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.NOT_EQUAL_ALT);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LESS_EQUAL);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.GREATER_EQUAL);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.EQUAL);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LESS_THAN);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.GREATER_THAN);
     }
@@ -200,37 +200,37 @@ class LexerTest {
     
     @Test
     void testMixedTokenTypes() {
-        lexer = new Lexer("var count = 42; var pi = 3.14159; var flag = true; var ch = 'X';");
+        lexer = new Lexer("var count := 42; var pi := 3.14159; var flag := true; var ch := 'X';");
         
-        // var count = 42;
+        // var count := 42;
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.VAR);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);
         Token intToken = lexer.nextToken();
         assertThat(intToken.type()).isEqualTo(TokenType.INTEGER);
         assertThat(intToken.value()).isEqualTo("42");
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.SEMICOLON);
         
-        // var pi = 3.14159;
+        // var pi := 3.14159;
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.VAR);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);
         Token realToken = lexer.nextToken();
         assertThat(realToken.type()).isEqualTo(TokenType.REAL);
         assertThat(realToken.value()).isEqualTo("3.14159");
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.SEMICOLON);
         
-        // var flag = true;
+        // var flag := true;
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.VAR);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.TRUE);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.SEMICOLON);
         
-        // var ch = 'X';
+        // var ch := 'X';
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.VAR);
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);
         Token stringToken = lexer.nextToken();
         assertThat(stringToken.type()).isEqualTo(TokenType.STRING);
         assertThat(stringToken.value()).isEqualTo("X");
@@ -239,10 +239,10 @@ class LexerTest {
     
     @Test
     void testComplexExpression() {
-        lexer = new Lexer("result = (a + b) * c - array[index].property;");
+        lexer = new Lexer("result := (a + b) * c - array[index].property;");
         
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // result
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN);     // =
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);  // :=
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LEFT_PAREN); // (
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // a
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.PLUS);       // +
