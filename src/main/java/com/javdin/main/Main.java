@@ -3,6 +3,7 @@ package com.javdin.main;
 import com.javdin.lexer.Lexer;
 import com.javdin.parser.Parser;
 import com.javdin.semantics.SemanticAnalyzer;
+import com.javdin.semantics.Optimizer;
 import com.javdin.interpreter.Interpreter;
 import com.javdin.utils.ErrorHandler;
 import com.javdin.utils.IoUtils;
@@ -63,9 +64,13 @@ public class Main {
                 return 1;
             }
             
+            // AST Optimizations
+            Optimizer optimizer = new Optimizer(errorHandler);
+            ProgramNode optimizedAst = optimizer.optimize(ast);
+            
             // Interpretation
             Interpreter interpreter = new Interpreter(errorHandler);
-            interpreter.interpret(ast);
+            interpreter.interpret(optimizedAst);
             
             return 0;
             
