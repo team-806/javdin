@@ -1,109 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 <program>
-  <declaration type="var">
-    <variable name="x">
-      <literal type="integer">
-      5
-      </literal>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="y">
-      <binary_operation>
-        <operator>*</operator>
-        <left>
-        <identifier>
-        x
-        </identifier>
-        </left>
-        <right>
-        <literal type="integer">
-        2
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
   <block>
     <print_statement>
-      <identifier>
-      y
-      </identifier>
+      <literal type="string">
+      This will always execute
+      </literal>
     </print_statement>
   </block>
-  <declaration type="var">
-    <variable name="result">
-      <literal type="boolean">
-      true
+  <block>
+    <print_statement>
+      <literal type="string">
+      This will always execute
       </literal>
-    </variable>
-  </declaration>
-  <if_statement>
-    <condition>
-    <identifier>
-    result
-    </identifier>
-    </condition>
-    <then_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        Always true
-        </literal>
-      </print_statement>
-    </block>
-    </then_block>
-  </if_statement>
-  <declaration type="var">
-    <variable name="compute">
-      <function_literal>
-        <parameters>val</parameters>
-        <body type="statements">
-          <if_statement>
-            <condition>
-            <binary_operation>
-              <operator>&lt;</operator>
-              <left>
-              <identifier>
-              val
-              </identifier>
-              </left>
-              <right>
-              <literal type="integer">
-              0
-              </literal>
-              </right>
-            </binary_operation>
-            </condition>
-            <then_block>
-            <block>
-              <return_statement>
-                <literal type="integer">
-                0
-                </literal>
-              </return_statement>
-            </block>
-            </then_block>
-          </if_statement>
-          <return_statement>
-            <binary_operation>
-              <operator>*</operator>
-              <left>
-              <identifier>
-              val
-              </identifier>
-              </left>
-              <right>
-              <literal type="integer">
-              2
-              </literal>
-              </right>
-            </binary_operation>
-          </return_statement>
-        </body>
-      </function_literal>
-    </variable>
-  </declaration>
+    </print_statement>
+  </block>
+  <block>
+    <print_statement>
+      <literal type="string">
+      Constant comparison - always true
+      </literal>
+    </print_statement>
+  </block>
 </program>
 </document>

@@ -3,43 +3,9 @@
 <program>
   <declaration type="var">
     <variable name="x">
-      <binary_operation>
-        <operator>+</operator>
-        <left>
-        <literal type="integer">
-        2
-        </literal>
-        </left>
-        <right>
-        <literal type="integer">
-        3
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="unused">
       <literal type="integer">
-      100
+      10
       </literal>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="y">
-      <binary_operation>
-        <operator>*</operator>
-        <left>
-        <identifier>
-        x
-        </identifier>
-        </left>
-        <right>
-        <literal type="integer">
-        2
-        </literal>
-        </right>
-      </binary_operation>
     </variable>
   </declaration>
   <if_statement>
@@ -51,9 +17,9 @@
     <then_block>
     <block>
       <print_statement>
-        <identifier>
-        y
-        </identifier>
+        <literal type="string">
+        This will always execute
+        </literal>
       </print_statement>
     </block>
     </then_block>
@@ -61,120 +27,71 @@
     <block>
       <print_statement>
         <literal type="string">
-        Dead code
+        This branch is dead and will be removed
         </literal>
       </print_statement>
     </block>
     </else_block>
   </if_statement>
-  <declaration type="var">
-    <variable name="result">
-      <binary_operation>
-        <operator>=</operator>
-        <left>
-        <literal type="integer">
-        10
-        </literal>
-        </left>
-        <right>
-        <literal type="integer">
-        10
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
   <if_statement>
     <condition>
-    <identifier>
-    result
-    </identifier>
+    <literal type="boolean">
+    false
+    </literal>
     </condition>
     <then_block>
     <block>
       <print_statement>
         <literal type="string">
-        Always true
+        This branch is dead and will be removed
         </literal>
       </print_statement>
     </block>
     </then_block>
-  </if_statement>
-  <declaration type="var">
-    <variable name="compute">
-      <function_literal>
-        <parameters>val</parameters>
-        <body type="statements">
-          <if_statement>
-            <condition>
-            <binary_operation>
-              <operator>&lt;</operator>
-              <left>
-              <identifier>
-              val
-              </identifier>
-              </left>
-              <right>
-              <literal type="integer">
-              0
-              </literal>
-              </right>
-            </binary_operation>
-            </condition>
-            <then_block>
-            <block>
-              <return_statement>
-                <literal type="integer">
-                0
-                </literal>
-              </return_statement>
-              <print_statement>
-                <literal type="string">
-                Unreachable
-                </literal>
-              </print_statement>
-              <declaration type="var">
-                <variable name="z">
-                  <literal type="integer">
-                  50
-                  </literal>
-                </variable>
-              </declaration>
-            </block>
-            </then_block>
-          </if_statement>
-          <return_statement>
-            <binary_operation>
-              <operator>*</operator>
-              <left>
-              <identifier>
-              val
-              </identifier>
-              </left>
-              <right>
-              <literal type="integer">
-              2
-              </literal>
-              </right>
-            </binary_operation>
-          </return_statement>
-        </body>
-      </function_literal>
-    </variable>
-  </declaration>
-  <print_statement>
-    <function_call>
-      <function>
-      <identifier>
-      compute
-      </identifier>
-      </function>
-      <arguments>
-        <literal type="integer">
-        5
+    <else_block>
+    <block>
+      <print_statement>
+        <literal type="string">
+        This will always execute
         </literal>
-      </arguments>
-    </function_call>
-  </print_statement>
+      </print_statement>
+    </block>
+    </else_block>
+  </if_statement>
+  <if_statement>
+    <condition>
+    <binary_operation>
+      <operator>&lt;</operator>
+      <left>
+      <literal type="integer">
+      5
+      </literal>
+      </left>
+      <right>
+      <literal type="integer">
+      10
+      </literal>
+      </right>
+    </binary_operation>
+    </condition>
+    <then_block>
+    <block>
+      <print_statement>
+        <literal type="string">
+        Constant comparison - always true
+        </literal>
+      </print_statement>
+    </block>
+    </then_block>
+    <else_block>
+    <block>
+      <print_statement>
+        <literal type="string">
+        Dead branch
+        </literal>
+      </print_statement>
+    </block>
+    </else_block>
+  </if_statement>
 </program>
 </document>
