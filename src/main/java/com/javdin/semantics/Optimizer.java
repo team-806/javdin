@@ -170,6 +170,14 @@ public class Optimizer implements AstVisitor<AstNode> {
         if (left instanceof LiteralNode && right instanceof LiteralNode) {
             LiteralNode result = foldConstants((LiteralNode) left, (LiteralNode) right, node.getOperator());
             if (result != null) {
+                // Report successful constant folding
+                String leftStr = formatLiteralValue((LiteralNode) left);
+                String rightStr = formatLiteralValue((LiteralNode) right);
+                String resultStr = formatLiteralValue(result);
+                errorHandler.addError(
+                    String.format("Constant folding: %s %s %s -> %s", 
+                                leftStr, node.getOperator(), rightStr, resultStr), 
+                    node.getLine(), node.getColumn());
                 return result;
             }
         }
@@ -188,12 +196,21 @@ public class Optimizer implements AstVisitor<AstNode> {
                 boolean value = (Boolean) literal.getValue();
                 if (value) {
                     // Always true, keep only then branch
+                    errorHandler.addError(
+                        "Dead branch elimination: if condition is always true, removing else branch", 
+                        node.getLine(), node.getColumn());
                     return node.getThenStatement().accept(this);
                 } else {
                     // Always false, keep only else branch if exists
                     if (node.getElseStatement() != null) {
+                        errorHandler.addError(
+                            "Dead branch elimination: if condition is always false, removing then branch", 
+                            node.getLine(), node.getColumn());
                         return node.getElseStatement().accept(this);
                     } else {
+                        errorHandler.addError(
+                            "Dead branch elimination: if condition is always false, removing entire if statement", 
+                            node.getLine(), node.getColumn());
                         return new BlockNode(node.getLine(), node.getColumn(), new ArrayList<>());
                     }
                 }
@@ -246,20 +263,20 @@ public class Optimizer implements AstVisitor<AstNode> {
     // Constant folding helper
     private LiteralNode foldConstants(LiteralNode left, LiteralNode right, String operator) {
         try {
-            // Handle arithmetic operations
-            if (isNumeric(left) && isNumeric(right)) {
-                return foldNumericConstants(left, right, operator);
-            }
-            
             // Handle boolean operations
             if (left.getType() == LiteralNode.LiteralType.BOOLEAN && 
                 right.getType() == LiteralNode.LiteralType.BOOLEAN) {
                 return foldBooleanConstants(left, right, operator);
             }
             
-            // Handle comparisons
+            // Handle numeric operations
             if (isNumeric(left) && isNumeric(right)) {
-                return foldComparisonConstants(left, right, operator);
+                // Try comparison operators first
+                if (isComparisonOperator(operator)) {
+                    return foldComparisonConstants(left, right, operator);
+                }
+                // Then try arithmetic operators
+                return foldNumericConstants(left, right, operator);
             }
             
         } catch (Exception e) {
@@ -267,6 +284,12 @@ public class Optimizer implements AstVisitor<AstNode> {
         }
         
         return null;
+    }
+    
+    private boolean isComparisonOperator(String operator) {
+        return operator.equals("<") || operator.equals("<=") || 
+               operator.equals(">") || operator.equals(">=") || 
+               operator.equals("=") || operator.equals("!=") || operator.equals("/=");
     }
     
     private boolean isNumeric(LiteralNode node) {
@@ -333,7 +356,8 @@ public class Optimizer implements AstVisitor<AstNode> {
             case ">": result = leftVal > rightVal; break;
             case ">=": result = leftVal >= rightVal; break;
             case "=": result = leftVal == rightVal; break;
-            case "!=": result = leftVal != rightVal; break;
+            case "!=":
+            case "/=": result = leftVal != rightVal; break;
             default: return null;
         }
         
@@ -445,6 +469,22 @@ public class Optimizer implements AstVisitor<AstNode> {
     @Override public AstNode visitTypeCheck(TypeCheckNode node) {
         ExpressionNode expr = (ExpressionNode) node.getExpression().accept(this);
         return new TypeCheckNode(node.getLine(), node.getColumn(), expr, node.getTypeIndicator());
+    }
+    
+    /**
+     * Helper method to format a literal value for display in optimization messages
+     */
+    private String formatLiteralValue(LiteralNode node) {
+        if (node.getType() == LiteralNode.LiteralType.BOOLEAN) {
+            return node.getValue().toString();
+        } else if (node.getType() == LiteralNode.LiteralType.INTEGER) {
+            return node.getValue().toString();
+        } else if (node.getType() == LiteralNode.LiteralType.REAL) {
+            return node.getValue().toString();
+        } else if (node.getType() == LiteralNode.LiteralType.STRING) {
+            return "\"" + node.getValue().toString() + "\"";
+        }
+        return node.getValue().toString();
     }
     
     @Override public AstNode visitTupleMemberAccess(TupleMemberAccessNode node) {
