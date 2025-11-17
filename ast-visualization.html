@@ -141,14 +141,14 @@
                         <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">program</span>
                         <div class="children">
                             <div>
-                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">block</span>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">declaration</span>
                                 <div class="children">
                                     <div>
-                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">print_statement</span>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">variable</span>
                                         <div class="children">
                                             <div>
                                                 <span class="node node-terminal">literal<span class="value"> = "
-      This will always execute
+      42
       "</span></span>
                                             </div>
                                         </div>
@@ -156,30 +156,58 @@
                                 </div>
                             </div>
                             <div>
-                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">block</span>
+                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">declaration</span>
                                 <div class="children">
                                     <div>
-                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">print_statement</span>
+                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">variable</span>
                                         <div class="children">
                                             <div>
-                                                <span class="node node-terminal">literal<span class="value"> = "
-      This will always execute
-      "</span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">block</span>
-                                <div class="children">
-                                    <div>
-                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">print_statement</span>
-                                        <div class="children">
-                                            <div>
-                                                <span class="node node-terminal">literal<span class="value"> = "
-      Constant comparison - always true
-      "</span></span>
+                                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">tuple_literal</span>
+                                                <div class="children">
+                                                    <div>
+                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">element</span>
+                                                        <div class="children">
+                                                            <div>
+                                                                <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">type_check</span>
+                                                                <div class="children">
+                                                                    <div>
+                                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">expression</span>
+                                                                        <div class="children">
+                                                                            <div>
+                                                                                <span class="node node-terminal">identifier<span class="value"> = "
+            result
+            "</span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="node node-terminal">type<span class="value"> = "int"</span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">element</span>
+                                                        <div class="children">
+                                                            <div>
+                                                                <span class="node node-terminal">literal<span class="value"> = "
+          false
+          "</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span class="node node-nonterminal collapsible" onclick="toggleCollapse(this)">element</span>
+                                                        <div class="children">
+                                                            <div>
+                                                                <span class="node node-terminal">literal<span class="value"> = "
+          false
+          "</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

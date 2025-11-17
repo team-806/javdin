@@ -238,6 +238,7 @@ type_indicator ::=
     | BOOL_TYPE {: RESULT = "bool"; :}
     | STRING_TYPE {: RESULT = "string"; :}
     | NONE_TYPE {: RESULT = "none"; :}
+    | NONE {: RESULT = "none"; :}
     | ARRAY_TYPE {: RESULT = "array"; :}
     | TUPLE_TYPE {: RESULT = "tuple"; :}
     | FUNC_TYPE {: RESULT = "func"; :}

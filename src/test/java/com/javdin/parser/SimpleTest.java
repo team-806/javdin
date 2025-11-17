@@ -20,9 +20,9 @@ public class SimpleTest {
             lexer = new Lexer(testCase);
             Parser parser = new Parser(lexer);
             ProgramNode program = parser.parse();
-            System.out.println("✓ Parsed successfully!");
+            System.out.println("[OK] Parsed successfully!");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("[FAIL] Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

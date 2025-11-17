@@ -11,12 +11,10 @@ import java.util.*;
 public class Optimizer implements AstVisitor<AstNode> {
     private final ErrorHandler errorHandler;
     private final Set<String> usedVariables;
-    private boolean hasReturnStatement;
     
     public Optimizer(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
-        this.usedVariables = new HashSet<>();
-        this.hasReturnStatement = false;
+    this.usedVariables = new HashSet<>();
     }
     
     public ProgramNode optimize(ProgramNode program) {
@@ -112,13 +110,16 @@ public class Optimizer implements AstVisitor<AstNode> {
     @Override
     public AstNode visitProgram(ProgramNode node) {
         List<StatementNode> optimizedStatements = new ArrayList<>();
-        hasReturnStatement = false;
+        boolean encounteredReturn = false;
         
         for (StatementNode stmt : node.getStatements()) {
-            if (!hasReturnStatement) {
+            if (!encounteredReturn) {
                 StatementNode optimized = (StatementNode) stmt.accept(this);
                 if (optimized != null) {
                     optimizedStatements.add(optimized);
+                    if (optimized instanceof ReturnNode) {
+                        encounteredReturn = true;
+                    }
                 }
             } else {
                 // Optimization 4: Remove unreachable code after return
@@ -226,8 +227,6 @@ public class Optimizer implements AstVisitor<AstNode> {
     
     @Override
     public AstNode visitReturn(ReturnNode node) {
-        hasReturnStatement = true;
-        
         ExpressionNode optimizedValue = null;
         if (node.getValue() != null) {
             optimizedValue = (ExpressionNode) node.getValue().accept(this);
@@ -298,27 +297,43 @@ public class Optimizer implements AstVisitor<AstNode> {
     }
     
     private LiteralNode foldNumericConstants(LiteralNode left, LiteralNode right, String operator) {
-        double leftVal = left.getType() == LiteralNode.LiteralType.INTEGER ? 
-            ((Number) left.getValue()).doubleValue() : ((Number) left.getValue()).doubleValue();
-        double rightVal = right.getType() == LiteralNode.LiteralType.INTEGER ? 
-            ((Number) right.getValue()).doubleValue() : ((Number) right.getValue()).doubleValue();
-            
-        double result = 0;
-        switch (operator) {
-            case "+": result = leftVal + rightVal; break;
-            case "-": result = leftVal - rightVal; break;
-            case "*": result = leftVal * rightVal; break;
-            case "/": 
-                if (rightVal == 0) return null; // Division by zero
-                result = leftVal / rightVal; 
-                break;
-            default: return null;
+        double leftVal = ((Number) left.getValue()).doubleValue();
+        double rightVal = ((Number) right.getValue()).doubleValue();
+        
+        // Handle integer division semantics separately to obey Project D spec
+        if ("/".equals(operator) &&
+            left.getType() == LiteralNode.LiteralType.INTEGER &&
+            right.getType() == LiteralNode.LiteralType.INTEGER) {
+            if (rightVal == 0) {
+                return null; // avoid folding division by zero
+            }
+            int lhs = ((Number) left.getValue()).intValue();
+            int rhs = ((Number) right.getValue()).intValue();
+            return new LiteralNode(Math.floorDiv(lhs, rhs), LiteralNode.LiteralType.INTEGER,
+                                   left.getLine(), left.getColumn());
         }
         
-        // Return as integer if both were integers and result is integer
+        double result = switch (operator) {
+            case "+" -> leftVal + rightVal;
+            case "-" -> leftVal - rightVal;
+            case "*" -> leftVal * rightVal;
+            case "/" -> {
+                if (rightVal == 0) {
+                    yield Double.NaN;
+                }
+                yield leftVal / rightVal;
+            }
+            default -> Double.NaN;
+        };
+        
+        if (Double.isNaN(result)) {
+            return null;
+        }
+        
+        // Return as integer if both were integers and result is an integer value
         if (left.getType() == LiteralNode.LiteralType.INTEGER && 
             right.getType() == LiteralNode.LiteralType.INTEGER &&
-            result == (int)result) {
+            result == Math.rint(result)) {
             return new LiteralNode((int)result, LiteralNode.LiteralType.INTEGER, 
                                  left.getLine(), left.getColumn());
         }
@@ -489,6 +504,10 @@ public class Optimizer implements AstVisitor<AstNode> {
     
     @Override public AstNode visitTupleMemberAccess(TupleMemberAccessNode node) {
         ExpressionNode tuple = (ExpressionNode) node.getTuple().accept(this);
+        if (node.isNumericIndex()) {
+            int index = Integer.parseInt(node.getMemberName());
+            return new TupleMemberAccessNode(node.getLine(), node.getColumn(), tuple, index);
+        }
         return new TupleMemberAccessNode(node.getLine(), node.getColumn(), tuple, node.getMemberName());
     }
     

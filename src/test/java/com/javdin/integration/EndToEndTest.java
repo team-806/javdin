@@ -36,8 +36,8 @@ class EndToEndTest {
             assertThat(exitCode).isEqualTo(0);
             
             // Verify output
-            String output = outputStream.toString();
-            assertThat(output).contains("Print statement executed");
+            String output = outputStream.toString().strip();
+            assertThat(output).isEqualTo("42");
         } finally {
             System.setOut(originalOut);
         }

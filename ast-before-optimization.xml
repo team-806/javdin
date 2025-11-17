@@ -2,96 +2,44 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="x">
+    <variable name="used">
       <literal type="integer">
       10
       </literal>
     </variable>
   </declaration>
-  <if_statement>
-    <condition>
-    <literal type="boolean">
-    true
-    </literal>
-    </condition>
-    <then_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        This will always execute
-        </literal>
-      </print_statement>
-    </block>
-    </then_block>
-    <else_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        This branch is dead and will be removed
-        </literal>
-      </print_statement>
-    </block>
-    </else_block>
-  </if_statement>
-  <if_statement>
-    <condition>
-    <literal type="boolean">
-    false
-    </literal>
-    </condition>
-    <then_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        This branch is dead and will be removed
-        </literal>
-      </print_statement>
-    </block>
-    </then_block>
-    <else_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        This will always execute
-        </literal>
-      </print_statement>
-    </block>
-    </else_block>
-  </if_statement>
-  <if_statement>
-    <condition>
-    <binary_operation>
-      <operator>&lt;</operator>
-      <left>
+  <print_statement>
+    <identifier>
+    used
+    </identifier>
+  </print_statement>
+  <declaration type="var">
+    <variable name="tuple_1">
+      <tuple_literal>
+        <element name="">
+          <literal type="integer">
+          1
+          </literal>
+        </element>
+        <element name="">
+          <literal type="integer">
+          3
+          </literal>
+        </element>
+        <element name="">
+          <literal type="integer">
+          4
+          </literal>
+        </element>
+      </tuple_literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="alsoUnused">
       <literal type="integer">
-      5
+      40
       </literal>
-      </left>
-      <right>
-      <literal type="integer">
-      10
-      </literal>
-      </right>
-    </binary_operation>
-    </condition>
-    <then_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        Constant comparison - always true
-        </literal>
-      </print_statement>
-    </block>
-    </then_block>
-    <else_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        Dead branch
-        </literal>
-      </print_statement>
-    </block>
-    </else_block>
-  </if_statement>
+    </variable>
+  </declaration>
 </program>
 </document>

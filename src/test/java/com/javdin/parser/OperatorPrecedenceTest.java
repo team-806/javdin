@@ -36,7 +36,7 @@ class OperatorPrecedenceTest {
         BinaryOpNode leftNode = (BinaryOpNode) topNode.getLeft();
         assertThat(leftNode.getOperator()).isEqualTo("or");
         
-        // Result: ((a or b) and c) ✅
+        // Result: ((a or b) and c) 
     }
     
     @Test
@@ -60,7 +60,7 @@ class OperatorPrecedenceTest {
         BinaryOpNode leftNode = (BinaryOpNode) topNode.getLeft();
         assertThat(leftNode.getOperator()).isEqualTo("and");
         
-        // Result: ((a and b) xor c) ✅
+        // Result: ((a and b) xor c) 
     }
     
     @Test
@@ -84,7 +84,7 @@ class OperatorPrecedenceTest {
         BinaryOpNode leftNode = (BinaryOpNode) topNode.getLeft();
         assertThat(leftNode.getOperator()).isEqualTo("xor");
         
-        // Result: ((a xor b) or c) ✅
+        // Result: ((a xor b) or c) 
     }
     
     @Test
@@ -109,7 +109,7 @@ class OperatorPrecedenceTest {
         BinaryOpNode leftNode = (BinaryOpNode) topNode.getLeft();
         assertThat(leftNode.getOperator()).isEqualTo("or");
         
-        // Result: ((a or b) or c) ✅
+        // Result: ((a or b) or c) 
     }
     
     // ========== Comparison vs Logical Tests ==========
@@ -137,7 +137,7 @@ class OperatorPrecedenceTest {
         assertThat(topNode.getRight()).isInstanceOf(BinaryOpNode.class);
         assertThat(((BinaryOpNode) topNode.getRight()).getOperator()).isEqualTo(">");
         
-        // Result: (a < b) and (c > d) ✅
+        // Result: (a < b) and (c > d) 
     }
     
     // ========== Arithmetic vs Comparison Tests ==========
@@ -166,7 +166,7 @@ class OperatorPrecedenceTest {
         assertThat(topNode.getRight()).isInstanceOf(BinaryOpNode.class);
         assertThat(((BinaryOpNode) topNode.getRight()).getOperator()).isEqualTo("*");
         
-        // Result: (a + b) < (c * d) ✅
+        // Result: (a + b) < (c * d) 
     }
     
     // ========== Multiplication vs Addition Tests ==========
@@ -191,7 +191,7 @@ class OperatorPrecedenceTest {
         assertThat(topNode.getRight()).isInstanceOf(BinaryOpNode.class);
         assertThat(((BinaryOpNode) topNode.getRight()).getOperator()).isEqualTo("*");
         
-        // Result: a + (b * c) ✅
+        // Result: a + (b * c) 
     }
     
     // ========== Complex Expression Tests ==========
@@ -254,7 +254,7 @@ class OperatorPrecedenceTest {
         assertThat(topNode.getLeft()).isInstanceOf(UnaryOpNode.class);
         assertThat(((UnaryOpNode) topNode.getLeft()).getOperator()).isEqualTo("not");
         
-        // Result: (not a) and b ✅
+        // Result: (not a) and b 
     }
     
     @Test
@@ -277,6 +277,6 @@ class OperatorPrecedenceTest {
         assertThat(topNode.getRight()).isInstanceOf(UnaryOpNode.class);
         assertThat(((UnaryOpNode) topNode.getRight()).getOperator()).isEqualTo("-");
         
-        // Result: a * (-b) ✅
+        // Result: a * (-b) 
     }
 }

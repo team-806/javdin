@@ -245,7 +245,7 @@ void testDifferentLiterals() {
 #### Required Fix:
 Change ALL test cases to use `:=` instead of `=`:
 ```java
-Lexer lexer = new Lexer("var x := 42;");  // ✅ Correct
+Lexer lexer = new Lexer("var x := 42;");  //  Correct
 ```
 
 **Note:** The LexerAdapter currently maps BOTH `ASSIGN` (=) and `ASSIGN_OP` (:=) to the same CUP symbol for backward compatibility. This should be removed once tests are fixed - only `:=` should be valid for initialization.
@@ -254,7 +254,7 @@ Lexer lexer = new Lexer("var x := 42;");  // ✅ Correct
 
 ## Additional Observations
 
-### ✅ Correctly Implemented:
+###  Correctly Implemented:
 
 1. **Literal Types** - All literal types (INTEGER, REAL, STRING, BOOLEAN, NONE) are correctly implemented
 2. **Array Literals** - Syntax `[]` and `[expr, expr, ...]` is correct per spec
@@ -300,12 +300,12 @@ However, since this is early development (Milestone 2), breaking changes are acc
 
 ### Immediate Actions (Before Milestone 3):
 
-1. ✅ **Fix declaration syntax** to support multiple variables
-2. ✅ **Fix print syntax** to support multiple expressions
-3. ✅ **Fix separator handling** to make semicolons optional
-4. ✅ **Update all tests** to use correct `:=` syntax
-5. ✅ **Remove backward compatibility** for `=` in LexerAdapter
-6. ✅ **Add comprehensive tests** for new multi-variable/multi-expression features
+1.  **Fix declaration syntax** to support multiple variables
+2.  **Fix print syntax** to support multiple expressions
+3.  **Fix separator handling** to make semicolons optional
+4.  **Update all tests** to use correct `:=` syntax
+5.  **Remove backward compatibility** for `=` in LexerAdapter
+6.  **Add comprehensive tests** for new multi-variable/multi-expression features
 
 ### Testing Strategy:
 

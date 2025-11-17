@@ -2,60 +2,96 @@ package com.javdin.interpreter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 /**
- * Runtime environment for variable storage and scope management.
+ * Runtime environment for variable storage and lexical scope management.
  */
 public class Environment {
-    private final Stack<Map<String, Value>> scopes;
+    private RuntimeScope currentScope;
     
     public Environment() {
-        this.scopes = new Stack<>();
-        this.scopes.push(new HashMap<>()); // Global scope
+        this.currentScope = new RuntimeScope(null);
     }
     
-    public void enterScope() {
-        scopes.push(new HashMap<>());
+    public RuntimeScope enterScope() {
+        currentScope = new RuntimeScope(currentScope);
+        return currentScope;
     }
     
     public void exitScope() {
-        if (scopes.size() > 1) { // Keep global scope
-            scopes.pop();
+        if (currentScope.parent == null) {
+            throw new IllegalStateException("Cannot exit global scope");
         }
+        currentScope = currentScope.parent;
+    }
+    
+    public RuntimeScope captureCurrentScope() {
+        return currentScope;
+    }
+    
+    public RuntimeScope pushFunctionScope(RuntimeScope parentScope) {
+        RuntimeScope previous = currentScope;
+        currentScope = new RuntimeScope(parentScope);
+        return previous;
+    }
+    
+    public void restoreScope(RuntimeScope scope) {
+        if (scope == null) {
+            throw new IllegalArgumentException("Previous scope cannot be null");
+        }
+        currentScope = scope;
     }
     
     public void define(String name, Value value) {
-        scopes.peek().put(name, value);
+        currentScope.values.put(name, value);
     }
     
-    public Value get(String name) {
-        for (int i = scopes.size() - 1; i >= 0; i--) {
-            Map<String, Value> scope = scopes.get(i);
-            if (scope.containsKey(name)) {
-                return scope.get(name);
-            }
-        }
-        throw new RuntimeException("Undefined variable: " + name);
+    public Value lookup(String name) {
+        RuntimeScope scope = resolveScope(name);
+        return scope != null ? scope.values.get(name) : null;
     }
     
-    public void assign(String name, Value value) {
-        for (int i = scopes.size() - 1; i >= 0; i--) {
-            Map<String, Value> scope = scopes.get(i);
-            if (scope.containsKey(name)) {
-                scope.put(name, value);
-                return;
-            }
+    public boolean assign(String name, Value value) {
+        RuntimeScope scope = resolveScope(name);
+        if (scope == null) {
+            return false;
         }
-        throw new RuntimeException("Undefined variable: " + name);
+        scope.values.put(name, value);
+        return true;
     }
     
     public boolean isDefined(String name) {
-        for (Map<String, Value> scope : scopes) {
-            if (scope.containsKey(name)) {
-                return true;
+        return resolveScope(name) != null;
+    }
+    
+    public RuntimeScope getCurrentScope() {
+        return currentScope;
+    }
+    
+    private RuntimeScope resolveScope(String name) {
+        RuntimeScope scope = currentScope;
+        while (scope != null) {
+            if (scope.values.containsKey(name)) {
+                return scope;
             }
+            scope = scope.parent;
         }
-        return false;
+        return null;
+    }
+    
+    /**
+     * Single lexical scope frame with pointer to parent scope.
+     */
+    public static final class RuntimeScope {
+        private final RuntimeScope parent;
+        private final Map<String, Value> values = new HashMap<>();
+        
+        private RuntimeScope(RuntimeScope parent) {
+            this.parent = parent;
+        }
+        
+        public RuntimeScope getParent() {
+            return parent;
+        }
     }
 }

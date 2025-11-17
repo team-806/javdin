@@ -183,8 +183,8 @@ Phase 2 (Analyze): All declarations visible, can reference anything
 **Key point**: We can serialize TO XML when needed, but AST isn't stored AS XML internally.
 
 Best of both worlds:
-- ✅ Fast custom AST in memory
-- ✅ XML output for visualization/debugging
+-  Fast custom AST in memory
+-  XML output for visualization/debugging
 
 ---
 
@@ -294,7 +294,7 @@ Type Info:
   5 + 3: int
   x: int
 
-Analysis Complete: ✅ No errors
+Analysis Complete:  No errors
 ```
 
 ---

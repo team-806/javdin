@@ -1,5 +1,6 @@
 var result := 42
+var pi := 3.14
 var types := {
     int_check := result is int,
-    real_check := 3.14 is real
+    real_check := pi is real
 }

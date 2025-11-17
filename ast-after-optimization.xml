@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 <program>
-  <block>
-    <print_statement>
-      <literal type="string">
-      This will always execute
+  <declaration type="var">
+    <variable name="used">
+      <literal type="integer">
+      10
       </literal>
-    </print_statement>
-  </block>
-  <block>
-    <print_statement>
-      <literal type="string">
-      This will always execute
-      </literal>
-    </print_statement>
-  </block>
-  <block>
-    <print_statement>
-      <literal type="string">
-      Constant comparison - always true
-      </literal>
-    </print_statement>
-  </block>
+    </variable>
+  </declaration>
+  <print_statement>
+    <identifier>
+    used
+    </identifier>
+  </print_statement>
 </program>
 </document>

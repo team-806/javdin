@@ -57,7 +57,7 @@ if x == 5 then      // Wrong! == doesn't exist
 if x != 5 then      // Wrong! != doesn't exist
 ```
 
-### ✅ CORRECT (Project D style)
+###  CORRECT (Project D style)
 ```d
 var x := 5          // Correct! := is for assignment
 if x = 5 then       // Correct! = is for equality

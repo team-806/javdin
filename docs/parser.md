@@ -417,10 +417,10 @@ mvn test jacoco:report
 ### Scalability
 
 The parser handles:
-- ✅ Programs with 1000+ lines
-- ✅ Deeply nested structures (limited by JVM stack)
-- ✅ Large array/tuple literals
-- ✅ Complex expressions with many operators
+-  Programs with 1000+ lines
+-  Deeply nested structures (limited by JVM stack)
+-  Large array/tuple literals
+-  Complex expressions with many operators
 
 ## Integration
 

@@ -2,30 +2,36 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="a">
-      <binary_operation>
-        <operator>+</operator>
-        <left>
-        <literal type="integer">
-        2
-        </literal>
-        </left>
-        <right>
-        <binary_operation>
-          <operator>*</operator>
-          <left>
-          <literal type="integer">
-          2
+    <variable name="result">
+      <literal type="integer">
+      42
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="types">
+      <tuple_literal>
+        <element name="int_check">
+          <type_check>
+            <expression>
+            <identifier>
+            result
+            </identifier>
+            </expression>
+            <type>int</type>
+          </type_check>
+        </element>
+        <element name="">
+          <literal type="boolean">
+          false
           </literal>
-          </left>
-          <right>
-          <literal type="integer">
-          2
+        </element>
+        <element name="">
+          <literal type="boolean">
+          false
           </literal>
-          </right>
-        </binary_operation>
-        </right>
-      </binary_operation>
+        </element>
+      </tuple_literal>
     </variable>
   </declaration>
 </program>

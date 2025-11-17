@@ -1,1 +1,2 @@
-if x is func then end
+var fn := func(x) => x
+if fn is func => print "fn is a function"

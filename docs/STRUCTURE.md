@@ -66,7 +66,7 @@ javdin/
 
 ## Current Implementation Status
 
-### ✅ Completed
+###  Completed
 
 #### Lexical Analysis (100%)
 - Maven project setup with all dependencies
@@ -79,18 +79,18 @@ javdin/
 - 43 comprehensive lexer tests
 
 #### Syntax Analysis (100%)
-- **CUP Parser Generator Integration** ✅
+- **CUP Parser Generator Integration** 
   - Complete grammar specification in `parser.cup`
   - LR parser generation via Maven build process
   - LexerAdapter for token mapping
   
-- **Full AST Node Hierarchy** ✅
+- **Full AST Node Hierarchy** 
   - All statement nodes (if, while, for, loop, return, print, declarations, assignments)
   - All expression nodes (binary ops, unary ops, literals, references)
   - All literal nodes (int, real, string, bool, none, arrays, tuples, functions)
   - Postfix operations (array access, tuple member access, function calls)
   
-- **Complete Grammar Support** ✅
+- **Complete Grammar Support** 
   - Expressions with proper operator precedence (9 levels)
   - All control flow statements (if/then/else, while, for, loop)
   - Variable declarations and assignments
@@ -100,18 +100,18 @@ javdin/
   - Statement separators (semicolons and newlines)
   - Type checking with `is` operator
   
-- **Error Handling** ✅
+- **Error Handling** 
   - Syntax error detection via CUP
   - ParseException wrapper with error details
   - 26 comprehensive error handling tests
   
-- **Comprehensive Testing** ✅
+- **Comprehensive Testing** 
   - 193 total tests across all components
   - 78% overall code coverage
   - 75% parser package coverage
   - 136 parser-specific tests organized by feature
   
-- **Documentation** ✅
+- **Documentation** 
   - Complete parser documentation in `docs/parser.md`
   - Grammar specification documented
   - Usage examples and integration guide
@@ -127,7 +127,7 @@ javdin/
 - Some statement execution support
 - Runtime value handling
 
-### 🚧 In Progress / TODO
+###  In Progress / TODO
 
 #### Semantic Analysis (Remaining)
 - Full type checking implementation
@@ -207,3 +207,14 @@ When adding new features:
 - Implement code generation for bytecode
 - Add IDE integration features
 - Performance profiling and optimization
+
+
+## Requirement coverage 17.11.2025
+Project D requirement	Coverage
+§2 Loop/Exit (“exit is the only way out of loop … end”)	InterpreterSemanticsTest.loopExitTerminatesInfiniteLoop
+§2 Range loops support arbitrary bounds	rangeLoopSupportsDescendingOrder
+Arrays are sparse, 1-based; undefined cells are none	arraysAreSparseAndOneBased, arrayIndexZeroProducesRuntimeError
+§Types Tuples: concatenation and access by name/index	tupleConcatenationAndIndexAccessWorkTogether
+Operator table: + only defined for numeric pairs, string+string, tuple+tuple, array+array	invalidAdditionBetweenMismatchedTypesFails
+“Implicit type conversions are supported” (ints mixing with reals)	implicitNumericConversionAllowsMixedMath
+Exit outside loops already enforced	Existing SemanticAnalyzerTest (exit-at-global) continues to cover §2 constraint
