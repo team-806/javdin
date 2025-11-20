@@ -121,8 +121,8 @@ public class OptimizerTest {
         
         ProgramNode optimized = optimizer.optimize(program);
         
-        assertTrue(errorHandler.hasErrors(), "Should detect unreachable code");
-        assertTrue(errorHandler.getErrors().get(0).getMessage().contains("Unreachable"));
+        assertTrue(errorHandler.hasInfo(), "Should detect unreachable code");
+        assertTrue(errorHandler.getInfoMessages().get(0).getMessage().contains("Unreachable"));
         
         // The print statement should be removed
         assertEquals(1, optimized.getStatements().size());

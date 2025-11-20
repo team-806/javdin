@@ -123,8 +123,8 @@ public class Optimizer implements AstVisitor<AstNode> {
                 }
             } else {
                 // Optimization 4: Remove unreachable code after return
-                errorHandler.addError("Unreachable code detected after return", 
-                                    stmt.getLine(), stmt.getColumn());
+                errorHandler.addInfo("Unreachable code detected after return", 
+                                   stmt.getLine(), stmt.getColumn());
             }
         }
         
@@ -175,7 +175,7 @@ public class Optimizer implements AstVisitor<AstNode> {
                 String leftStr = formatLiteralValue((LiteralNode) left);
                 String rightStr = formatLiteralValue((LiteralNode) right);
                 String resultStr = formatLiteralValue(result);
-                errorHandler.addError(
+                errorHandler.addInfo(
                     String.format("Constant folding: %s %s %s -> %s", 
                                 leftStr, node.getOperator(), rightStr, resultStr), 
                     node.getLine(), node.getColumn());
@@ -197,19 +197,19 @@ public class Optimizer implements AstVisitor<AstNode> {
                 boolean value = (Boolean) literal.getValue();
                 if (value) {
                     // Always true, keep only then branch
-                    errorHandler.addError(
+                    errorHandler.addInfo(
                         "Dead branch elimination: if condition is always true, removing else branch", 
                         node.getLine(), node.getColumn());
                     return node.getThenStatement().accept(this);
                 } else {
                     // Always false, keep only else branch if exists
                     if (node.getElseStatement() != null) {
-                        errorHandler.addError(
+                        errorHandler.addInfo(
                             "Dead branch elimination: if condition is always false, removing then branch", 
                             node.getLine(), node.getColumn());
                         return node.getElseStatement().accept(this);
                     } else {
-                        errorHandler.addError(
+                        errorHandler.addInfo(
                             "Dead branch elimination: if condition is always false, removing entire if statement", 
                             node.getLine(), node.getColumn());
                         return new BlockNode(node.getLine(), node.getColumn(), new ArrayList<>());
@@ -251,8 +251,8 @@ public class Optimizer implements AstVisitor<AstNode> {
                 }
             } else {
                 // Remove unreachable code in blocks
-                errorHandler.addError("Unreachable code in block after return", 
-                                    stmt.getLine(), stmt.getColumn());
+                errorHandler.addInfo("Unreachable code in block after return", 
+                                   stmt.getLine(), stmt.getColumn());
             }
         }
         

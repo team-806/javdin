@@ -61,7 +61,7 @@ public final class ArrayValue {
     
     private void verifyIndex(int index) {
         if (index <= 0) {
-            throw new RuntimeError("Array index must be positive");
+            throw new RuntimeError("Array index out of bounds: " + index + " (indices must be >= 1)");
         }
     }
     

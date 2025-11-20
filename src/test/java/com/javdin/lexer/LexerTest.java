@@ -239,7 +239,7 @@ class LexerTest {
     
     @Test
     void testComplexExpression() {
-        lexer = new Lexer("result := (a + b) * c - array[index].property;");
+        lexer = new Lexer("result := (a + b) * c - arr[index].property;");
         
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // result
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP);  // :=
@@ -251,7 +251,7 @@ class LexerTest {
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.MULTIPLY);   // *
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // c
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.MINUS);      // -
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // array
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // arr
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LEFT_BRACKET);  // [
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // index
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.RIGHT_BRACKET); // ]

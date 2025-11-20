@@ -41,3 +41,8 @@ arr[1000] := {a := 1, b := 2.7}
 // Tuple access
 var x := t.first
 var y := t.2
+
+print tests
+print logic
+print types
+print y

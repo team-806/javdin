@@ -243,6 +243,8 @@ type_indicator ::=
     | TUPLE_TYPE {: RESULT = "tuple"; :}
     | FUNC_TYPE {: RESULT = "func"; :}
     | FUNC {: RESULT = "func"; :}
+    | LEFT_BRACKET RIGHT_BRACKET {: RESULT = "array"; :}
+    | LEFT_BRACE RIGHT_BRACE {: RESULT = "tuple"; :}
     ;
 
 /* Primary: Literal | FunctionLiteral | ( Expression ) */
@@ -312,8 +314,6 @@ literal ::= INTEGER:val
     {: RESULT = func; :};
 
 /* Array literals: [1, 2, 3] or [] */
-/* Note: Removed redundant ARRAY_TYPE alternative - lexer recognizes [] as ARRAY_TYPE
- * but that token should only be used in type_indicator production, not here */
 array_literal ::=
     LEFT_BRACKET:lb separator_opt RIGHT_BRACKET
     {: RESULT = new ArrayLiteralNode(new ArrayList<>(), lbleft, lbright); :}
@@ -329,8 +329,6 @@ expression_list ::=
        RESULT = list; :};
 
 /* Tuple literals: {a := 1, b := 2} or {1, 2, 3} or {} */
-/* Note: Removed redundant TUPLE_TYPE alternative - lexer recognizes {} as TUPLE_TYPE
- * but that token should only be used in type_indicator production, not here */
 tuple_literal ::=
     LEFT_BRACE:lb separator_opt RIGHT_BRACE
     {: RESULT = new TupleLiteralNode(new ArrayList<>(), lbleft, lbright); :}

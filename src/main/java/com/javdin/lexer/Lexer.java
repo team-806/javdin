@@ -47,6 +47,8 @@ public class Lexer {
         KEYWORDS.put("real", TokenType.REAL_TYPE);
         KEYWORDS.put("bool", TokenType.BOOL_TYPE);
         KEYWORDS.put("string", TokenType.STRING_TYPE);
+        KEYWORDS.put("array", TokenType.ARRAY_TYPE);
+        KEYWORDS.put("tuple", TokenType.TUPLE_TYPE);
     }
     
     public Lexer(String source) {
@@ -146,19 +148,6 @@ public class Lexer {
         
         if (current == '.' && peek() == '.') {
             Token token = new Token(TokenType.RANGE, line, column);
-            advance();
-            advance();
-            return token;
-        }        // Handle special type indicators
-        if (current == '[' && peek() == ']') {
-            Token token = new Token(TokenType.ARRAY_TYPE, line, column);
-            advance();
-            advance();
-            return token;
-        }
-        
-        if (current == '{' && peek() == '}') {
-            Token token = new Token(TokenType.TUPLE_TYPE, line, column);
             advance();
             advance();
             return token;

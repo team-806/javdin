@@ -16,7 +16,7 @@ Maps token types to CUP terminal symbols
 Input: Token stream from LexerAdapter
 Grammar: 417 lines in parser.cup
 Output: Abstract Syntax Tree (AST)
-4) Custom AST nodes (for creating custom ast tree xml visualisation, see src/main/java/com/javdin/visualization/AstXmlSerializer.java)
+4) Custom AST nodes (for creating custom ast tree xml visualization, see src/main/java/com/javdin/visualization/AstXmlSerializer.java)
 Node hierarchy: 23 specialized classes extending StatementNode or ExpressionNode
 Each production rule creates specific AST node type
 All nodes are immutable with final fields
@@ -39,16 +39,18 @@ Position tracking: Every node stores source line and column
      2. Unused variable removal
      3. Dead branch elimination
      4. Unreachable code removal
-6) Interpreter: Executes the optimezed AST and produces runtime behavior.
+6) Interpreter: Executes the optimized AST and produces runtime behavior.
 
 The problems:
-1) Current parser implementation rejects empty array/tuple literals despite the spec. You can try runnig these tests to see the issue:
+1) Current parser implementation rejects empty array/tuple literals despite the spec. You can try running these tests to see the issue:
 java -jar target/javdin-1.0.0.jar test-resources/test-empty-array.d 
 java -jar target/javdin-1.0.0.jar test-resources/test-empty-tuple.d 
-2) There is a confusion with array/array type indicators, for example in the current program logic, to check if one type is instance of another type you should write: "{1,2,3} is {}" meaning "is {1,2,3} is of tuple type?" or "[1,2,3] is []" meaning "is [1,2,3] is of array type?". This syntax is incorrect and shoud be changed to this "{1,2,3} is tuple" meaning "is {1,2,3} is of tuple type?" or "[1,2,3] is array" meaning "is [1,2,3] is of array type?"
+2) There is a confusion with array/array type indicators, for example in the current program logic, to check if one type is instance of another type you should write: "{1,2,3} is {}" meaning "is {1,2,3} is of tuple type?" or "[1,2,3] is []" meaning "is [1,2,3] is of array type?". This syntax is not obvious and should be either:
+2.1) replaced by this "{1,2,3} is tuple" meaning "is {1,2,3} is of tuple type?" or "[1,2,3] is array" meaning "is [1,2,3] is of array type?"
+2.2) or complemented by 2.1) - so both notations should work. But this option may be very non trivial to implement, if that is the case stay with 2.1)
 
 Your goal:
-Analyse the existing components, and fix the problems 
+Analyze the existing components, and solve the problems 
 
 Output format notes:
 Stay formal and try to be critical thinking. Remember that existing code might have errors. Do not use emoji or Unicode symbols use only Ascii. Do not create excessive documentation, try to be concise with your reports.

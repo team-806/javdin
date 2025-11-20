@@ -1,6 +1,7 @@
 // Arithmetic
 var result := (10 + 5) * 3 - 2 / 1
 
+
 // Comparison operators
 var tests := [
     5 < 10,

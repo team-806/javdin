@@ -77,7 +77,7 @@ public final class TupleValue {
     
     private void verifyIndex(int index) {
         if (index <= 0 || index > entries.size()) {
-            throw new RuntimeError("Tuple index out of bounds: " + index);
+            throw new RuntimeError("Tuple index out of bounds: " + index + " (valid range: 1 to " + entries.size() + ")");
         }
     }
     

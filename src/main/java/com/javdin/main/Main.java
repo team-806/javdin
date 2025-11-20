@@ -68,9 +68,23 @@ public class Main {
             Optimizer optimizer = new Optimizer(errorHandler);
             ProgramNode optimizedAst = optimizer.optimize(ast);
             
+            // Print optimization info messages
+            errorHandler.printInfo();
+            
+            // Check for errors after optimization
+            if (errorHandler.hasErrors()) {
+                errorHandler.printErrors();
+                return 1;
+            }
+            
             // Interpretation
             Interpreter interpreter = new Interpreter(errorHandler);
             interpreter.interpret(optimizedAst);
+            
+            if (errorHandler.hasErrors()) {
+                errorHandler.printErrors();
+                return 1;
+            }
             
             return 0;
             

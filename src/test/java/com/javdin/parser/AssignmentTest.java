@@ -109,7 +109,7 @@ class AssignmentTest {
     
     @Test
     void testTupleNumericMemberAssignment() {
-        Lexer lexer = new Lexer("tuple.0 := 42");
+        Lexer lexer = new Lexer("tup.0 := 42");
         Parser parser = new Parser(lexer);
         
         ProgramNode program = parser.parse();

@@ -1,0 +1,5 @@
+var nested := [[1, 2], [3, 4], [5, 6]]
+print nested[1][1]
+print nested[1][2]
+print nested[2][1]
+print nested[3][2]

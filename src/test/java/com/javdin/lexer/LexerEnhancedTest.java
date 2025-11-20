@@ -60,8 +60,10 @@ class LexerEnhancedTest {
     void testSpecialTypeTokens() {
         lexer = new Lexer("[] {}");
         
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ARRAY_TYPE);
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.TUPLE_TYPE);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LEFT_BRACKET);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.RIGHT_BRACKET);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LEFT_BRACE);
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.RIGHT_BRACE);
     }
     
     @Test
@@ -349,9 +351,9 @@ class LexerEnhancedTest {
     
     @Test 
     void testProjectDArrayAccess() {
-        lexer = new Lexer("array[index] := value");
+        lexer = new Lexer("arr[index] := value");
         
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // array
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // arr
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.LEFT_BRACKET); // [
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // index
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.RIGHT_BRACKET); // ]
@@ -361,13 +363,13 @@ class LexerEnhancedTest {
     
     @Test
     void testProjectDTupleAccess() {
-        lexer = new Lexer("tuple.field := tuple.1");
+        lexer = new Lexer("tup.field := tup.1");
         
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // tuple
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // tup
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.DOT); // .
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // field
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.ASSIGN_OP); // :=
-        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // tuple
+        assertThat(lexer.nextToken().type()).isEqualTo(TokenType.IDENTIFIER); // tup
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.DOT); // .
         assertThat(lexer.nextToken().type()).isEqualTo(TokenType.INTEGER); // 1
     }

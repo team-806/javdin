@@ -64,7 +64,7 @@ class InterpreterSemanticsTest {
             "arr[0] := 99");
         List<ErrorHandler.Error> runtimeErrors = runExpectRuntimeErrors(program);
         assertThat(runtimeErrors).singleElement()
-            .satisfies(error -> assertThat(error.getMessage()).contains("Array index must be positive"));
+            .satisfies(error -> assertThat(error.getMessage()).contains("Array index out of bounds"));
     }
 
     @Test
