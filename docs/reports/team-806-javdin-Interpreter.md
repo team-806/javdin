@@ -120,6 +120,33 @@ public Value visitBinaryOp(BinaryOpNode node) {
 }
 ```
 
+### Execution Flow Example
+
+Consider this simple program:
+
+```d
+var x := 5
+var y := x + 3
+print y
+```
+
+The interpreter executes this program as follows:
+
+1. visitProgram(ProgramNode) - Start execution of the program
+2. visitDeclaration(DeclarationNode) - Process first declaration
+   - visitLiteral(5) - Evaluate right side, returns Value.integer(5)
+   - environment.define("x", Value.integer(5)) - Store variable x
+3. visitDeclaration(DeclarationNode) - Process second declaration
+   - visitBinaryOp(+) - Evaluate right side
+     - visitReference("x") - Look up x, returns Value.integer(5)
+     - visitLiteral(3) - Evaluate 3, returns Value.integer(3)
+     - add(5, 3) - Perform addition, returns Value.integer(8)
+   - environment.define("y", Value.integer(8)) - Store variable y
+4. visitPrint(PrintNode) - Execute print statement
+   - visitReference("y") - Look up y, returns Value.integer(8)
+   - System.out.println("8") - Output to console
+
+
 <div style="page-break-after: always;"></div>
 
 ---
