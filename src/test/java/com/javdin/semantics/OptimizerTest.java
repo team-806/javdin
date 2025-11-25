@@ -144,8 +144,9 @@ public class OptimizerTest {
         
         ProgramNode optimized = optimizer.optimize(program);
         
-        assertTrue(errorHandler.hasErrors(), "Should detect unused variable");
-        assertTrue(errorHandler.getErrors().get(0).getMessage().contains("Unused"));
+        // Should report unused variable as info (not error)
+        assertTrue(errorHandler.hasInfo(), "Should detect unused variable");
+        assertTrue(errorHandler.getInfoMessages().get(0).getMessage().contains("Unused"));
         
         // The declaration should be removed
         assertEquals(0, optimized.getStatements().size());

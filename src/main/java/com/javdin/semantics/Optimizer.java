@@ -140,8 +140,8 @@ public class Optimizer implements AstVisitor<AstNode> {
             // Optimization 2: Remove unused variables
             if (!usedVariables.contains(varDef.getName()) && 
                 !varDef.getName().startsWith("_")) { // Keep variables starting with _
-                errorHandler.addError("Unused variable '" + varDef.getName() + "'", 
-                                    node.getLine(), node.getColumn());
+                errorHandler.addInfo("Unused variable removal: '" + varDef.getName() + "'", 
+                                   node.getLine(), node.getColumn());
                 // Skip this variable
                 continue;
             }
