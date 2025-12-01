@@ -1,6 +1,6 @@
 ### Week 2: 11th September 2025
 
-<img width="301" height="82" alt="logo" src="assets/inno-logo.png" />
+<img width="301" height="82" alt="logo" src="assets/inno-logo-2.png" />
 
 ## </p>[F25] Compiler Construction <p>
 ### Team 806

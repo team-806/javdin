@@ -1,4 +1,4 @@
-<img width="602" height="164" alt="Javdin Logo" src="../assets/inno-logo.png" />
+<img width="602" height="164" alt="Javdin Logo" src="../assets/inno-logo-2.png" />
 
 # Javdin Parser
 
