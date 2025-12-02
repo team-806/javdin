@@ -4,7 +4,7 @@
 # Or: ./demo-semantic-analysis.sh all
 
 DEMO_CLASS="com.javdin.demo.SemanticAnalysisDemo"
-DEMOS_DIR="docs/demos"
+DEMOS_DIR="test-resources/semantic-analysis"
 
 show_menu() {
     echo "==============================================================="

@@ -35,7 +35,7 @@ Each production rule creates specific AST node type. All nodes are immutable wit
     - Performs non-modifying semantic validation
     - Detects 4 types of semantic errors:
         1. Return outside function check
-        2. Break/Continue outside loop check
+        2. Break(Exit) outside loop check
         3. Undeclared variable check
         4. Duplicate declaration check
     
@@ -53,6 +53,26 @@ Each production rule creates specific AST node type. All nodes are immutable wit
 2) [Interpreter](src/main/java/com/javdin/interpreter/Interpreter.java)  executes the optimized AST using the visitor pattern. It implements a tree-walking interpreter with dynamic typing, supporting eight value types: integer, real, boolean, string, array, tuple, function, and void. The interpreter uses a stack-based approach to handle lexical scoping in blocks and functions.
 
 ---
+# Project Structure (high-level)
+```txt
+javdin/
+- docs/                  # Task statements, parser notes, milestone reports
+- reports/               # Weekly reports and component presentations
+- src/
+- - main/
+- - - java/com/javdin/
+- - - - ast/            # 23 immutable AST node definitions
+- - - - lexer/          # Hand-written lexer, tokens, and lexical utilities
+- - - - parser/         # Parser wrapper, CUP adapter, grammar artifacts
+- - - - semantics/      # Semantic analyzer and optimizer
+- - - - interpreter/    # Tree-walking interpreter and runtime environment
+- - - - visualization/  # AST XML serializer (for ast tree visualizations)
+- - - resources/        # CUP/Flex outputs, demo assets, configs
+- - test/java/          # JUnit integration and regression suites
+- test-resources/       # Project D sample programs
+- scripts (*.sh)        # Helpers for demos, AST visualization, test
+```
+
 # Try Javdin on your machine!
 ```bash
 git clone https://github.com/team-806/javdin.git # Clone project

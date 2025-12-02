@@ -2,15 +2,99 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="used">
+    <variable name="result1">
       <literal type="integer">
-      10
+      5
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="result2">
+      <literal type="integer">
+      50
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="result3">
+      <literal type="integer">
+      25
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="result4">
+      <literal type="integer">
+      13
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="flag1">
+      <literal type="boolean">
+      false
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="flag2">
+      <literal type="boolean">
+      true
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="comparison1">
+      <literal type="boolean">
+      true
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="comparison2">
+      <literal type="boolean">
+      true
       </literal>
     </variable>
   </declaration>
   <print_statement>
     <identifier>
-    used
+    result1
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    result2
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    result3
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    result4
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    flag1
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    flag2
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    comparison1
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <identifier>
+    comparison2
     </identifier>
   </print_statement>
 </program>

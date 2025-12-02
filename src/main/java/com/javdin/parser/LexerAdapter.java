@@ -18,6 +18,14 @@ public class LexerAdapter implements java_cup.runtime.Scanner {
         this.lexer = lexer;
         this.currentToken = null;
     }
+
+    /**
+     * Expose the most-recent token fetched from the lexer. Useful for
+     * producing better error messages when the parser fails.
+     */
+    public Token getCurrentToken() {
+        return currentToken;
+    }
     
     /**
      * Get the next token from the lexer and convert it to a CUP Symbol.

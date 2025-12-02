@@ -12,6 +12,10 @@ public class Lexer {
     private int position;
     private int line;
     private int column;
+    // Track the last non-whitespace/non-newline token type to allow
+    // context-aware lexical checks (e.g. "var int := ..." should be
+    // rejected with a clear message).
+    private TokenType lastSignificantToken;
     
     private static final Map<String, TokenType> KEYWORDS = new HashMap<>();
     
@@ -56,6 +60,7 @@ public class Lexer {
         this.position = 0;
         this.line = 1;
         this.column = 1;
+        this.lastSignificantToken = null;
     }
     
     /**
@@ -65,7 +70,7 @@ public class Lexer {
         skipWhitespace();
         
         if (position >= source.length()) {
-            return new Token(TokenType.EOF, line, column);
+            return finalizeToken(new Token(TokenType.EOF, line, column));
         }
         
         char current = source.charAt(position);
@@ -74,7 +79,7 @@ public class Lexer {
         if (current == '\n') {
             Token token = new Token(TokenType.NEWLINE, line, column);
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         // Handle /= (not equal) before checking for // comments
@@ -82,7 +87,7 @@ public class Lexer {
             Token token = new Token(TokenType.NOT_EQUAL_ALT, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         // Handle comments
@@ -101,56 +106,56 @@ public class Lexer {
             Token token = new Token(TokenType.ASSIGN_OP, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         if (current == '=' && peek() == '>') {
             Token token = new Token(TokenType.SHORT_IF, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         if (current == '=' && peek() == '=') {
             Token token = new Token(TokenType.EQUAL, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
 
         if (current == '!' && peek() == '=') {
             Token token = new Token(TokenType.NOT_EQUAL, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
 
         if (current == '<' && peek() == '=') {
             Token token = new Token(TokenType.LESS_EQUAL, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
 
         if (current == '>' && peek() == '=') {
             Token token = new Token(TokenType.GREATER_EQUAL, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
 
         if (current == '-' && peek() == '>') {
             Token token = new Token(TokenType.ARROW, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         if (current == '.' && peek() == '.') {
             Token token = new Token(TokenType.RANGE, line, column);
             advance();
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         // Handle single-character tokens
@@ -158,7 +163,7 @@ public class Lexer {
         if (singleChar != null) {
             Token token = new Token(singleChar, line, column);
             advance();
-            return token;
+            return finalizeToken(token);
         }
         
         // Handle numbers
@@ -176,6 +181,17 @@ public class Lexer {
         
         // Unknown character
         throw new LexicalException("Unexpected character: " + current, line, column);
+    }
+
+    /**
+     * Finalize a token before returning: set lastSignificantToken for
+     * non-newline/non-EOF tokens and return the token.
+     */
+    private Token finalizeToken(Token token) {
+        if (token.type() != TokenType.NEWLINE && token.type() != TokenType.EOF) {
+            lastSignificantToken = token.type();
+        }
+        return token;
     }
     
     private void skipWhitespace() {
@@ -233,10 +249,10 @@ public class Lexer {
                 advance();
             }
             
-            return new Token(TokenType.REAL, sb.toString(), startLine, startColumn);
+            return finalizeToken(new Token(TokenType.REAL, sb.toString(), startLine, startColumn));
         }
         
-        return new Token(TokenType.INTEGER, sb.toString(), startLine, startColumn);
+        return finalizeToken(new Token(TokenType.INTEGER, sb.toString(), startLine, startColumn));
     }
     
     private Token scanString(char quote) {
@@ -273,7 +289,7 @@ public class Lexer {
         }
         
         advance(); // Skip closing quote
-        return new Token(TokenType.STRING, sb.toString(), startLine, startColumn);
+        return finalizeToken(new Token(TokenType.STRING, sb.toString(), startLine, startColumn));
     }
     
     private Token scanIdentifier() {
@@ -289,8 +305,17 @@ public class Lexer {
         
         String identifier = sb.toString();
         TokenType type = KEYWORDS.getOrDefault(identifier, TokenType.IDENTIFIER);
-        
-        return new Token(type, identifier, startLine, startColumn);
+
+        // If a type-indicator keyword appears immediately after 'var',
+        // treat it as a lexical error with a clearer message.
+        if ((type == TokenType.INT_TYPE || type == TokenType.REAL_TYPE || type == TokenType.BOOL_TYPE ||
+             type == TokenType.STRING_TYPE || type == TokenType.ARRAY_TYPE || type == TokenType.TUPLE_TYPE ||
+             type == TokenType.FUNC_TYPE)
+            && lastSignificantToken == TokenType.VAR) {
+            throw new LexicalException("Reserved word '" + identifier + "' cannot be used as a variable name", startLine, startColumn);
+        }
+
+        return finalizeToken(new Token(type, identifier, startLine, startColumn));
     }
     
     private TokenType getSingleCharToken(char c) {
