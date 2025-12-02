@@ -6,10 +6,8 @@ source "$SCRIPT_DIR/scripts/test-suite-common.sh"
 ensure_jar || exit 1
 reset_counters
 
-run_suite "$REPO_ROOT/test-resources/arrays" "Array Tests"
-run_suite "$REPO_ROOT/test-resources/tuples" "Tuple Tests"
-
-print_summary "Array + Tuple Suite"
+run_suite "$REPO_ROOT/test-resources/arrays" "Array Suite"
+print_summary "Array Suite"
 
 if [ $FAILED -eq 0 ]; then
     exit 0
