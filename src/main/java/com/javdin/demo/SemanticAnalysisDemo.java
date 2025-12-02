@@ -116,13 +116,26 @@ public class SemanticAnalysisDemo {
                 System.out.println("Optimized AST saved to: ast-after-optimization.xml");
                 System.out.println();
                 
-                // Show optimization warnings/info
-                if (optimizerErrors.hasErrors()) {
+                // Show optimization messages (infos/warnings/errors)
+                if (!optimizerErrors.getMessages().isEmpty()) {
                     System.out.println("Optimization Notes:");
                     System.out.println();
-                    for (ErrorHandler.Error error : optimizerErrors.getErrors()) {
-                        System.out.println("  [i] Line " + error.getLine() + ", Column " + error.getColumn() + ":");
-                        System.out.println("      " + error.getMessage());
+                    for (ErrorHandler.Message message : optimizerErrors.getMessages()) {
+                        String marker = "[i]";
+                        if (message instanceof ErrorHandler.Error) {
+                            marker = "[!]";
+                        } else if (message instanceof ErrorHandler.Warning) {
+                            marker = "[~]";
+                        }
+                        String location = (message.getLine() > 0 && message.getColumn() > 0)
+                            ? String.format("Line %d, Column %d", message.getLine(), message.getColumn())
+                            : "";
+                        System.out.print("  " + marker);
+                        if (!location.isEmpty()) {
+                            System.out.print(" " + location);
+                        }
+                        System.out.println(":");
+                        System.out.println("      " + message.getMessage());
                         System.out.println();
                     }
                 } else {

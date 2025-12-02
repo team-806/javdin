@@ -64,6 +64,13 @@ public class ErrorHandler {
         }
         return errorList;
     }
+
+    /**
+     * Returns all collected messages (errors, infos, warnings) in insertion order.
+     */
+    public List<Message> getMessages() {
+        return new ArrayList<>(messages);
+    }
     
     public boolean hasInfo() {
         return messages.stream().anyMatch(m -> m instanceof Info);

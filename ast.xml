@@ -2,37 +2,156 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="result">
+    <variable name="number">
       <literal type="integer">
-      42
+      768
       </literal>
     </variable>
   </declaration>
   <declaration type="var">
-    <variable name="types">
-      <tuple_literal>
-        <element name="int_check">
-          <type_check>
-            <expression>
-            <identifier>
-            result
-            </identifier>
-            </expression>
-            <type>int</type>
-          </type_check>
-        </element>
-        <element name="">
-          <literal type="boolean">
-          false
-          </literal>
-        </element>
-        <element name="">
-          <literal type="boolean">
-          false
-          </literal>
-        </element>
-      </tuple_literal>
+    <variable name="guess">
+      <binary_operation>
+        <operator>/</operator>
+        <left>
+        <identifier>
+        number
+        </identifier>
+        </left>
+        <right>
+        <literal type="integer">
+        2
+        </literal>
+        </right>
+      </binary_operation>
     </variable>
   </declaration>
+  <declaration type="var">
+    <variable name="iterations">
+      <literal type="integer">
+      5
+      </literal>
+    </variable>
+  </declaration>
+  <print_statement>
+    <literal type="string">
+    Computing sqrt(
+    </literal>
+    <identifier>
+    number
+    </identifier>
+    <literal type="string">
+    ) using Heron&apos;s method
+    </literal>
+  </print_statement>
+  <print_statement>
+    <literal type="string">
+    Initial guess:
+    </literal>
+    <identifier>
+    guess
+    </identifier>
+  </print_statement>
+  <for_statement>
+    <variable>i</variable>
+    <range_start>
+    <literal type="integer">
+    1
+    </literal>
+    </range_start>
+    <range_end>
+    <identifier>
+    iterations
+    </identifier>
+    </range_end>
+    <body>
+    <block>
+      <declaration type="var">
+        <variable name="newGuess">
+          <binary_operation>
+            <operator>/</operator>
+            <left>
+            <binary_operation>
+              <operator>+</operator>
+              <left>
+              <identifier>
+              guess
+              </identifier>
+              </left>
+              <right>
+              <binary_operation>
+                <operator>/</operator>
+                <left>
+                <identifier>
+                number
+                </identifier>
+                </left>
+                <right>
+                <identifier>
+                guess
+                </identifier>
+                </right>
+              </binary_operation>
+              </right>
+            </binary_operation>
+            </left>
+            <right>
+            <literal type="integer">
+            2
+            </literal>
+            </right>
+          </binary_operation>
+        </variable>
+      </declaration>
+      <print_statement>
+        <literal type="string">
+        Iteration 
+        </literal>
+        <identifier>
+        i
+        </identifier>
+        <literal type="string">
+        :
+        </literal>
+        <identifier>
+        newGuess
+        </identifier>
+      </print_statement>
+      <assignment>
+        <identifier>
+        guess
+        </identifier>
+        <identifier>
+        newGuess
+        </identifier>
+      </assignment>
+    </block>
+    </body>
+  </for_statement>
+  <print_statement>
+    <literal type="string">
+    Approximate square root:
+    </literal>
+    <identifier>
+    guess
+    </identifier>
+  </print_statement>
+  <print_statement>
+    <literal type="string">
+    Check:
+    </literal>
+    <binary_operation>
+      <operator>*</operator>
+      <left>
+      <identifier>
+      guess
+      </identifier>
+      </left>
+      <right>
+      <identifier>
+      guess
+      </identifier>
+      </right>
+    </binary_operation>
+  </print_statement>
 </program>
 </document>

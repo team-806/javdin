@@ -2,7 +2,7 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="result1">
+    <variable name="x">
       <binary_operation>
         <operator>+</operator>
         <left>
@@ -19,163 +19,162 @@
     </variable>
   </declaration>
   <declaration type="var">
-    <variable name="result2">
+    <variable name="unused">
+      <literal type="integer">
+      100
+      </literal>
+    </variable>
+  </declaration>
+  <declaration type="var">
+    <variable name="y">
       <binary_operation>
         <operator>*</operator>
         <left>
-        <literal type="integer">
-        10
-        </literal>
+        <identifier>
+        x
+        </identifier>
         </left>
         <right>
         <literal type="integer">
-        5
+        2
         </literal>
         </right>
       </binary_operation>
     </variable>
   </declaration>
+  <if_statement>
+    <condition>
+    <literal type="boolean">
+    true
+    </literal>
+    </condition>
+    <then_block>
+    <block>
+      <print_statement>
+        <identifier>
+        y
+        </identifier>
+      </print_statement>
+    </block>
+    </then_block>
+    <else_block>
+    <block>
+      <print_statement>
+        <literal type="string">
+        Dead code
+        </literal>
+      </print_statement>
+    </block>
+    </else_block>
+  </if_statement>
   <declaration type="var">
-    <variable name="result3">
-      <binary_operation>
-        <operator>/</operator>
-        <left>
-        <literal type="integer">
-        100
-        </literal>
-        </left>
-        <right>
-        <literal type="integer">
-        4
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="result4">
-      <binary_operation>
-        <operator>-</operator>
-        <left>
-        <literal type="integer">
-        20
-        </literal>
-        </left>
-        <right>
-        <literal type="integer">
-        7
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="flag1">
-      <binary_operation>
-        <operator>and</operator>
-        <left>
-        <literal type="boolean">
-        true
-        </literal>
-        </left>
-        <right>
-        <literal type="boolean">
-        false
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="flag2">
-      <binary_operation>
-        <operator>or</operator>
-        <left>
-        <literal type="boolean">
-        true
-        </literal>
-        </left>
-        <right>
-        <literal type="boolean">
-        false
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="comparison1">
-      <binary_operation>
-        <operator>&lt;</operator>
-        <left>
-        <literal type="integer">
-        5
-        </literal>
-        </left>
-        <right>
-        <literal type="integer">
-        10
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="comparison2">
+    <variable name="result">
       <binary_operation>
         <operator>=</operator>
         <left>
         <literal type="integer">
-        15
+        10
         </literal>
         </left>
         <right>
         <literal type="integer">
-        15
+        10
         </literal>
         </right>
       </binary_operation>
     </variable>
   </declaration>
-  <print_statement>
+  <if_statement>
+    <condition>
     <identifier>
-    result1
+    result
     </identifier>
-  </print_statement>
+    </condition>
+    <then_block>
+    <block>
+      <print_statement>
+        <literal type="string">
+        Always true
+        </literal>
+      </print_statement>
+    </block>
+    </then_block>
+  </if_statement>
+  <declaration type="var">
+    <variable name="compute">
+      <function_literal>
+        <parameters>val</parameters>
+        <body type="statements">
+          <if_statement>
+            <condition>
+            <binary_operation>
+              <operator>&lt;</operator>
+              <left>
+              <identifier>
+              val
+              </identifier>
+              </left>
+              <right>
+              <literal type="integer">
+              0
+              </literal>
+              </right>
+            </binary_operation>
+            </condition>
+            <then_block>
+            <block>
+              <return_statement>
+                <literal type="integer">
+                0
+                </literal>
+              </return_statement>
+              <print_statement>
+                <literal type="string">
+                Unreachable
+                </literal>
+              </print_statement>
+              <declaration type="var">
+                <variable name="z">
+                  <literal type="integer">
+                  50
+                  </literal>
+                </variable>
+              </declaration>
+            </block>
+            </then_block>
+          </if_statement>
+          <return_statement>
+            <binary_operation>
+              <operator>*</operator>
+              <left>
+              <identifier>
+              val
+              </identifier>
+              </left>
+              <right>
+              <literal type="integer">
+              2
+              </literal>
+              </right>
+            </binary_operation>
+          </return_statement>
+        </body>
+      </function_literal>
+    </variable>
+  </declaration>
   <print_statement>
-    <identifier>
-    result2
-    </identifier>
-  </print_statement>
-  <print_statement>
-    <identifier>
-    result3
-    </identifier>
-  </print_statement>
-  <print_statement>
-    <identifier>
-    result4
-    </identifier>
-  </print_statement>
-  <print_statement>
-    <identifier>
-    flag1
-    </identifier>
-  </print_statement>
-  <print_statement>
-    <identifier>
-    flag2
-    </identifier>
-  </print_statement>
-  <print_statement>
-    <identifier>
-    comparison1
-    </identifier>
-  </print_statement>
-  <print_statement>
-    <identifier>
-    comparison2
-    </identifier>
+    <function_call>
+      <function>
+      <identifier>
+      compute
+      </identifier>
+      </function>
+      <arguments>
+        <literal type="integer">
+        5
+        </literal>
+      </arguments>
+    </function_call>
   </print_statement>
 </program>
 </document>
