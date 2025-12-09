@@ -2,63 +2,9 @@
 <document>
 <program>
   <declaration type="var">
-    <variable name="x">
-      <literal type="integer">
-      5
-      </literal>
-    </variable>
-  </declaration>
-  <declaration type="var">
-    <variable name="y">
-      <binary_operation>
-        <operator>*</operator>
-        <left>
-        <identifier>
-        x
-        </identifier>
-        </left>
-        <right>
-        <literal type="integer">
-        2
-        </literal>
-        </right>
-      </binary_operation>
-    </variable>
-  </declaration>
-  <block>
-    <print_statement>
-      <identifier>
-      y
-      </identifier>
-    </print_statement>
-  </block>
-  <declaration type="var">
-    <variable name="result">
-      <literal type="boolean">
-      true
-      </literal>
-    </variable>
-  </declaration>
-  <if_statement>
-    <condition>
-    <identifier>
-    result
-    </identifier>
-    </condition>
-    <then_block>
-    <block>
-      <print_statement>
-        <literal type="string">
-        Always true
-        </literal>
-      </print_statement>
-    </block>
-    </then_block>
-  </if_statement>
-  <declaration type="var">
     <variable name="compute">
       <function_literal>
-        <parameters>val</parameters>
+        <parameters>x</parameters>
         <body type="statements">
           <if_statement>
             <condition>
@@ -66,7 +12,7 @@
               <operator>&lt;</operator>
               <left>
               <identifier>
-              val
+              x
               </identifier>
               </left>
               <right>
@@ -91,7 +37,7 @@
               <operator>*</operator>
               <left>
               <identifier>
-              val
+              x
               </identifier>
               </left>
               <right>
@@ -116,6 +62,25 @@
         <literal type="integer">
         5
         </literal>
+      </arguments>
+    </function_call>
+  </print_statement>
+  <print_statement>
+    <function_call>
+      <function>
+      <identifier>
+      compute
+      </identifier>
+      </function>
+      <arguments>
+        <unary_operation>
+          <operator>-</operator>
+          <operand>
+          <literal type="integer">
+          3
+          </literal>
+          </operand>
+        </unary_operation>
       </arguments>
     </function_call>
   </print_statement>
